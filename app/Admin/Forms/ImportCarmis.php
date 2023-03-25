@@ -46,8 +46,8 @@ class ImportCarmis extends Form
             $carmisData = assoc_unique($carmisData, 'carmi');
         }
         Carmis::query()->insert($carmisData);
-        // 删除文件
-        Storage::disk('public')->delete($input['carmis_txt']);
+        if (!empty($input['carmis_txt'])) // 删除文件
+            Storage::disk('public')->delete($input['carmis_txt']);
         return $this
 				->response()
 				->success(admin_trans('carmis.rule_messages.import_carmis_success'))

@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\BaseModel;
 use Closure;
-use Germey\Geetest\GeetestServiceProvider;
 
 class DujiaoBoot
 {

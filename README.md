@@ -3,14 +3,20 @@
 <p align="center">
 <img alt="GitHub" src="https://img.shields.io/github/license/outtimes/dujiaoka?style=for-the-badge">
 <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/outtimes/dujiaoka?label=version&style=for-the-badge">
-<img alt="PHP Version" src="https://img.shields.io/static/v1?label=PHP&message=7.4&style=for-the-badge">
+<img alt="PHP Version" src="https://img.shields.io/static/v1?label=PHP&message=8.0.2&style=for-the-badge">
 <img alt="Telegram" src="https://img.shields.io/static/v1?label=Telegram&logo=Telegram&message=@dujiaoka&style=for-the-badge&color=blue&&link=https://t.me/dujiaoka">
 </p>
+
+# :warning:使用前警告
+# 这是*正在开发*，未经*充分测试*的版本，请*不要*用于*生产环境*
+# 仅供尝鲜试用，必须全新安装
 
 ## :bulb:版本介绍
 这是一份基于[独角数卡](https://github.com/assimon/dujiaoka)在[dc53741](https://github.com/assimon/dujiaoka/commit/dc53741e275007b8c81c43319ee657ef011bad93)基础上修改的版本。此版本在部分功能上与原版有所修改，故请以本仓库的Wiki/Issues得到的反馈为准。
 
 以下是目前几个比较重要的更改：
+- 更新框架至Laravel9
+- 必须运行在PHP8.0.2及以上
 - 补充插件表结构
 - Unicorn模板支持深色模式，优化样式，显示销量，支持极验验证
 - 新增支付宝WAP支付，微信小程序支付[（开发参考）](https://github.com/outtimes/dujiaoka/wiki/微信小程序支付开发说明)
@@ -49,7 +55,7 @@
 
 - 本程序有一定的上手安装难度，请具备Linux服务器相关的基础知识，跟随Wiki一步一步安装基本不会出现问题。
 - 本程序不支持虚拟主机，未在Windows服务器上进行测试，请直接使用Linux服务器完成搭建。
-- 本程序*暂不支持*PHP8，请使用PHP7.4及以上的版本
+- 本程序*近支持*PHP8.0.2及以上。
 - 提问，没人回答？买别人的时间。
 
 ## :speech_balloon:使用交流

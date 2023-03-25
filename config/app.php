@@ -175,8 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Jenssegers\Agent\AgentServiceProvider::class,
-        Germey\Geetest\GeetestServiceProvider::class
+        Jenssegers\Agent\AgentServiceProvider::class
 
 
     ],
