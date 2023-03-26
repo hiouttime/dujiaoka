@@ -21,6 +21,16 @@
     <link href="/assets/hyper/css/icons.min.css" rel="stylesheet" type="text/css">
     <link href="/assets/hyper/css/app-creative.min.css" rel="stylesheet" type="text/css" id="light-style">
     <link href="/assets/hyper/css/hyper.css?v=045256" rel="stylesheet" type="text/css">
+    @if(dujiaoka_config_get('is_open_google_translate') == \App\Models\BaseModel::STATUS_OPEN)
+    <style>
+        .skiptranslate,.goog-te-spinner-pos,.goog-te-spinner-animation {
+            display: none;
+        }
+        .skiptranslate > div > div > .logo {
+            display: none;
+        }
+    </style>
+    @endif
 </head>
 <body data-layout="topnav">
     <div class="wrapper">
