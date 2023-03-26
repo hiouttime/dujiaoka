@@ -4,6 +4,7 @@ return [
     'labels' => [
         'Goods' => '商品',
         'goods' => '商品',
+        'soldout' => '已售完'
     ],
     'fields' => [
         'actual_price' => '实际售价',

@@ -112,6 +112,15 @@ body {
 	border-left: 1px solid transparent;
 }
 
+.btn.disabled {
+     pointer-events: auto;
+     cursor: not-allowed;
+ }
+
+ .btn.disabled:focus {
+     box-shadow: none;
+ }
+
 .btn-group>button:hover {
 	color: #e84c3d;
 	background-color: #fafafa;
@@ -121,6 +130,58 @@ body {
 .header-top-right-btns .btn-group:last-child>button {
 	border-right-color: transparent;
 }
+
+.badge-soldout {
+     position: absolute;
+     right: -5px;
+     top: -5px;
+     overflow: hidden;
+     width: 75px;
+     height: 75px;
+     text-align: right;
+ }
+
+ .badge-soldout span {
+     font-size: 13px;
+     color: #fff;
+     text-align: center;
+     line-height: 20px;
+     -webkit-transform: rotate(45deg);
+     transform: rotate(45deg);
+     width: 100px;
+     display: block;
+     -webkit-box-shadow: 0 0 8px 0 rgb(71 77 86 / 8%), 0 1px 0 0 rgb(71 77 86 / 3%);
+     box-shadow: 0 0 8px 0 rgb(71 77 86 / 8%), 0 1px 0 0 rgb(71 77 86 / 3%);
+     position: absolute;
+     top: 19px;
+     right: -21px;
+     font-weight: 600;
+     background: #fa6767;
+ }
+
+ .badge-soldout span:before {
+     content: "";
+     position: absolute;
+     left: 0;
+     top: 100%;
+     z-index: -1;
+     border-right: 3px solid transparent;
+     border-bottom: 3px solid transparent;
+     border-left: 3px solid #f94e4e;
+     border-top: 3px solid #f94e4e;
+ }
+
+ .badge-soldout span:after {
+     content: "";
+     position: absolute;
+     right: 0;
+     top: 100%;
+     z-index: -1;
+     border-left: 3px solid transparent;
+     border-bottom: 3px solid transparent;
+     border-right: 3px solid #f94e4e;
+     border-top: 3px solid #f94e4e;
+ }
 
 .header {
 	padding: 20px 0;

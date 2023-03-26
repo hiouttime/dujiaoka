@@ -83,6 +83,11 @@
                                                         {{ __('goods.fields.manual_processing') }}
                                                     </span>
                                                 @endif
+                                                @if($goods['in_stock'] === 0)
+                                                     <div class="badge-soldout">
+                                                         <span>{{ __('goods.labels.soldout') }}</span>
+                                                     </div>
+                                                 @endif
                                                 <img src="{{ picture_ulr($goods['picture']) }}" class="card-img-top" alt="{{ $goods['gd_name'] }}">
                                                 <div class="card-body">
 
@@ -104,7 +109,7 @@
                                                             <strong>{{__('goods.fields.sales_volume')}}：{{ $goods['sales_volume'] }}</strong>
                                                         </button>                                                    
                                                     <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.in_stock')}}：{{ $goods['in_stock'] }}</small></h6>
-                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr">
+                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['in_stock'] === 0) disabled @endif">
                                                         <i class="ali-icon">&#xe7d8;</i>
                                                         {{ __('dujiaoka.order_now') }}
                                                     </a>
@@ -135,6 +140,11 @@
                                         {{ __('goods.fields.manual_processing') }}
                                     </span>
                                                 @endif
+                                                @if($goods['in_stock'] === 0)
+                                                     <div class="badge-soldout">
+                                                         <span>{{ __('goods.labels.soldout') }}</span>
+                                                     </div>
+                                                 @endif
                                                 <img src="{{ picture_ulr($goods['picture']) }}" class="card-img-top" alt="{{ $goods['gd_name'] }}">
                                                 <div class="card-body">
 
@@ -156,7 +166,7 @@
                                                             <strong>{{__('goods.fields.sales_volume')}}：{{ $goods['sales_volume'] }}</strong>
                                                         </button>
                                                     <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.in_stock')}}：{{ $goods['in_stock'] }}</small></h6>
-                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr">
+                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['in_stock'] === 0) disabled @endif">
                                                         <i class="ali-icon">&#xe7d8;</i>
                                                         {{ __('dujiaoka.order_now') }}
                                                     </a>
