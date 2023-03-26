@@ -39,8 +39,9 @@
                                     @if(!empty($info))
                                         <div class="mb-1"><label>{{ __('dujiaoka.order_information') }}：</label><p>{{ $info }}</p></div>
                                     @endif
-                                    <div class="mb-1"><label>{{ __('order.fields.actual_price') }}：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $actual_price }}</span></div>
                                     <div class="mb-1"><label>{{ __('dujiaoka.payment_method') }}：</label><span>{{ $pay['pay_name'] }}</span></div>
+                                    <div class="mb-1"><label>{{ __('dujiaoka.payment_fee') }}：</label><span>{{ $pay['pay_fee'] }}%</span></div>                                    
+                                    <div class="mb-1"><label>{{ __('order.fields.actual_price') }}：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $actual_price }}</span></div>
                                     <div class="mb-1"><label>{{ __('order.fields.order_created') }}：</label><span>{{ $created_at }}</span></div>
 
                                     <div class="pay-now text-center mt-3">

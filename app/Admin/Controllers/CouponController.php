@@ -104,7 +104,7 @@ class CouponController extends AdminController
                     // 从数据库中查出的二维数组中转化成ID
                     return array_column($v, 'id');
                 });
-            $form->currency('discount')->default(0)->required();
+            $form->currency('discount')->default(0)->help(__('coupon.helps.discount'))->required();
             $form->text('coupon')->required();
             $form->number('ret')->default(1);
             $form->select('type')->options(CouponModel::getTypeMap())->default(CouponModel::TYPE_PERCENT);

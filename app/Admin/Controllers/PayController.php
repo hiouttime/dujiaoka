@@ -26,15 +26,12 @@ class PayController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('pay_name');
             $grid->column('pay_check');
+            $grid->column('pay_fee');
             $grid->column('pay_method')->select(PayModel::getMethodMap());
             $grid->column('merchant_id')->limit(20);
-            $grid->column('merchant_key')->limit(20);
-            $grid->column('merchant_pem')->limit(20);
             $grid->column('pay_client')->select(PayModel::getClientMap());
             $grid->column('pay_handleroute');
             $grid->column('is_open')->switch();
-            $grid->column('created_at');
-            $grid->column('updated_at')->sortable();
             $grid->disableDeleteButton();
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -71,6 +68,7 @@ class PayController extends AdminController
             $show->field('merchant_key');
             $show->field('merchant_pem');
             $show->field('pay_check');
+            $show->fielf('pay_fee');
             $show->field('pay_client')->as(function ($payClient) {
                 if ($payClient == PayModel::PAY_CLIENT_PC) {
                     return admin_trans('pay.fields.pay_client_pc');
@@ -108,6 +106,7 @@ class PayController extends AdminController
         return Form::make(new Pay(), function (Form $form) {
             $form->display('id');
             $form->text('pay_name')->required();
+            $form->currency('pay_fee')->default(0)->help(__('pay.helps.pay_fee'))->required();
             $form->text('merchant_id')->required();
             $form->textarea('merchant_key');
             $form->textarea('merchant_pem')->required();

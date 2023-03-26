@@ -91,12 +91,11 @@ class PayController extends BaseController
         $this->checkOrder($orderSN);
         // 支付配置
         $this->payGateway = $this->payService->detailByCheck($payCheck);
-        if (!$this->payGateway) {
+        if (!$this->payGateway) 
             throw new RuleValidationException(__('dujiaoka.prompt.pay_gateway_does_not_exist'));
-        }
-        // 临时保存支付方式
-        $this->order->pay_id = $this->payGateway->id;
-        $this->order->save();
+        // 阻止主动切换支付方式
+        if($this->order->pay_id != $this->payGateway->id)
+            throw new RuleValidationException(__('dujiaoka.prompt.pay_gateway_does_not_match'));
     }
 
     /**
