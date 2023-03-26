@@ -175,7 +175,7 @@ return [
     'uploader' => [
         'add_new_media'          => '添加文件',
         'drag_file'              => '或将文件拖到这里',
-        'max_file_limit'         => 'The :attribute may not be greater than :max.',
+        'max_file_limit'         => '文件 :attribute 不允许超过 :max.',
         'exceed_size'            => '文件大小超出',
         'interrupt'              => '上传暂停',
         'upload_failed'          => '上传失败，请重试',
