@@ -13,7 +13,6 @@ return [
         'extensions'    => '扩展',
         'scaffold'      => '代码生成器',
         'icons'         => '图标',
-
         'goods_manage'  => '商品管理',
         'goods'         => '商品列表',
         'goods_group'   => '商品分类',

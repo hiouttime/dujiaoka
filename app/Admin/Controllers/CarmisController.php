@@ -36,11 +36,12 @@ class CarmisController extends AdminController
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
+                $filter->panel();
+                $filter->equal('id')->width(2);
                 $filter->equal('goods_id')->select(
                     Goods::query()->where('type', Goods::AUTOMATIC_DELIVERY)->pluck('gd_name', 'id')
-                );
-                $filter->equal('status')->select(CarmisModel::getStatusMap());
+                )->width(5);
+                $filter->equal('status')->select(CarmisModel::getStatusMap())->width(2);
                 $filter->scope(admin_trans('dujiaoka.trashed'))->onlyTrashed();
             });
             $grid->actions(function (Grid\Displayers\Actions $actions) {

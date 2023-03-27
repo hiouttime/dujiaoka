@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg" width="35"> &nbsp;独角 数卡',
+    'logo' => '<img src="/assets/common/images/logo.png"> &nbsp;独角数卡',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,15 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<img src="/vendor/dujiaoka-admin/images/logo.jpg">',
+    'logo-mini' => '<img src="/assets/common/images/logo.png">',
+
+    /*
+    |--------------------------------------------------------------------------
+    | dcat-admin favicon
+    |--------------------------------------------------------------------------
+    |
+    */
+    'favicon' => null,
 
     /*
      |--------------------------------------------------------------------------
@@ -106,7 +114,7 @@ return [
     | If your page is going to be accessed via https, set it to `true`.
     |
     */
-    'https' => env('ADMIN_HTTPS', true),
+    'https' => env('ADMIN_HTTPS', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -192,7 +200,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'helpers' => [
-        'enable' => false,
+        'enable' => true,
     ],
 
     /*
@@ -226,8 +234,8 @@ return [
     'menu' => [
         'cache' => [
             // enable cache or not
-            'enable' => false,
-            'store'  => 'file',
+            'enable' => true,
+            'store'  => 'redis',
         ],
 
         // Whether enable menu bind to a permission.
@@ -254,13 +262,14 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`.
-        'disk' => 'admin',
+        'disk' => 'public',
 
         // Image and file upload path under the disk above.
         'directory' => [
             'image' => 'images',
             'file'  => 'files',
         ],
+
     ],
 
     /*

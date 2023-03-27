@@ -175,7 +175,7 @@ return [
     'uploader' => [
         'add_new_media'          => '添加文件',
         'drag_file'              => '或将文件拖到这里',
-        'max_file_limit'         => '文件 :attribute 不允许超过 :max.',
+        'max_file_limit'         => 'The :attribute may not be greater than :max.',
         'exceed_size'            => '文件大小超出',
         'interrupt'              => '上传暂停',
         'upload_failed'          => '上传失败，请重试',
@@ -195,6 +195,7 @@ return [
         'Q_EXCEED_SIZE_LIMIT'    => '对不起，已超出文件大小限制',
         'F_DUPLICATE'            => '文件重复',
         'confirm_delete_file'    => '您确定要删除这个文件吗?',
+        'dimensions'             => '图片规格不正确',
     ],
     'import_extension_confirm'  => '确认导入拓展？',
     'quick_create'              => '快速创建',
