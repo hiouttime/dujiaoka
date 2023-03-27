@@ -23,6 +23,15 @@
         height: 70px;
     }
 </style>
+<script>
+    Dcat.ready(function () {
+        colorSwitch = window.matchMedia('(prefers-color-scheme: dark)');
+        colorSwitch.addListener((e) => { 
+            Dcat.darkMode.display(e.matches);
+        });
+        Dcat.darkMode.display(colorSwitch.matches);
+    });
+</script>
 
 <div class="dashboard-title card bg-primary">
     <div class="card-body">
