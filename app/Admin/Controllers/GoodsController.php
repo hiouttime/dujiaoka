@@ -7,13 +7,14 @@ use App\Admin\Actions\Post\Restore;
 use App\Admin\Repositories\Goods;
 use App\Models\Carmis;
 use App\Models\Coupon;
-use App\Models\GoodsGroup as GoodsGroupModel;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 use App\Models\Goods as GoodsModel;
+use App\Models\GoodsGroup as GoodsGroupModel;
+use App\Models\Pay as PayModel;
 
 class GoodsController extends AdminController
 {
@@ -55,7 +56,6 @@ class GoodsController extends AdminController
             $grid->column('sales_volume');
             $grid->column('ord')->editable()->sortable();
             $grid->column('is_open')->switch();
-            $grid->column('created_at')->sortable();
             $grid->column('updated_at');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -133,6 +133,7 @@ class GoodsController extends AdminController
      */
     protected function form()
     {
+        
         return Form::make(new Goods(), function (Form $form) {
             $form->display('id');
             $form->text('gd_name')->required();
@@ -145,6 +146,9 @@ class GoodsController extends AdminController
             $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY)->required();
             $form->currency('retail_price')->default(0)->help(admin_trans('goods.helps.retail_price'));
             $form->currency('actual_price')->default(0)->required();
+            $form->multipleSelect('payment_limit')
+            ->options(PayModel::where('is_open', PayModel::STATUS_OPEN)->pluck('pay_name', 'id')->toArray())
+            ->help(admin_trans('goods.helps.payment_limit'));
             $form->number('in_stock')->help(admin_trans('goods.helps.in_stock'));
             $form->number('sales_volume');
             $form->number('buy_limit_num')->help(admin_trans('goods.helps.buy_limit_num'));

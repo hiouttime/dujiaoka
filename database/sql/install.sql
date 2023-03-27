@@ -341,6 +341,7 @@ CREATE TABLE `goods` (
   `in_stock` int NOT NULL DEFAULT '0' COMMENT '库存',
   `sales_volume` int DEFAULT '0' COMMENT '销量',
   `ord` int DEFAULT '1' COMMENT '排序权重 越大越靠前',
+  `payment_limit` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '仅允许的支付方式',
   `buy_limit_num` int NOT NULL DEFAULT '0' COMMENT '限制单次购买最大数量，0为不限制',
   `buy_prompt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '购买提示',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '商品描述',
