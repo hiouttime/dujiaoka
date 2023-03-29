@@ -11,9 +11,10 @@ return [
     'dujiaoka_version' => '2.1.0',
     // 模板集合
     'templates' => [
-        'unicorn' => '官方[unicorn-独角兽]',
-        'luna' => 'Luna[Julyssn]',
-        'hyper' => 'hyper[Bimoe]'
+        'unicorn' => 'Unicorn独角兽',
+        'luna' => 'Luna[Author: Julyssn]',
+        'hyperx' => 'Hyper v23[Author: Bimoe]'
+        'hyper' => 'Hyper [Author: Bimoe]'
     ],
     // 语言
     'language' => [

@@ -54,13 +54,6 @@ $(function() {
 			scrollTop: 0
 		}, 500);
 	});
-	// 设置公告
-	let expiration = localStorage.announcement;
-	if (new Date().getTime() > expiration || expiration == null) {
-		$('#notice-modal').modal();
-		let setTime = new Date().getTime() + (1 * 60 * 60 * 1000);
-		localStorage.setItem("announcement",setTime);
-	}
 	// 版权
 	console.group("Faka");console.log("Name: 独角数卡");console.log("Github: https://github.com/assimon/dujiaoka");console.groupEnd();
 	console.group("Theme");console.log("Name: Hyper Theme");console.log("Author: Bimoes");console.groupEnd();
