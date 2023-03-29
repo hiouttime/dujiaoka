@@ -148,6 +148,7 @@ class GoodsController extends AdminController
             $form->currency('actual_price')->default(0)->required();
             $form->multipleSelect('payment_limit')
             ->options(PayModel::where('is_open', PayModel::STATUS_OPEN)->pluck('pay_name', 'id')->toArray())
+            ->saving(function ($v) {return json_encode($v);})
             ->help(admin_trans('goods.helps.payment_limit'));
             $form->number('in_stock')->help(admin_trans('goods.helps.in_stock'));
             $form->number('sales_volume');
