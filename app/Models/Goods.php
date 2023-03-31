@@ -16,6 +16,7 @@ class Goods extends BaseModel
     protected $dispatchesEvents = [
         'deleted' => GoodsDeleted::class
     ];
+    
 
     /**
      * 关联分类
@@ -93,5 +94,5 @@ class Goods extends BaseModel
             self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing')
         ];
     }
-
+    
 }

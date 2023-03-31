@@ -203,6 +203,7 @@ if (!function_exists('picture_ulr')) {
 
     /**
      * 生成前台图片链接 不存在使用默认图
+     * 如果地址已经是完整URL了，则直接输出
      * @param string $file 图片地址
      * @param false $getHost 是否只获取图片前缀域名
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\UrlGenerator|string
@@ -210,6 +211,7 @@ if (!function_exists('picture_ulr')) {
     function picture_ulr($file, $getHost = false)
     {
         if ($getHost) return Storage::disk('admin')->url('');
+        if (Illuminate\Support\Facades\URL::isValidUrl($file)) return $file;
         return $file ? Storage::disk('admin')->url($file) : url('assets/common/images/default.jpg');
     }
 }

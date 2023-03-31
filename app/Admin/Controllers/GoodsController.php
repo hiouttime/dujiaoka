@@ -143,6 +143,12 @@ class GoodsController extends AdminController
                 GoodsGroupModel::query()->pluck('gp_name', 'id')
             )->required();
             $form->image('picture')->autoUpload()->uniqueName()->help(admin_trans('goods.helps.picture'));
+            $form->url('picture_url')->help(admin_trans('goods.helps.picture_url'));
+            $form->saving(function (Form $form) {
+                if($form->picture_url)
+                    $form->picture = $form->picture_url;
+                $form->deleteInput('picture_url');
+            });
             $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY)->required();
             $form->currency('retail_price')->default(0)->help(admin_trans('goods.helps.retail_price'));
             $form->currency('actual_price')->default(0)->required();

@@ -2,11 +2,10 @@
 
 namespace App\Admin\Repositories;
 
-use App\Models\Goods as Model;
-use Dcat\Admin\Form;
+use App\Models\Articles as Model;
 use Dcat\Admin\Repositories\EloquentRepository;
 
-class Goods extends EloquentRepository
+class Articles extends EloquentRepository
 {
     /**
      * Model.

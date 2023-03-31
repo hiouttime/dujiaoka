@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Pay;
-use Germey\Geetest\Geetest;
+use App\Models\Articles;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\QueryException;
 use Illuminate\Encryption\Encrypter;
@@ -47,7 +47,13 @@ class HomeController extends BaseController
     public function index(Request $request)
     {
         $goods = $this->goodsService->withGroup();
-        return $this->render('static_pages/home', ['data' => $goods], __('dujiaoka.page-title.home'));
+        $articles = Articles::select('title', 'link', 'updated_at')
+        ->take(8)
+        ->orderBy('updated_at', 'desc')
+        ->get();
+        return $this->render('static_pages/home',
+        ['data' => $goods, 'articles' => $articles],
+        __('dujiaoka.page-title.home'));
     }
 
     /**
@@ -78,9 +84,10 @@ class HomeController extends BaseController
             $formatGoods->payways = $this->payService->pays($client);
             if ($formatGoods->payment_limit) {
                 $formatGoods->payment_limit = json_decode($formatGoods->payment_limit,true);
-                $formatGoods->payways = array_filter($formatGoods->payways, function($way) use ($formatGoods) {
-                    return in_array($way['id'], $formatGoods->payment_limit);
-                });
+                if(count($formatGoods->payment_limit))
+                    $formatGoods->payways = array_filter($formatGoods->payways, function($way) use ($formatGoods) {
+                        return in_array($way['id'], $formatGoods->payment_limit);
+                    });
              }
             return $this->render('static_pages/buy', $formatGoods, $formatGoods->gd_name);
         } catch (RuleValidationException $ruleValidationException) {

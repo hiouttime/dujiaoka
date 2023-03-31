@@ -48,6 +48,7 @@ return [
     'search_now' => '立即查询',
 
     'home_page' => '首页',
+    'article_page' => '相关文章',
     'group_all' => '全部',
     'order_search' => '订单查询',
     'site_announcement' => '公告',
@@ -147,6 +148,7 @@ return [
         'home' => '首页',
         'bill' => '订单确认',
         'order-detail' => '订单详情',
-        'order-search' => '订单查询'
+        'order-search' => '订单查询',
+        'article' => '文章'
     ]
 ];

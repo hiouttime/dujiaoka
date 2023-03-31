@@ -45,6 +45,7 @@ INSERT INTO `admin_menu` VALUES (22, 0, 8, 'Order_Manage', 'fa-table', NULL, '',
 INSERT INTO `admin_menu` VALUES (23, 22, 20, 'Order', 'fa-heart', '/order', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (24, 19, 21, 'System_Setting', 'fa-cogs', '/system-setting', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (25, 19, 22, 'Email_Test', 'fa-envelope', '/email-test', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (26, 0, 23, 'Article_Manage', 'fa-newspaper-o', '/article', '', 1, now(), now());
 
 COMMIT;
 
@@ -526,6 +527,23 @@ INSERT INTO `pays` VALUES (null ,'USDT-ERC20', 'tokenpay-usdt-erc', 0, 1, 3, 'US
 INSERT INTO `pays` VALUES (null ,'USDC-ERC20', 'tokenpay-usdc-erc', 0, 1, 3, 'USDC_ERC20', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
 
 -- ----------------------------
-COMMIT;
+-- Table structure for articles
+-- ----------------------------
 
-SET FOREIGN_KEY_CHECKS = 1;
+DROP TABLE IF EXISTS `articles`;
+CREATE TABLE `articles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
+  `link` varchar(255) NOT NULL COMMENT '文章链接',
+  `title` varchar(255) NOT NULL COMMENT '文章标题',
+  `content` text NOT NULL COMMENT '文章内容',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of articles
+-- ----------------------------
+BEGIN;
+COMMIT;

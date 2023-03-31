@@ -32,6 +32,10 @@ Route::group(['middleware' => ['dujiaoka.boot'],'namespace' => 'Home'], function
     Route::post('search-order-by-email', 'OrderController@searchOrderByEmail');
     // 通过浏览器查询
     Route::post('search-order-by-browser', 'OrderController@searchOrderByBrowser');
+    // 列出文章
+    Route::get('article', 'ArticleController@listAll');
+    // 访问文章
+    Route::get('article/{link}', 'ArticleController@show');
 });
 
 Route::group(['middleware' => ['install.check'],'namespace' => 'Home'], function () {

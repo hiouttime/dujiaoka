@@ -72,7 +72,8 @@ class OrderController extends BaseController
             // 数量
             $this->orderProcessService->setBuyAmount($request->input('by_amount'));
             // 支付方式
-            if(!in_array($request->input('payway'),json_decode($goods->payment_limit,true)))
+            $payment_limit = json_decode($goods->payment_limit,true);
+            if(is_array($payment_limit) && count($payment_limit) && !in_array($request->input('payway'),$payment_limit))
                 return $this->err(__('dujiaoka.prompt.payment_limit'));
             $this->orderProcessService->setPayID($request->input('payway'));
             // 下单邮箱

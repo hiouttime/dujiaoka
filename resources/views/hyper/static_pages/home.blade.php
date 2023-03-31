@@ -11,15 +11,14 @@
                     </div>
                 </div>
             </div>
-            <h4 class="page-title">
-                <button type="button" class="btn btn-outline-primary ml-1" id="notice-open">
-                    <i class="uil-comment-alt-notes me-1"></i>
-                    {{-- 公告 --}}
-                    {{ __('hyper.notice_announcement') }}
-                </button>
-            </h4>
         </div>
     </div>
+</div>
+<div class="card card-body">
+    <h4 class="page-title d-md-block">
+        {{ __('hyper.notice_announcement') }}
+    </h4>
+        {!! dujiaoka_config_get('notice') !!}
 </div>
 <div class="nav nav-list">
     <a href="#group-all" class="tab-link active" data-bs-toggle="tab" aria-expanded="false" role="tab" data-toggle="tab">
@@ -98,25 +97,53 @@
         </div>
     @endforeach
 </div>
-<div class="modal fade" id="notice-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myCenterModalLabel">{{ __('hyper.notice_announcement') }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                {!! dujiaoka_config_get('notice') !!}
-            </div>
-        </div>
+<div class="row">
+    <div class="col-12">
+    <div class="page-title-box">
+        <h4 class="page-title d-md-block">
+            {{ __('article.total') }}
+        </h4>
+    </div>
     </div>
 </div>
+<div class="article-grid">
+<div class="card card-body">
+    <div class="article-title">
+        <h4>{{ __('article.newest') }}</h4>
+        <a href="/article">{{ __('article.more') }}>></a>
+    </div>
+    <table class="articles">
+        <tbody>
+            @foreach ($articles as $article)
+            <tr>
+                <td><a href="{{ url("/article/{$article->link}") }}">{{ $article->title }}</a></td>
+                <td>{{ $article->updated_at }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<div class="card card-body">
+    <div class="article-title">
+        <h4>{{ __('article.recommend') }}</h4>
+        <a href="/article">{{ __('article.more') }}>></a>
+    </div>
+    <table class="articles">
+        <tbody>
+            @foreach ($articles as $article)
+            <tr>
+                <td><a href="{{ url("/article/{$article->link}") }}">{{ $article->title }}</a></td>
+                <td>{{ $article->updated_at }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+</div>
+    
 @stop 
 @section('js')
 <script>
-    $('#notice-open').click(function() {
-        $('#notice-modal').modal();
-    });
     $("#search").on("input",function(e){
         var txt = $("#search").val();
         if($.trim(txt)!="") {
