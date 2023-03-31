@@ -13,8 +13,7 @@ return [
     'templates' => [
         'unicorn' => 'Unicorn独角兽',
         'luna' => 'Luna[Author: Julyssn]',
-        'hyperx' => 'Hyper v23[Author: Bimoe]',
-        'hyper' => 'Hyper [Author: Bimoe]'
+        'hyper' => 'Hyper[Author: Bimoe]',
     ],
     // 语言
     'language' => [

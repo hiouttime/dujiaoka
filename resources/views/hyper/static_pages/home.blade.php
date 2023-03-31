@@ -1,5 +1,26 @@
 @extends('hyper.layouts.default')
 @section('content')
+<style>
+@media (max-width: 767.98px){
+    .page-title-box .page-title-right {
+        width: 100%;
+    }
+    .page-title-right {
+        margin-bottom: 17px;
+    }
+    .app-search {
+        width: 100%;
+    }
+    .phone {
+        display: none;
+    }
+}
+.notice img {
+    max-width: 288px;
+    height: auto;
+}
+</style>
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -11,136 +32,105 @@
                     </div>
                 </div>
             </div>
+            <h4 class="page-title d-none d-md-block">{{ __('hyper.home_title') }}</h4>
         </div>
     </div>
-</div>
-<div class="card card-body">
-    <h4 class="page-title d-md-block">
-        {{ __('hyper.notice_announcement') }}
-    </h4>
-        {!! dujiaoka_config_get('notice') !!}
-</div>
-<div class="nav nav-list">
-    <a href="#group-all" class="tab-link active" data-bs-toggle="tab" aria-expanded="false" role="tab" data-toggle="tab">
-        <span class="tab-title">
-        {{-- 全部 --}}
-        {{ __('hyper.home_whole') }}
-        </span>
-        <div class="img-checkmark">
-            <img src="/assets/hyper/images/check.png">
-        </div>
-    </a>
-    @foreach($data as  $index => $group)
-    <a href="#group-{{ $group['id'] }}" class="tab-link" data-bs-toggle="tab" aria-expanded="false" role="tab" data-toggle="tab">
-        <span class="tab-title">
-            {{ $group['gp_name'] }}
-        </span>
-        <div class="img-checkmark">
-            <img src="/assets/hyper/images/check.png">
-        </div>
-    </a>
-    @endforeach
-</div>
-<div class="tab-content">
-    <div class="tab-pane active" id="group-all">
-        <div class="hyper-wrapper">
-            @foreach($data as $group)
-                @foreach($group['goods'] as $goods)
-                    @if($goods['in_stock'] > 0)
-                    <a href="{{ url("/buy/{$goods['id']}") }}" class="home-card category">
-                    @else
-                    <a href="javascript:void(0);" onclick="sell_out_tip()" class="home-card category ribbon-box">
-                        <div class="ribbon-two ribbon-two-danger">
-                            {{-- 缺货 --}}
-                            <span>{{ __('hyper.home_out_of_stock') }}</span>
-                        </div>
-                    @endif
-                        <img class="home-img" src="/assets/hyper/images/loading.gif" data-src="{{ picture_ulr($goods['picture']) }}">
-                        <div class="flex">
-                            <p class="name">
-                                {{ $goods['gd_name'] }}
-                            </p>
-                            <div class="price">
-                                {{ __('hyper.global_currency') }}<b>{{ $goods['actual_price'] }}</b>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            @endforeach
-        </div>
-    </div>
-    @foreach($data as  $index => $group)
-        <div class="tab-pane" id="group-{{ $group['id'] }}">
-            <div class="hyper-wrapper">
-                @foreach($group['goods'] as $goods)
-                    @if($goods['in_stock'] > 0)
-                    <a href="{{ url("/buy/{$goods['id']}") }}" class="home-card category">
-                    @else
-                    <a href="javascript:void(0);" onclick="sell_out_tip()" class="home-card category ribbon-box">
-                        <div class="ribbon-two ribbon-two-danger">
-                            {{-- 缺货 --}}
-                            <span>{{ __('hyper.home_out_of_stock') }}</span>
-                        </div>
-                    @endif
-                        <img class="home-img" src="/assets/hyper/images/loading.gif" data-src="{{ picture_ulr($goods['picture']) }}">
-                        <div class="flex">
-                            <p class="name">
-                                {{ $goods['gd_name'] }}
-                            </p>
-                            <div class="price">
-                                {{ __('hyper.global_currency') }}<b>{{ $goods['actual_price'] }}</b>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    @endforeach
 </div>
 <div class="row">
-    <div class="col-12">
-    <div class="page-title-box">
-        <h4 class="page-title d-md-block">
-            {{ __('article.total') }}
-        </h4>
-    </div>
+	<div class="col-12">
+        <div class="card">
+            <div class="card-body">
+            	<h4 class="header-title mb-3">{{ __('hyper.notice_announcement') }}</h4>
+                <div class="notice">{!! dujiaoka_config_get('notice') !!}</div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="article-grid">
-<div class="card card-body">
-    <div class="article-title">
-        <h4>{{ __('article.newest') }}</h4>
-        <a href="/article">{{ __('article.more') }}>></a>
+    @foreach($data as $group)
+    @if(count($group['goods']) > 0)
+    <div class="row category">
+        <div class="col-md-12">
+            <h3>
+                {{-- 分类名称 --}}
+                <span class="badge badge-info">{{ $group['gp_name'] }}</span>
+            </h3>
+        </div>
+        <div class="col-md-12">
+            <div class="card pl-1 pr-1">
+                <table class="table table-centered mb-0">
+                    <thead>
+                        <tr>
+                            {{-- 名称 --}}
+                            <th width="40%">{{ __('hyper.home_product_name') }}</th>
+                            {{-- 类型 --}}
+                            <th width="10%" class="phone">{{ __('hyper.home_product_class') }}</th>
+                            {{-- 库存 --}}
+                            <th width="10%" class="phone">{{ __('hyper.home_in_stock') }}</th>
+                            {{-- 价格 --}}
+                            <th width="10%">{{ __('hyper.home_price') }}</th>
+                            {{-- 操作 --}}
+                            <th width="10%" class="text-center">{{ __('hyper.home_place_an_order') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($group['goods'] as $goods)
+                        <tr class="category">
+                            <td class="d-none">{{ $group['gp_name'] }}-{{ $goods['gd_name'] }}</td>
+                            <td class="table-user">
+                                {{-- 商品名称 --}}
+                                @if($goods['in_stock'] > 0)
+                                <a href="{{ url("/buy/{$goods['id']}") }}" class="text-body">
+                                <img src="{{ picture_ulr($goods['picture']) }}" class="mr-2 avatar-sm">
+                                    {{ $goods['gd_name'] }}
+                                </a>
+                                @else
+                                <a href="javascript:void(0);" class="text-body" onclick="sell_out_tip()">
+                                <img src="{{ picture_ulr($goods['picture']) }}" class="mr-2 avatar-sm">
+                                    {{ $goods['gd_name'] }}
+                                </a>
+                                @endif
+                                @if($goods['wholesale_price_cnf'])
+                                    {{-- 折扣 --}}
+                                    <span class="badge badge-outline-warning">{{ __('hyper.home_discount') }}</span>
+                                @endif
+                            </td>
+                            <td class="phone">
+                                @if($goods['type'] == \App\Models\Goods::AUTOMATIC_DELIVERY)
+                                    {{-- 自动发货 --}}
+                                    <span class="badge badge-outline-primary">{{ __('hyper.home_automatic_delivery') }}</span>
+                                @else
+                                    {{-- 人工发货 --}}
+                                    <span class="badge badge-outline-danger">{{ __('hyper.home_charge') }}</span>
+                                @endif
+                            </td>
+                            {{-- 库存 --}}
+                            <td class="phone">
+                                @if($goods['in_stock'] > 0)
+                                    库存充足
+                                @else
+                                    库存不足
+                                @endif
+                            </td>
+                            {{-- 价格 --}}
+                            <td>￥<b>{{ $goods['actual_price'] }}</b></td>
+                            <td class="text-center">
+                                @if($goods['in_stock'] > 0)
+                                    {{-- 购买 --}}
+                                    <a class="btn btn-outline-primary" href="{{ url("/buy/{$goods['id']}") }}">{{ __('hyper.home_buy') }}</a>
+                                @else
+                                    {{-- 缺货 --}}
+                                    <a class="btn btn-outline-secondary disabled" href="javascript:void(0);">{{ __('hyper.home_out_of_stock') }}</a>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <table class="articles">
-        <tbody>
-            @foreach ($articles as $article)
-            <tr>
-                <td><a href="{{ url("/article/{$article->link}") }}">{{ $article->title }}</a></td>
-                <td>{{ $article->updated_at }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-<div class="card card-body">
-    <div class="article-title">
-        <h4>{{ __('article.recommend') }}</h4>
-        <a href="/article">{{ __('article.more') }}>></a>
-    </div>
-    <table class="articles">
-        <tbody>
-            @foreach ($articles as $article)
-            <tr>
-                <td><a href="{{ url("/article/{$article->link}") }}">{{ $article->title }}</a></td>
-                <td>{{ $article->updated_at }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-</div>
-    
+    @endif
+    @endforeach
 @stop 
 @section('js')
 <script>

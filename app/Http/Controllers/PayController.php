@@ -110,7 +110,7 @@ class PayController extends BaseController
      * @link      http://utf8.hk/
      */
     public function redirectGateway(string $handle,string $payway, string $orderSN)
-    {
+    {    exit();
         try {
             $this->checkOrder($orderSN);
             $bccomp = bccomp($this->order->actual_price, 0.00, 2);
@@ -123,7 +123,6 @@ class PayController extends BaseController
         } catch (RuleValidationException $exception) {
             return $this->err($exception->getMessage());
         }
-
     }
 
 }
