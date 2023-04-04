@@ -17,35 +17,35 @@ CREATE TABLE `admin_menu` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of admin_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin_menu` VALUES (1, 0, 1, 'Index', 'feather icon-bar-chart-2', '/', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (2, 0, 2, 'Admin', 'feather icon-settings', '', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (3, 2, 3, 'Users', '', 'auth/users', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (4, 2, 4, 'Roles', '', 'auth/roles', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (5, 2, 5, 'Permission', '', 'auth/permissions', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (6, 2, 6, 'Menu', '', 'auth/menu', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (7, 2, 7, 'Extensions', '', 'auth/extensions', '', 1, now(), NULL);
-INSERT INTO `admin_menu` VALUES (11, 0, 9, 'Goods_Manage', 'fa-shopping-bag', NULL, '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (12, 11, 11, 'Goods', 'fa-shopping-bag', '/goods', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (13, 11, 10, 'Goods_Group', 'fa-star-half-o', '/goods-group', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (14, 0, 12, 'Carmis_Manage', 'fa-credit-card-alt', NULL, '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (15, 14, 13, 'Carmis', 'fa-credit-card', '/carmis', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (16, 14, 14, 'Import_Carmis', 'fa-plus-circle', '/import-carmis', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (17, 18, 16, 'Coupon', 'fa-dollar', '/coupon', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (18, 0, 15, 'Coupon_Manage', 'fa-diamond', NULL, '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (19, 0, 17, 'Configuration', 'fa-wrench', NULL, '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (20, 19, 18, 'Email_Template_Configuration', 'fa-envelope', '/emailtpl', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (21, 19, 19, 'Pay_Configuration', 'fa-cc-visa', '/pay', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (22, 0, 8, 'Order_Manage', 'fa-table', NULL, '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (23, 22, 20, 'Order', 'fa-heart', '/order', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (24, 19, 21, 'System_Setting', 'fa-cogs', '/system-setting', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (25, 19, 22, 'Email_Test', 'fa-envelope', '/email-test', '', 1, now(), now());
-INSERT INTO `admin_menu` VALUES (26, 0, 23, 'Article_Manage', 'fa-newspaper-o', '/article', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 1, 'Index', 'feather icon-bar-chart-2', '/', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 2, 'Admin', 'feather icon-settings', '', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 2, 3, 'Users', '', 'auth/users', '', 1, now(), NULL);
+INSERT INTO `admin_menu` VALUES (null, 2, 4, 'Roles', '', 'auth/roles', '', 1, now(), NULL);
+INSERT INTO `admin_menu` VALUES (null, 2, 5, 'Permission', '', 'auth/permissions', '', 1, now(), NULL);
+INSERT INTO `admin_menu` VALUES (null, 2, 6, 'Menu', '', 'auth/menu', '', 1, now(), NULL);
+INSERT INTO `admin_menu` VALUES (null, 2, 7, 'Extensions', '', 'auth/extensions', '', 1, now(), NULL);
+INSERT INTO `admin_menu` VALUES (null, 0, 9, 'Goods_Manage', 'fa-shopping-bag', NULL, '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 11, 11, 'Goods', 'fa-shopping-bag', '/goods', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 11, 10, 'Goods_Group', 'fa-star-half-o', '/goods-group', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 12, 'Carmis_Manage', 'fa-credit-card-alt', NULL, '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 14, 13, 'Carmis', 'fa-credit-card', '/carmis', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 14, 14, 'Import_Carmis', 'fa-plus-circle', '/import-carmis', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 18, 16, 'Coupon', 'fa-dollar', '/coupon', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 15, 'Coupon_Manage', 'fa-diamond', NULL, '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 17, 'Configuration', 'fa-wrench', NULL, '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 19, 18, 'Email_Template_Configuration', 'fa-envelope', '/emailtpl', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 19, 19, 'Pay_Configuration', 'fa-cc-visa', '/pay', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 8, 'Order_Manage', 'fa-table', NULL, '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 22, 20, 'Order', 'fa-heart', '/order', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 19, 21, 'System_Setting', 'fa-cogs', '/system-setting', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 19, 22, 'Email_Test', 'fa-envelope', '/email-test', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (null, 0, 23, 'Article_Manage', 'fa-newspaper-o', '/article', '', 1, now(), now());
 
 COMMIT;
 
@@ -519,7 +519,7 @@ INSERT INTO `pays` VALUES (null, 'V 免签支付宝', 'vzfb', 0, 1, 1, 'V 免签
 INSERT INTO `pays` VALUES (null, 'V 免签微信', 'vwx', 1, 0, 1, 'V 免签通讯密钥', NULL, 'V 免签地址 例如 https://vpay.qq.com/    结尾必须有/', 'pay/vpay', 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null, 'Stripe[微信支付宝]', 'stripe', 0, 1, 1, 'pk开头的可发布密钥', NULL, 'sk开头的密钥', 'pay/stripe', 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null, 'Coinbase[加密货币]', 'coinbase', 0, 1, 3, '费率', 'API密钥', '共享密钥', 'pay/coinbase', 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Epusdt[trc20]', 0, 'epusdt', 1, 3, 'API密钥', '不填即可', 'api请求地址', 'pay/epusdt', 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Epusdt[trc20]', 'epusdt', 0, 1, 3, 'API密钥', '不填即可', 'api请求地址', 'pay/epusdt', 0, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'USDT-TRC20', 'tokenpay-usdt-trc', 0, 1, 3, 'USDT_TRC20', '你的API密钥', 'TokenPay地址', 'pay/tokenpay', 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'TRX', 'tokenpay-trx', 0, 1, 3, 'TRX', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'ETH', 'tokenpay-eth', 0, 1, 3, 'ETH', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
