@@ -116,6 +116,7 @@ return [
         'order_already_paid' => '订单已经支付过了，请勿重复支付',
         'order_status_completed' => '订单已经处理',
         'order_inconsistent_amounts' => '订单金额不一致',
+        'order_ip_limits' => '您有过多待支付的订单，请先支付；或者休息一下吧。',
         'order_carmis_insufficient_quantity_available' => '库存可使用卡密不足，请联系管理员核查',
         'pay_gateway_does_not_exist' => '支付网关不存在',
         'pay_gateway_does_not_match' => '请使用与下单时一致的支付方式',

@@ -14,6 +14,7 @@ return [
         'base_setting' => '基本设置',
         'mail_setting' => '邮件服务',
         'order_push_setting' => '订单推送配置',
+        'order_setting' => '下单设置',
         'geetest' => '极验验证',
     ],
 
@@ -27,9 +28,12 @@ return [
         'footer' => '页脚自定义代码',
         'manage_email' => '管理员邮箱',
         'is_open_anti_red' => '是否开启微信/QQ防红',
-        'is_open_img_code' => '是否开启图形验证码',
         'is_open_search_pwd' => '是否开启查询密码',
         'is_open_google_translate' => '是否开启google翻译',
+        
+        'is_open_img_code' => '是否开启图形验证码',
+        'order_expire_time' => '订单过期时间(分钟)',
+        'order_ip_limits' => '单IP同时<code>待支付</code>订单数量',
 
         'is_open_server_jiang' => '是否开启server酱',
         'server_jiang_token' => 'server酱通讯token',
@@ -45,7 +49,6 @@ return [
 
         'template' => '站点模板',
         'language' => '站点语言',
-        'order_expire_time' => '订单过期时间(分钟)',
 
         'driver' => '邮件驱动',
         'host' => 'smtp服务器地址',

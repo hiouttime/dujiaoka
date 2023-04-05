@@ -88,6 +88,17 @@ class OrderService
         ) {
             throw new RuleValidationException(__('dujiaoka.prompt.geetest_validate_fail'));
         }
+        // 待支付订单限制
+        $limit = dujiaoka_config_get('order_ip_limits');
+        if($limit > 0){
+            $count = Order::where('buy_ip', $request->getClientIp())
+            ->where('status', Order::STATUS_WAIT_PAY)
+            ->limit($limit)
+            ->count();
+            
+            if ($count >= $limit)
+                throw new RuleValidationException(__('dujiaoka.prompt.order_ip_limits'));
+        }
     }
 
     /**
