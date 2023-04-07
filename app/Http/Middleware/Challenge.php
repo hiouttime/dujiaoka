@@ -8,6 +8,9 @@ use GeoIp2\Database\Reader;
 
 class Challenge
 {
+    private $whiteClass = [
+        "App\Http\Controllers\Pay"
+        ];
     /**
      * Handle an incoming request.
      *
@@ -17,6 +20,10 @@ class Challenge
      */
     public function handle($request, Closure $next)
     {
+        
+        if(in_array($request->route()->getAction()["namespace"],$this->whiteClass))
+            return $next($request);
+        
         if(dujiaoka_config_get('is_cn_challenge') == BaseModel::STATUS_CLOSE)
             return $next($request);
             
