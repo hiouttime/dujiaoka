@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /
+
+Allow: /$
+Allow: /buy
+Allow: /article
