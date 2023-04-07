@@ -64,6 +64,7 @@ return [
     'or_the_above' => '件或以上',
     'each' => '每个',
     'email' => '邮箱',
+    'shipping_email' => '收货邮箱',
     'payment_method' => '支付方式',
     'payment_fee' => '通道费率',
     'search_password' => '订单查询密码',

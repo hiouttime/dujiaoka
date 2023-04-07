@@ -69,8 +69,6 @@
         }
 
         async function work(target) {
-            const maxLength = 10;
-  
             for (let i = 0; i < Number.MAX_SAFE_INTEGER; i++) {
                 const hash = await sha1(i);
                 if (hash.endsWith(target)) {

@@ -63,7 +63,7 @@
                                                     </div>
                                                     <div class="col-xs-12 col-md-6">
                                                         <input type="hidden" name="gid" value="{{ $id }}">
-                                                        <label for="email" class=" col-form-label">{{ __('dujiaoka.email') }}:</label>
+                                                        <label for="email" class=" col-form-label">{{ __('dujiaoka.shipping_email') }}:</label>
                                                         <input type="email" class="form-control form-control-sm"
                                                                name="email" id="email" required placeholder="{{ __('dujiaoka.email') }}">
                                                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\BaseModel;
 use Closure;
+use Germey\Geetest\GeetestServiceProvider;
 
 class DujiaoBoot
 {
@@ -52,6 +53,11 @@ class DujiaoBoot
             // 重新注册服务
             (new GeetestServiceProvider(app()))->register();
         }
+        // CDN下IP还原
+        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {// Cloudflare
+            $request->server->set('REMOTE_ADDR', $_SERVER["HTTP_CF_CONNECTING_IP"]);
+        }
+
         return $next($request);
     }
 }
