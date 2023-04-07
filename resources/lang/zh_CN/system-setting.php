@@ -32,6 +32,7 @@ return [
         'is_open_google_translate' => '是否开启google翻译',
         
         'is_open_img_code' => '是否开启图形验证码',
+        'is_cn_challenge' => '中国大陆访问需要人机验证',
         'order_expire_time' => '订单过期时间(分钟)',
         'order_ip_limits' => '单IP同时<code>待支付</code>订单数量',
 

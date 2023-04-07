@@ -43,6 +43,8 @@ class SystemSetting extends Form
             $this->text('manage_email', admin_trans('system-setting.fields.manage_email'));
             $this->switch('is_open_anti_red', admin_trans('system-setting.fields.is_open_anti_red'))
                 ->default(BaseModel::STATUS_CLOSE);
+            $this->switch('is_cn_challenge', admin_trans('system-setting.fields.is_cn_challenge'))
+                ->default(BaseModel::STATUS_OPEN);    
             $this->switch('is_open_search_pwd', admin_trans('system-setting.fields.is_open_search_pwd'))
                 ->default(BaseModel::STATUS_CLOSE);
             $this->switch('is_open_google_translate', admin_trans('system-setting.fields.is_open_google_translate'))

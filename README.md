@@ -31,6 +31,7 @@
 - 后台系统框架 [Dcat Admin](http://www.dcatadmin.com)
 - 部分支付系统集成 [yansongda/Pay](https://github.com/yansongda/pay)
 - 区块链代币支付系统集成 [Tokenpay](https://github.com/LightCountry/TokenPay)
+- IP数据库[GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
 
 ### 项目原版作者：
 - [Assimon](https://github.com/assimon)
@@ -124,3 +125,7 @@
 ## :raised_hands:License
 
 独角数卡 DJK Inc [MIT license](https://opensource.org/licenses/MIT).
+
+This product includes GeoLite2 data created by MaxMind, available from
+[https://www.maxmind.com](https://www.maxmind.com)
+
