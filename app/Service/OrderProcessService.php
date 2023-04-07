@@ -232,11 +232,17 @@ class OrderProcessService
         $couponPrice = 0;
         // 优惠码优惠价格
         if ($this->coupon) {
-            if($this->coupon->type == Coupon::TYPE_FIXED){
-                $couponPrice =  $this->coupon->discount;
-            }else{
-                $totalPrice = $this->calculateTheTotalPrice(); // 总价
-                $couponPrice = $totalPrice - bcmul($totalPrice, $this->coupon->discount, 2); //计算折扣
+            switch($this->coupon->type){
+                case Coupon::TYPE_FIXED:
+                    $couponPrice =  $this->coupon->discount;
+                    break;
+                case Coupon::TYPE_PERCENT:
+                    $totalPrice = $this->calculateTheTotalPrice(); // 总价
+                    $couponPrice = $totalPrice - bcmul($totalPrice, $this->coupon->discount, 2); //计算折扣
+                    break;
+                case Coupon::TYPE_EACH:
+                    $couponPrice = bcmul($this->coupon->discount, $this->buyAmount, 2);
+                    break;
             }
         }
         return $couponPrice;

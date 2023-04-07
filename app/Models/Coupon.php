@@ -12,7 +12,8 @@ class Coupon extends BaseModel
     protected $table = 'coupons';
 
     const TYPE_PERCENT = 1; //系数优惠
-    const TYPE_FIXED = 2; //固定金额优惠
+    const TYPE_FIXED = 2; //整体固定金额优惠
+    const TYPE_EACH = 3; //每件固定金额优惠
 
     /**
      * 关联商品
@@ -34,6 +35,7 @@ class Coupon extends BaseModel
         return [
             self::TYPE_PERCENT => admin_trans('coupon.fields.type_percent'),
             self::TYPE_FIXED => admin_trans('coupon.fields.type_fixed'),
+            self::TYPE_EACH => admin_trans('coupon.fields.type_each'),
         ];
     }
 
