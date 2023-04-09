@@ -117,6 +117,12 @@ class OrderProcessService
      * @var int
      */
     private $payID;
+    
+    /**
+     * 预选的卡密ID
+     * @var int
+     */
+    private $carmiID;
 
     public function __construct()
     {
@@ -174,6 +180,15 @@ class OrderProcessService
     public function setEmail($email): void
     {
         $this->email = $email;
+    }
+    
+    /**
+     * 设置预选卡密ID
+     * @param int $id
+     */
+    public function setCarmi(int $id): void
+    {
+        $this->carmiID = $id;
     }
 
     /**
@@ -258,6 +273,9 @@ class OrderProcessService
      */
     private function calculateTheWholesalePrice(): float
     {
+        // 优惠码与批发价不叠加
+        if($this->coupon)
+            return 0;
         $wholesalePrice = 0; // 优惠单价
         $wholesaleTotalPrice = 0; // 优惠总价
         if ($this->goods->wholesale_price_cnf) {
@@ -287,6 +305,11 @@ class OrderProcessService
     private function calculateTheTotalPrice(): float
     {
         $price = $this->goods->sell_price;
+        
+        // 如果预选了卡密，则加上预选加价
+        if($this->carmiID)
+            $price+=$this->goods->preselection;
+            
         return bcmul($price, $this->buyAmount, 2);
     }
     
@@ -358,9 +381,11 @@ class OrderProcessService
             // 支付方式.
             $order->pay_id = $this->payID;
             // 商品单价
-            $order->goods_price = $this->goods->actual_price;
+            $order->goods_price = $this->goods->sell_price;
             // 购买数量
             $order->buy_amount = $this->buyAmount;
+            // 预选卡密
+            $order->carmi_id = $this->carmiID;
             // 订单详情
             $order->info = $this->otherIpt;
             // ip地址
@@ -515,17 +540,23 @@ class OrderProcessService
      */
     public function processAuto(Order $order): Order
     {
-        // 获得卡密
-        $carmis = $this->carmisService->withGoodsByAmountAndStatusUnsold($order->goods_id, $order->buy_amount);
-        // 实际可使用的库存已经少于购买数量了
-        if (count($carmis) != $order->buy_amount) {
-            $order->info = __('dujiaoka.prompt.order_carmis_insufficient_quantity_available');
-            $order->status = Order::STATUS_ABNORMAL;
-            $order->save();
-            return $order;
+        if($order->carmi_id){
+            $carmis = $this->carmisService->getCarmiById($order->carmi_id);
+            $carmisInfo = [$carmis['carmi']];
+            $ids = [$carmis['id']];
+        }else{
+            // 批量获得卡密
+            $carmis = $this->carmisService->withGoodsByAmountAndStatusUnsold($order->goods_id, $order->buy_amount);
+            // 实际可使用的库存已经少于购买数量了
+            if (count($carmis) != $order->buy_amount) {
+                $order->info = __('dujiaoka.prompt.order_carmis_insufficient_quantity_available');
+                $order->status = Order::STATUS_ABNORMAL;
+                $order->save();
+                return $order;
+            }
+            $carmisInfo = array_column($carmis, 'carmi');
+            $ids = array_column($carmis, 'id');
         }
-        $carmisInfo = array_column($carmis, 'carmi');
-        $ids = array_column($carmis, 'id');
         $order->info = implode(PHP_EOL, $carmisInfo);
         $order->status = Order::STATUS_COMPLETED;
         $order->save();

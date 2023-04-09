@@ -148,5 +148,43 @@ class GoodsService
     {
         return Goods::query()->where('id', $id)->increment('sales_volume', $number);
     }
+    
+    /**
+     * 获得商品可供选择的卡密
+     *
+     * @param int $id 商品id
+     * @return array
+     *
+     * @author    outtime<i@treeo.cn>
+     * @copyright outtime<i@treeo.cn>
+     * @link      https://outti.me
+     */
+    public function getSelectableCarmis(int $id){
+        $carmis = Carmis::where('goods_id', $id)
+                   ->where('status', Carmis::STATUS_UNSOLD)
+                   ->get(['id', 'info']);
+        return $carmis->toArray();
+    }
+    
+    /**
+     * 检查卡密归属
+     *
+     * @param int $good_id 商品id
+     * @param int $carmi_id 卡密id
+     * @return array
+     *
+     * @author    outtime<i@treeo.cn>
+     * @copyright outtime<i@treeo.cn>
+     * @link      https://outti.me
+     */    
+    public function checkCarmiBelong(int $good_id, int $carmi_id){
+        $carmi = Carmis::where('id', $carmi_id)
+                  ->where('goods_id', $good_id)
+                  ->where('status', Carmis::STATUS_UNSOLD)
+                  ->limit(1)
+                  ->first();
+
+        return !is_null($carmi);
+    }
 
 }

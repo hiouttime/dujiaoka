@@ -35,6 +35,20 @@ class CarmisService
             ->get();
         return $carmis ? $carmis->toArray() : null;
     }
+    
+     /**
+     * 通过卡密ID获得卡密
+     *
+     * @param int $id 卡密id
+     * @return string|null
+     *
+     * @author    outtime<i@treeo.cn>
+     * @copyright outtime<i@treeo.cn>
+     * @link      https://outti.me
+     */
+     public function getCarmiById(int $id){
+         return Carmis::find($id);
+     }
 
     /**
      * 通过id集合设置卡密已售出

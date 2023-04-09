@@ -114,6 +114,20 @@
                                                         </div>
                                                     @endif
                                                 </div>
+                                                
+                                                @if($preselection)
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label">{{ __('dujiaoka.preselection')}} <b>{{ __('dujiaoka.money_symbol') . $preselection }}</b>:</label>
+                                                        <div class="carmis form-control">
+                                                            @foreach($selectable as $carmi)
+                                                            <label>
+                                                            <input type="radio" name="carmi_id" value="{{ $carmi['id'] }}">
+                                                                {{ $carmi['info'] }}
+                                                            </label>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
 
                                                 <div class="form-group row">
                                                     @if($type == \App\Models\Goods::MANUAL_PROCESSING && is_array($other_ipu))

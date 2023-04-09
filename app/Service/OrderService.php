@@ -125,6 +125,10 @@ class OrderService
         if ($request->input('by_amount') > $goods->in_stock) {
             throw new RuleValidationException(__('dujiaoka.prompt.inventory_shortage'));
         }
+        // 预选卡密不存在
+        if(!$this->goodsService->checkCarmiBelong($goods['id'], $request->input('carmi_id'))){
+            throw new RuleValidationException(__('dujiaoka.prompt.preselect_unable'));
+        }
         return $goods;
     }
 	
@@ -241,20 +245,6 @@ class OrderService
         return Order::query()->where('order_sn', $orderSN)->update(['status' => Order::STATUS_EXPIRED]);
     }
 
-    /**
-     * 设置订单优惠码已回退
-     *
-     * @param string $orderSN
-     * @return bool
-     *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
-     */
-    public function couponIsBack(string $orderSN): bool
-    {
-        return Order::query()->where('order_sn', $orderSN)->update(['coupon_ret_back' => Order::COUPON_BACK_OK]);
-    }
 
     /**
      * 通过邮箱和查询密码查询

@@ -21,7 +21,6 @@
                                             </div>
 
                                             <div class="mb-1"><label>{{ __('order.fields.buy_amount') }}：</label><span>{{ $order['buy_amount'] }}</span></div>
-
                                             <div class="mb-1"><label>{{ __('order.fields.order_created') }}：</label><span>{{ $order['created_at'] }}</span>
                                             </div>
 

@@ -6,7 +6,7 @@ return [
         'goods' => '商品',
     ],
     'fields' => [
-        'actual_price' => '售價',
+        'sell_price' => '售價',
         'group_id' => '所屬分類',
         'api_hook' => '回調事件',
         'buy_prompt' => '購買提示',

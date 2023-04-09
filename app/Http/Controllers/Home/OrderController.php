@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Order;
+use App\Models\Carmis;
 use App\Service\OrderProcessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -69,8 +70,11 @@ class OrderController extends BaseController
             $this->orderProcessService->setCoupon($coupon);
             $otherIpt = $this->orderService->validatorChargeInput($goods, $request);
             $this->orderProcessService->setOtherIpt($otherIpt);
-            // 数量
-            $this->orderProcessService->setBuyAmount($request->input('by_amount'));
+            //设置预选卡密
+            $carmi_id = intval($request->input('carmi_id'));
+            $this->orderProcessService->setCarmi($carmi_id);
+            // 数量，如果预选了卡密，则只能购买一个
+            $this->orderProcessService->setBuyAmount($carmi_id ? 1 : $request->input('by_amount'));
             // 支付方式
             $payment_limit = json_decode($goods->payment_limit,true);
             if(is_array($payment_limit) && count($payment_limit) && !in_array($request->input('payway'),$payment_limit))
@@ -129,6 +133,9 @@ class OrderController extends BaseController
         }
         if ($order->status == Order::STATUS_EXPIRED) {
             return $this->err(__('dujiaoka.prompt.order_is_expired'));
+        }
+        if ($order->carmi_id){
+            $order->preselection = Carmis::find($order->carmi_id)->info;
         }
         return $this->render('static_pages/bill', $order, __('dujiaoka.page-title.bill'));
     }

@@ -11,6 +11,7 @@ return [
         'buy_ip' => '购买者下单IP地址',
         'coupon_discount_price' => '优惠码优惠价格',
         'coupon_id' => '优惠码',
+        'preselection' => '自选卡密',
         'email' => '下单邮箱',
         'goods_id' => '所属商品',
         'goods_price' => '商品单价',

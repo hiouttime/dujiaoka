@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ImportCarmis extends Form
 {
+    
+    private $info_preg = "";
 
     /**
      * Handle the form request.
@@ -29,13 +31,16 @@ class ImportCarmis extends Form
         if (!empty($input['carmis_list'])) {
             $carmisContent = $input['carmis_list'];
         }
+        $this->info_preg = $input['info_preg'];
         $carmisData = [];
         $tempList = explode(PHP_EOL, $carmisContent);
+        
         foreach ($tempList as $val) {
             if (trim($val) != "") {
                 $carmisData[] = [
                     'goods_id' => $input['goods_id'],
                     'carmi' => trim($val),
+                    'info' => $this->formatInfo(trim($val)),
                     'status' => Carmis::STATUS_UNSOLD,
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
@@ -52,6 +57,29 @@ class ImportCarmis extends Form
 				->response()
 				->success(admin_trans('carmis.rule_messages.import_carmis_success'))
 				->location('/carmis');
+    }
+    
+    /**
+     * 匹配卡密信息
+     *
+     * @param string $val 卡密
+     * @return string|null
+     *
+     * @author    outtime<i@treeo.cn>
+     * @copyright outtime<i@treeo.cn>
+     * @link      https://outti.me
+     */
+     
+    private function formatInfo($val){
+        if(empty($this->info_preg)) return NULL;
+        
+        $info = "";
+        if (@preg_match($this->info_preg, $val, $info))
+            return $info[0];
+        $info = explode($this->info_preg,$val);
+        if(count($info) > 1)
+            return end($info);
+        return NULL;
     }
 
     /**
@@ -72,6 +100,7 @@ class ImportCarmis extends Form
             ->accept('txt')
             ->maxSize(5120)
             ->help(admin_trans('carmis.helps.carmis_list'));
+        $this->text('info_preg')->help(admin_trans('carmis.helps.info_preg'));;
         $this->switch('remove_duplication');
     }
 

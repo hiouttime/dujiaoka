@@ -32,8 +32,6 @@ class GoodsController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('picture')->image('', 100, 100);
             $grid->column('gd_name');
-            $grid->column('gd_description');
-            $grid->column('gd_keywords');
             $grid->column('group.gp_name', admin_trans('goods.fields.group_id'));
             $grid->column('type')
                 ->using(GoodsModel::getGoodsTypeMap())
@@ -105,6 +103,7 @@ class GoodsController extends AdminController
                     return admin_trans('goods.fields.manual_processing');
                 }
             });
+            $show->field('preselection');
             $show->field('is_open')->as(function ($isOpen) {
                 if ($isOpen == GoodsGroupModel::STATUS_OPEN) {
                     return admin_trans('dujiaoka.status_open');
@@ -156,6 +155,7 @@ class GoodsController extends AdminController
             $form->number('in_stock')->help(admin_trans('goods.helps.in_stock'));
             $form->number('sales_volume');
             $form->number('buy_limit_num')->help(admin_trans('goods.helps.buy_limit_num'));
+            $form->currency('preselection')->default(0)->help(admin_trans('goods.helps.preselection'));
             $form->editor('buy_prompt');
             $form->editor('description');
             $form->textarea('other_ipu_cnf')->help(admin_trans('goods.helps.other_ipu_cnf'));

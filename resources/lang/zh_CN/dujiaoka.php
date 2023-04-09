@@ -72,6 +72,7 @@ return [
     'coupon_code' => '优惠码',
     'copy_text' => '复制',
     'search_goods_name' => '商品名称...',
+    'preselection' => '可自选卡密，加价',
 
     'behavior_verification' => '行为验证',
     'click_to_behavior_verification' => '点击进行此处行为验证',
@@ -130,7 +131,8 @@ return [
         'no_related_order_found' => '未找到相关订单！',
         'new_order_push' => '新订单通知',
         'loop_carmis_limit' => '此商品最多购买一件！',
-        'payment_limit' => '商品不支持此支付方式支付！'
+        'payment_limit' => '商品不支持此支付方式支付！',
+        'preselect_unable' => '预选的卡密已失效，请重新下单。'
     ],
 
     'equipment' => [

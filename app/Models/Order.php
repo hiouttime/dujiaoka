@@ -47,16 +47,6 @@ class Order extends BaseModel
      */
     const STATUS_ABNORMAL = 6;
 
-    /**
-     * 优惠券未回退
-     */
-    const COUPON_BACK_WAIT = 0;
-
-    /**
-     * 优惠券已回退
-     */
-    const COUPON_BACK_OK = 1;
-
     protected $dispatchesEvents = [
         'updated' => OrderUpdated::class
     ];

@@ -33,7 +33,7 @@ class CarmisController extends AdminController
             $grid->column('status')->select(CarmisModel::getStatusMap());
             $grid->column('is_loop')->display(function($v){return $v==1?admin_trans('carmis.fields.yes'):"";});
             $grid->column('carmi')->limit(20);
-            $grid->column('created_at');
+            $grid->column('info')->limit(20);
             $grid->column('updated_at')->sortable();
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -78,6 +78,7 @@ class CarmisController extends AdminController
             });
 			$show->field('is_loop')->as(function ($v) {return $v==1?admin_trans('carmis.fields.yes'):"";});
             $show->field('carmi');
+            $show->field('info');
             $show->field('created_at');
             $show->field('updated_at');
         });
@@ -100,6 +101,7 @@ class CarmisController extends AdminController
                 ->default(CarmisModel::STATUS_UNSOLD);
             $form->switch('is_loop')->default(false);
             $form->textarea('carmi')->required();
+            $form->textarea('info')->help(admin_trans('carmis.helps.carmis_info'));
             $form->display('created_at');
             $form->display('updated_at');
         });

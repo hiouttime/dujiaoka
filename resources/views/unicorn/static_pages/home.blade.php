@@ -97,7 +97,7 @@
 
                                                     <button type="button" class="btn btn-sm btn-outline-success">
                                                         <i class="ali-icon">&#xe703;</i>
-                                                        <strong>{{ $goods['actual_price'] }}</strong>
+                                                        <strong>{{ $goods['sell_price'] }}</strong>
                                                     </button>
                                                     @if($goods['wholesale_price_cnf'])
                                                         <button type="button" class="btn btn-sm btn-outline-warning">
@@ -154,7 +154,7 @@
 
                                                         <button type="button" class="btn btn-sm btn-outline-success">
                                                             <i class="ali-icon">&#xe703;</i>
-                                                            <strong>{{ $goods['actual_price'] }}</strong>
+                                                            <strong>{{ $goods['sell_price'] }}</strong>
                                                         </button>
                                                         @if($goods['wholesale_price_cnf'])
                                                             <button type="button" class="btn btn-sm btn-outline-warning">

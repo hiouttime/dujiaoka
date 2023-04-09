@@ -50,8 +50,6 @@ class CouponBack implements ShouldQueue
         if ($this->order->coupon_id) {
             // 优惠码次数+1
             app('Service\CouponService')->retIncrByID($this->order->coupon_id);
-            // 设置订单优惠码已回退
-            app('Service\OrderService')->couponIsBack($this->order->order_sn);
         }
     }
 }
