@@ -125,9 +125,11 @@ class OrderService
         if ($request->input('by_amount') > $goods->in_stock) {
             throw new RuleValidationException(__('dujiaoka.prompt.inventory_shortage'));
         }
-        // 预选卡密不存在
-        if(!$this->goodsService->checkCarmiBelong($goods['id'], $request->input('carmi_id'))){
-            throw new RuleValidationException(__('dujiaoka.prompt.preselect_unable'));
+        // 预选，且预选卡密不存在
+        if($request->input('carmi_id')){
+            if(!$this->goodsService->checkCarmiBelong($goods['id'], $request->input('carmi_id'))){
+                throw new RuleValidationException(__('dujiaoka.prompt.preselect_unable'));
+            }
         }
         return $goods;
     }

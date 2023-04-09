@@ -20,7 +20,7 @@
                                     </div>
                                     <div class="mb-1"><label>{{ __('order.fields.goods_price') }}：</label><span> {{ $goods_price }}</span></div>
                                     <div class="mb-1"><label>{{ __('order.fields.buy_amount') }}：</label><span>{{ $buy_amount }}</span></div>
-                                    @if($preselection)
+                                    @if($preselection ?? '')
                                         <div class="mb-1"><label>{{ __('order.fields.preselection') }}：</label><span>{{ $preselection }}</span></div>
                                     @endif
                                     <div class="mb-1"><label>{{ __('order.fields.email') }}：</label><span>{{ $email }}</span></div>
