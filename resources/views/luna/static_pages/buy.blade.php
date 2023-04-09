@@ -78,10 +78,7 @@
                                 </div>
                                 <div class="price">
                                     <span class="price-sign">￥</span>
-                                    <span class="price-num">{{ $actual_price }}</span>
-                                    @if((int)$retail_price)
-                                        <span class="price-c">[<del>￥{{ $retail_price }}</del>]</span>
-                                    @endif
+                                    <span class="price-num">{{ $sell_price }}</span>
                                 </div>
 
                                 @if(!empty($wholesale_price_cnf) && is_array($wholesale_price_cnf))

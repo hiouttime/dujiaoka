@@ -286,7 +286,7 @@ class OrderProcessService
      */
     private function calculateTheTotalPrice(): float
     {
-        $price = $this->goods->actual_price;
+        $price = $this->goods->sell_price;
         return bcmul($price, $this->buyAmount, 2);
     }
     

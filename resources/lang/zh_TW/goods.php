@@ -6,7 +6,7 @@ return [
         'goods' => '商品',
     ],
     'fields' => [
-        'actual_price' => '實際售價',
+        'actual_price' => '售價',
         'group_id' => '所屬分類',
         'api_hook' => '回調事件',
         'buy_prompt' => '購買提示',
@@ -18,7 +18,6 @@ return [
         'ord' => '排序權重',
         'other_ipu_cnf' => '其他輸入框配置',
         'picture' => '商品圖片',
-        'retail_price' => '零售價',
         'sales_volume' => '銷量',
         'type' => '商品類型',
         'buy_limit_num' => '限製單次購買最大數量',
@@ -31,7 +30,6 @@ return [
     'options' => [
     ],
     'helps' => [
-        'retail_price' => '可以不填寫，主要用於展示',
         'picture' => '可不上傳，為預設圖片',
         'in_stock' => '當商品類型為"人工處理"時，手動填寫的庫存數量才會生效。"自動發貨"類型的商品系統會自動識別庫存數量',
         'buy_limit_num' => '防止惡意刷庫存，0為不限製客戶單次下單最大數量',

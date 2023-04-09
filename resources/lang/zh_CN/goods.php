@@ -7,7 +7,7 @@ return [
         'soldout' => '已售完'
     ],
     'fields' => [
-        'actual_price' => '实际售价',
+        'actual_price' => '售价',
         'group_id' => '所属分类',
         'api_hook' => '回调事件',
         'buy_prompt' => '购买提示',
@@ -20,7 +20,6 @@ return [
         'other_ipu_cnf' => '其他输入框配置',
         'picture' => '商品图片',
         'picture_url' => '商品图片URL',
-        'retail_price' => '零售价',
         'sales_volume' => '销量',
         'type' => '商品类型',
         'buy_limit_num' => '限制单次购买最大数量',
@@ -34,7 +33,6 @@ return [
     'options' => [
     ],
     'helps' => [
-        'retail_price' => '可以不填写，主要用于展示',
         'picture' => '可不上传，为默认图片',
         'picture_url' => '输入站外图片链接，将自动替换商品图片。',
         'in_stock' => '当商品类型为"人工处理"时，手动填写的库存数量才会生效。"自动发货"类型的商品系统会自动识别库存数量',

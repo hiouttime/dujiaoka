@@ -41,8 +41,7 @@ class GoodsController extends AdminController
                     GoodsModel::AUTOMATIC_DELIVERY => Admin::color()->success(),
                     GoodsModel::MANUAL_PROCESSING => Admin::color()->info(),
                 ]);
-            $grid->column('retail_price');
-            $grid->column('actual_price')->sortable();
+            $grid->column('sell_price')->sortable();
             $grid->column('in_stock')->display(function () {
                 // 如果为自动发货，则加载库存卡密
                 if ($this->type == GoodsModel::AUTOMATIC_DELIVERY) {
@@ -95,8 +94,7 @@ class GoodsController extends AdminController
             $show->field('gd_description');
             $show->field('gd_keywords');
             $show->field('picture')->image();
-            $show->field('retail_price');
-            $show->field('actual_price');
+            $show->field('sell_price');
             $show->field('in_stock');
             $show->field('ord');
             $show->field('sales_volume');
@@ -150,8 +148,7 @@ class GoodsController extends AdminController
                 $form->deleteInput('picture_url');
             });
             $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY)->required();
-            $form->currency('retail_price')->default(0)->help(admin_trans('goods.helps.retail_price'));
-            $form->currency('actual_price')->default(0)->required();
+            $form->currency('sell_price')->default(0)->required();
             $form->multipleSelect('payment_limit')
             ->options(PayModel::where('is_open', PayModel::STATUS_OPEN)->pluck('pay_name', 'id')->toArray())
             ->saving(function ($v) {return json_encode($v);})

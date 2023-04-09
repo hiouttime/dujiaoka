@@ -55,9 +55,7 @@
                             <div class="buy-title">{{ __('hyper.buy_price') }}</div>
                             <h3>
                                 {{-- 价格 --}}
-                                <span>{{ __('hyper.global_currency') }} {{ $actual_price }}</span>
-                                {{-- 原价 --}}
-                                <small><del>¥ {{ $retail_price }}</del></small>
+                                <span>{{ __('hyper.global_currency') }} {{ $sell_price }}</span>
                             </h3>
                         </div>
                         <div class="form-group buy-group">

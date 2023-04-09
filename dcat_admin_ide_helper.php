@@ -65,8 +65,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection gd_description
      * @property Grid\Column|Collection gd_keywords
      * @property Grid\Column|Collection picture
-     * @property Grid\Column|Collection retail_price
-     * @property Grid\Column|Collection actual_price
+     * @property Grid\Column|Collection sell_price
      * @property Grid\Column|Collection in_stock
      * @property Grid\Column|Collection sales_volume
      * @property Grid\Column|Collection ord
@@ -152,8 +151,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection gd_description(string $label = null)
      * @method Grid\Column|Collection gd_keywords(string $label = null)
      * @method Grid\Column|Collection picture(string $label = null)
-     * @method Grid\Column|Collection retail_price(string $label = null)
-     * @method Grid\Column|Collection actual_price(string $label = null)
+     * @method Grid\Column|Collection sell_price(string $label = null)
      * @method Grid\Column|Collection in_stock(string $label = null)
      * @method Grid\Column|Collection sales_volume(string $label = null)
      * @method Grid\Column|Collection ord(string $label = null)
@@ -244,8 +242,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection gd_description
      * @property Show\Field|Collection gd_keywords
      * @property Show\Field|Collection picture
-     * @property Show\Field|Collection retail_price
-     * @property Show\Field|Collection actual_price
+     * @property Show\Field|Collection sell_price
      * @property Show\Field|Collection in_stock
      * @property Show\Field|Collection sales_volume
      * @property Show\Field|Collection ord
@@ -331,8 +328,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection gd_description(string $label = null)
      * @method Show\Field|Collection gd_keywords(string $label = null)
      * @method Show\Field|Collection picture(string $label = null)
-     * @method Show\Field|Collection retail_price(string $label = null)
-     * @method Show\Field|Collection actual_price(string $label = null)
+     * @method Show\Field|Collection sell_price(string $label = null)
      * @method Show\Field|Collection in_stock(string $label = null)
      * @method Show\Field|Collection sales_volume(string $label = null)
      * @method Show\Field|Collection ord(string $label = null)

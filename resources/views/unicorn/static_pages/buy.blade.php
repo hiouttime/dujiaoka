@@ -59,7 +59,7 @@
                                                 {{ csrf_field() }}
                                                 <div class="form-group row">
                                                     <div class="col-12">
-                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} {{ $actual_price }}</h6>
+                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} {{ $sell_price }}</h6>
                                                     </div>
                                                     <div class="col-xs-12 col-md-6">
                                                         <input type="hidden" name="gid" value="{{ $id }}">
