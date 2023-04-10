@@ -89,7 +89,7 @@ class HomeController extends BaseController
                         return in_array($way['id'], $formatGoods->payment_limit);
                     });
              }
-             if($goods->preselection)
+             if($goods->preselection > 0)
                 $formatGoods->selectable = $this->goodsService->getSelectableCarmis($id);
             return $this->render('static_pages/buy', $formatGoods, $formatGoods->gd_name);
         } catch (RuleValidationException $ruleValidationException) {

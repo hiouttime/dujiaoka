@@ -115,7 +115,7 @@
                                                     @endif
                                                 </div>
                                                 
-                                                @if($preselection)
+                                                @if($preselection > 0)
                                                     <div class="form-group row">
                                                         <label class="col-form-label">{{ __('dujiaoka.preselection')}} <b>{{ __('dujiaoka.money_symbol') . $preselection }}</b>:</label>
                                                         <div class="carmis form-control">

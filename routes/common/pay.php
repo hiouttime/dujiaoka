@@ -56,5 +56,8 @@ Route::group(['prefix' => 'pay', 'namespace' => 'Pay', 'middleware' => ['dujiaok
     Route::get('tokenpay/{payway}/{orderSN}', 'TokenPayController@gateway');
     Route::post('tokenpay/notify_url', 'TokenPayController@notifyUrl');
     Route::get('tokenpay/return_url', 'TokenPayController@returnUrl')->name('tokenpay-return');
+    // Binance Pay
+    Route::get('binance/{payway}/{orderSN}', 'BinancePayController@gateway');
+    Route::post('binance/notify_url', 'BinancePayController@notifyUrl');
 
 });

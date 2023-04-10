@@ -113,7 +113,7 @@ class PayController extends BaseController
     {
         try {
             $this->checkOrder($orderSN);
-            $bccomp = bccomp($this->order->sell_price, 0.00, 2);
+            $bccomp = bccomp($this->order->actual_price, 0.00, 2);
             // 如果订单金额为0 代表无需支付，直接成功
             if ($bccomp == 0) {
                 $this->orderProcessService->completedOrder($this->order->order_sn, 0.00);
