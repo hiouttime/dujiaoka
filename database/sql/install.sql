@@ -526,6 +526,7 @@ INSERT INTO `pays` VALUES (null ,'TRX', 'tokenpay-trx', 0, 1, 3, 'TRX', 'API密�
 INSERT INTO `pays` VALUES (null ,'ETH', 'tokenpay-eth', 0, 1, 3, 'ETH', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'USDT-ERC20', 'tokenpay-usdt-erc', 0, 1, 3, 'USDT_ERC20', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'USDC-ERC20', 'tokenpay-usdc-erc', 0, 1, 3, 'USDC_ERC20', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'币安支付', 'binance', 0, 1, 3, 'USDT', 'API密钥', '密钥', 'pay/binance', 0, now(), now(), NULL);
 
 -- ----------------------------
 -- Table structure for articles

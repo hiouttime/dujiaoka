@@ -24,6 +24,7 @@
         paypal: paypalSvg,
         coinbase: coinbaseSvg,
         bsc: bnbSvg,
+        binance: bnbSvg,
         okc: okbSvg,
         trx: trxSvg,
         polygon: polygonSvg,
