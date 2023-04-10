@@ -155,7 +155,6 @@ class BinancePayController extends PayController
     }
     
     private function checkSign(string $params, string $sign){// 必须用原始数据验签
-    return true;
         $payload = $this->timestamp . "\n" . $this->noce . "\n" . $params . "\n";
         return openssl_verify($payload, base64_decode($sign), $this->getPublicKey(), OPENSSL_ALGO_SHA256);
     }
