@@ -41,10 +41,10 @@ class BinancePayController extends PayController
             $endpoint = "/binancepay/openapi/v2/order";
             
             // 判断用户终端类型
-            $client = 'WEB';
+            $device = 'WEB';
             if(app('Jenssegers\Agent')->isMobile())
-                $client = 'WAP';
-                
+                $device = 'WAP';
+            
             // 判断是否指定汇率
             $this->currency = explode(":",$this->payGateway->merchant_id);
             if(count($this->currency) > 1)
@@ -56,7 +56,7 @@ class BinancePayController extends PayController
             
             $data = [
                 "env" => [
-                    "terminalType" => $client,
+                    "terminalType" => $device,
                     "orderClientIp" => $this->order->buy_ip
                     ],
                 "merchantTradeNo" => $this->order->order_sn,
@@ -72,7 +72,6 @@ class BinancePayController extends PayController
                 "buyer" => [
                     "buyerEmail" => $this->order->email
                     ],
-                "passThroughInfo" => "",
                 "returnUrl" => url('detail-order-sn', ['orderSN' => $this->order->order_sn]),
                 "orderExpireTime" => $this->timestamp + dujiaoka_config_get('order_expire_time', 5) * 60 * 1000,
                 "webhookUrl" => url($this->payGateway->pay_handleroute . '/notify_url')
@@ -92,6 +91,18 @@ class BinancePayController extends PayController
             if (!isset($body['status']) || $body['status'] != "SUCCESS") {
                 return $this->err(__('dujiaoka.prompt.abnormal_payment_channel') . $body['errorMessage']);
             }
+            if($device == "WAP"){
+                return '<script>
+                    var work = false;
+                    window.location.href = "'.$body['data']['deeplink'].'"
+                    window.onblur=function(){work = true;}
+                    window.setTimeout(function(){
+                        if(work){
+                            window.location.href = "'.$body['data']['checkoutUrl'].'"
+                        }
+                    },1000)</script>';
+            }
+            header("Location: ".$body['data']['deeplink']);
             return redirect()->away($body['data']['checkoutUrl']);
         } catch (RuleValidationException $exception) {
         } catch (GuzzleException $exception) {
@@ -104,6 +115,7 @@ class BinancePayController extends PayController
         
         $data = $request->json()->all();
         $trade = json_decode($data['data'], true);
+
         $order = $this->orderService->detailOrderSN($trade['merchantTradeNo']);
         
         if (!$order) // 订单不存在
