@@ -102,7 +102,6 @@ class BinancePayController extends PayController
                         }
                     },1000)</script>';
             }
-            header("Location: ".$body['data']['deeplink']);
             return redirect()->away($body['data']['checkoutUrl']);
         } catch (RuleValidationException $exception) {
         } catch (GuzzleException $exception) {
