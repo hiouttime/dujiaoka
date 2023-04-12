@@ -105,6 +105,15 @@ class BinancePayController extends PayController
             return redirect()->away($body['data']['checkoutUrl']);
         } catch (RuleValidationException $exception) {
         } catch (GuzzleException $exception) {
+            if ($exception->hasResponse()) {
+                $error = $exception->getResponse();
+                $error = json_decode($error->getBody(), true);
+                switch ($error['code']) {
+                    case '400201':
+                        return $this->err(__('dujiaoka.prompt.payment_only_once'));
+                        break;
+                }
+            }
             return $this->err($exception->getMessage());
         }
     }
