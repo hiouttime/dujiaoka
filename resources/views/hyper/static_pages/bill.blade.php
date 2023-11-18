@@ -20,16 +20,14 @@
                 <div class="mb-1"><label>{{ __('hyper.bill_commodity_price') }}：</label><span>{{ $goods_price }}</span></div>
                 {{-- 购买数量 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_purchase_quantity') }}：</label><span>x {{ $buy_amount }}</span></div>
+                @if($preselection ?? '')
+                 <div class="mb-1"><label>{{ __('order.fields.preselection') }}：</label><span>{{  }}</span></div>
+                @endif
                 @if(!empty($coupon))
                 {{-- 优惠码 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_promo_code') }}：</label><span>{{ $coupon['coupon'] }}</span></div>
                 {{-- 优惠金额 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_discounted_price') }}：</label><span>{{ $coupon_discount_price }}</span></div>
-                @endif
-                {{-- 支付方式 --}}
-                <div class="mb-1"><label>{{ __('dujiaoka.payment_method') }}：</label><span>{{ $pay['pay_name'] }}</span></div>
-                @if($pay['pay_fee'] > 0)
-                <div class="mb-1"><label>{{ __('dujiaoka.payment_fee') }}：</label><span>{{ $pay['pay_fee'] }}%</span></div>
                 @endif
                 {{-- 商品总价 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_actual_payment') }}：</label><span>{{ $actual_price }}</span></div>
@@ -39,6 +37,8 @@
                 {{-- 订单资料 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_order_information') }}：</label><span>{{ $info }}</span></div>
                 @endif
+                {{-- 支付方式 --}}
+                <div class="mb-1"><label>{{ __('hyper.bill_payment_method') }}：</label><span>{{ $pay['pay_name'] }}</span></div>
             </div>
             <div class="text-center">
                 {{-- 立即支付 --}}

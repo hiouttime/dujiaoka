@@ -104,6 +104,15 @@ body[data-layout=topnav] .content-page {
 }
 
 /* Home Page */
+.carmis {
+  display: grid;   
+  height: auto;
+}
+
+.carmis label {
+  margin: 0.5rem .5rem;
+}
+
 
 /* modal-dialog */
 .modal-body img {

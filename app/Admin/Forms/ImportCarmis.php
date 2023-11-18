@@ -100,7 +100,7 @@ class ImportCarmis extends Form
             ->accept('txt')
             ->maxSize(5120)
             ->help(admin_trans('carmis.helps.carmis_list'));
-        $this->text('info_preg')->help(admin_trans('carmis.helps.info_preg'));;
+        $this->text('info_preg')->help(admin_trans('carmis.helps.info_preg'));
         $this->switch('remove_duplication');
     }
 
