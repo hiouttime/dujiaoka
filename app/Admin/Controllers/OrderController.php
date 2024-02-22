@@ -35,6 +35,7 @@ class OrderController extends AdminController
                 ->label([
                     OrderModel::AUTOMATIC_DELIVERY => Admin::color()->success(),
                     OrderModel::MANUAL_PROCESSING => Admin::color()->info(),
+                    OrderModel::AUTOMATIC_PROCESSING => Admin::color()->warning(),
                 ]);
             $grid->column('email')->copyable();
             $grid->column('goods.gd_name', admin_trans('order.fields.goods_id'));

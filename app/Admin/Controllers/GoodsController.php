@@ -38,6 +38,7 @@ class GoodsController extends AdminController
                 ->label([
                     GoodsModel::AUTOMATIC_DELIVERY => Admin::color()->success(),
                     GoodsModel::MANUAL_PROCESSING => Admin::color()->info(),
+                    GoodsModel::AUTOMATIC_PROCESSING => Admin::color()->warning(),
                 ]);
             $grid->column('sell_price')->sortable();
             $grid->column('in_stock')->display(function () {
