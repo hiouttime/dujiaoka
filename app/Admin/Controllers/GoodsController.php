@@ -12,9 +12,10 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
+use App\Models\Pay as PayModel;
 use App\Models\Goods as GoodsModel;
 use App\Models\GoodsGroup as GoodsGroupModel;
-use App\Models\Pay as PayModel;
+use App\Models\RemoteServer as RemoteServerModel;
 
 class GoodsController extends AdminController
 {
@@ -98,11 +99,7 @@ class GoodsController extends AdminController
             $show->field('ord');
             $show->field('sales_volume');
             $show->field('type')->as(function ($type) {
-                if ($type == GoodsModel::AUTOMATIC_DELIVERY) {
-                    return admin_trans('goods.fields.automatic_delivery');
-                } else {
-                    return admin_trans('goods.fields.manual_processing');
-                }
+                return admin_trans('goods.fields.'.strtolower($type));
             });
             $show->field('preselection');
             $show->field('is_open')->as(function ($isOpen) {
@@ -118,9 +115,7 @@ class GoodsController extends AdminController
             $show->other_ipu_cnf()->unescape()->as(function ($otherIpuCnf) {
                 return  "<textarea class=\"form-control field_wholesale_price_cnf _normal_\"  rows=\"10\" cols=\"30\">" . $otherIpuCnf . "</textarea>";
             });
-            $show->api_hook()->unescape()->as(function ($apiHook) {
-                return  "<textarea class=\"form-control field_wholesale_price_cnf _normal_\"  rows=\"10\" cols=\"30\">" . $apiHook . "</textarea>";
-            });;
+            $show->field('api_hook');
         });
     }
 
@@ -161,7 +156,14 @@ class GoodsController extends AdminController
             $form->editor('description');
             $form->textarea('other_ipu_cnf')->help(admin_trans('goods.helps.other_ipu_cnf'));
             $form->textarea('wholesale_price_cnf')->help(admin_trans('goods.helps.wholesale_price_cnf'));
-            $form->textarea('api_hook');
+            $form->select('api_hook')
+                ->help(admin_trans('remote-server.helps.goods'))
+                ->options(function () {
+                    $servers = RemoteServerModel::all()->pluck('name', 'id');
+                    return $servers->toArray();
+                })->saving(function ($value) {
+                    return $value == 0 ? null : $value;
+            });
             $form->number('ord')->default(1)->help(admin_trans('dujiaoka.ord'));
             $form->switch('is_open')->default(GoodsModel::STATUS_OPEN);
         });

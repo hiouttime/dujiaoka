@@ -91,7 +91,8 @@ class Goods extends BaseModel
     {
         return [
             self::AUTOMATIC_DELIVERY => admin_trans('goods.fields.automatic_delivery'),
-            self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing')
+            self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing'),
+            self::AUTOMATIC_PROCESSING => admin_trans('goods.fields.automatic_processing'),
         ];
     }
     

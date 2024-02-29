@@ -72,18 +72,14 @@
                                     @foreach($group['goods'] as $goods)
                                         <div class="col">
                                             <div class="card position-relative">
-                                                @if($goods['type'] == \App\Models\Goods::AUTOMATIC_DELIVERY)
-                                                    <span class="badge bg-success position-absolute top-0 start-0">
-                                            <i class="ali-icon">&#xe7db;</i>
-                                            {{ __('goods.fields.automatic_delivery') }}
-                                        </span>
-                                                @else
-                                                    <span class="badge bg-warning position-absolute top-0 start-0">
-                                                        <i class="ali-icon">&#xe74b;</i>
-                                                        {{ __('goods.fields.manual_processing') }}
+                                                @php
+                                                    $info = $types[$goods['type']];
+                                                @endphp
+                                                    <span class="badge bg-{{ $info['color'] }} position-absolute top-0 start-0">
+                                                        <i class="ali-icon">{{ $info['icon'] }}</i>
+                                                        {{ __('goods.fields.'.$info['type']) }}
                                                     </span>
-                                                @endif
-                                                @if($goods['in_stock'] === 0)
+                                                @if($goods['in_stock'] <= 0)
                                                      <div class="badge-soldout">
                                                          <span>{{ __('goods.labels.soldout') }}</span>
                                                      </div>

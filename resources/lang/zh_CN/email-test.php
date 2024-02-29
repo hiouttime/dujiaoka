@@ -14,7 +14,10 @@ return [
         'title' => '邮件标题',
         'body' => '邮件内容',
     ],
-
+    'labels' => [
+        'EmailTest' => '邮件测试',
+        'email-test' => '邮件测试',
+    ],
     'fields' => [
         
     ],

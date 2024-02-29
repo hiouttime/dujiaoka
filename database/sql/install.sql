@@ -45,6 +45,7 @@ INSERT INTO `admin_menu` VALUES (71, 70, 71, 'System_Setting', 'fa-cogs', '/syst
 INSERT INTO `admin_menu` VALUES (72, 70, 72, 'Pay_Configuration', 'fa-cc-visa', '/pay', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (73, 70, 73, 'Email_Template_Configuration', 'fa-envelope', '/emailtpl', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (74, 70, 74, 'Email_Test', 'fa-envelope', '/email-test', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (75, 70, 75, 'Remote_Server', 'fa-server', '/remote-server', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (80,  0, 80, 'Article_Manage', 'fa-newspaper-o', '/article', '', 1, now(), now());
 COMMIT;
 
@@ -348,7 +349,7 @@ CREATE TABLE `goods` (
   `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商品类型  1自动发货 2人工处理 3自动处理',
   `wholesale_price_cnf` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '批发价配置',
   `other_ipu_cnf` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '其他输入框配置',
-  `api_hook` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '回调事件',
+  `api_hook` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '回调事件',
   `preselection` decimal(10,2) DEFAULT '0.0' COMMENT '自选加价',
   `is_open` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用，1是 0否',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -545,6 +546,27 @@ CREATE TABLE `articles` (
 
 -- ----------------------------
 -- Records of articles
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for remote_servers
+-- ----------------------------
+
+DROP TABLE IF EXISTS `remote_servers`;
+CREATE TABLE `remote_servers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '服务器ID',
+  `name` varchar(255) NOT NULL COMMENT '服务器名称',
+  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '服务器类型  1HTTP 2RCON 3SQL',
+  `data` text COMMENT '服务器数据',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of remote_servers
 -- ----------------------------
 BEGIN;
 COMMIT;

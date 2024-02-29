@@ -455,13 +455,15 @@ class OrderProcessService
             $order->actual_price = $actualPrice;
             $order->trade_no = $tradeNo;
             // 区分订单类型
-            // 自动发货
-            if ($order->type == Order::AUTOMATIC_DELIVERY) {
-                $completedOrder = $this->processAuto($order);
-            } else {
-                $completedOrder = $this->processManual($order);
+            // 发货
+            switch($order->type){
+                case Order::MANUAL_PROCESSING:
+                case Order::AUTOMATIC_PROCESSING:
+                    $completedOrder = $this->processManual($order);break;
+                case Order::AUTOMATIC_DELIVERY:
+                    $completedOrder = $this->processAuto($order);break;
             }
-            // 销量加上
+            // 增加销量
             $this->goodsService->salesVolumeIncr($order->goods_id, $order->buy_amount);
             DB::commit();
             // 如果开启了server酱
@@ -501,30 +503,14 @@ class OrderProcessService
      */
     public function processManual(Order $order)
     {
-        // 设置订单为待处理
+        // 更新订单为待处理，直接通过模型调用处理过程
         $order->status = Order::STATUS_PENDING;
         // 保存订单
         $order->save();
         // 商品库存减去
         $this->goodsService->inStockDecr($order->goods_id, $order->buy_amount);
         // 邮件数据
-        $mailData = [
-            'created_at' => $order->create_at,
-            'product_name' => $order->goods->gd_name,
-            'webname' => dujiaoka_config_get('text_logo', '独角数卡'),
-            'weburl' => config('app.url') ?? 'http://dujiaoka.com',
-            'ord_info' => str_replace(PHP_EOL, '<br/>', $order->info),
-            'ord_title' => $order->title,
-            'order_id' => $order->order_sn,
-            'buy_amount' => $order->buy_amount,
-            'ord_price' => $order->actual_price,
-            'created_at' => $order->created_at,
-        ];
-        $tpl = $this->emailtplService->detailByToken('manual_send_manage_mail');
-        $mailBody = replace_mail_tpl($tpl, $mailData);
-        $manageMail = dujiaoka_config_get('manage_email', '');
-        // 邮件发送
-        MailSend::dispatch($manageMail, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        $this->sendMail($order);
         return $order;
     }
 
@@ -563,22 +549,50 @@ class OrderProcessService
         // 将卡密设置为已售出
         $this->carmisService->soldByIDS($ids);
         // 邮件数据
+        $this->sendMail($order, $carmisInfo);
+        return $order;
+    }
+    
+    /**
+     * 发送邮件
+     *
+     * @param Order $order 订单
+     * @param array $carmis 卡密信息，仅自动发货提供
+     * @return null
+     * 
+     *
+     * @author    outtime<i@treeo.cn>
+     * @copyright outtime<i@treeo.cn>
+     * @link      https://outti.me
+     */
+
+    private function sendMail(Order $order, $carmis = []){
+        switch($order->type){
+            case Order::MANUAL_PROCESSING:
+            case Order::AUTOMATIC_PROCESSING:
+                $tpl = 'manual_send_manage_mail';
+                $ord_info = str_replace(PHP_EOL, '<br/>', $order->info);
+                break;
+            case Order::AUTOMATIC_DELIVERY:
+                $tpl = 'card_send_user_email';
+                $ord_info = implode('<br/>', $carmis);
+                break;
+        }
         $mailData = [
             'created_at' => $order->create_at,
             'product_name' => $order->goods->gd_name,
             'webname' => dujiaoka_config_get('text_logo', '独角数卡'),
             'weburl' => config('app.url') ?? 'http://dujiaoka.com',
-            'ord_info' => implode('<br/>', $carmisInfo),
+            'ord_info' => $ord_info,
             'ord_title' => $order->title,
             'order_id' => $order->order_sn,
             'buy_amount' => $order->buy_amount,
             'ord_price' => $order->actual_price,
+            'created_at' => $order->created_at,
         ];
-        $tpl = $this->emailtplService->detailByToken('card_send_user_email');
+        $tpl = $this->emailtplService->detailByToken($tpl);
         $mailBody = replace_mail_tpl($tpl, $mailData);
         // 邮件发送
         MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
-        return $order;
     }
-
 }

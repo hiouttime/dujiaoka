@@ -47,7 +47,6 @@ class ApiHook implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Service\GoodsService');
     }
 
     /**
@@ -57,31 +56,18 @@ class ApiHook implements ShouldQueue
      */
     public function handle()
     {
-        $goodInfo = $this->goodsService->detail($this->order->goods_id);
+        $goodInfo = app('Service\GoodsService')->detail($this->order->goods_id);
         // 判断是否有配置支付回调
-        if(empty($goodInfo->api_hook)){
+        if(empty($goodInfo->api_hook))
             return;
-        }
-        $postdata = [
-            'title' => $this->order->title,
-            'order_sn' => $this->order->order_sn,
-            'email' => $this->order->email,
-            'actual_price' => $this->order->actual_price,
-            'order_info' => $this->order->info,
-            'good_id' => $goodInfo->id,
-            'gd_name' => $goodInfo->gd_name
-
-        ];
-
+        $result = app('Service\RemoteServerService')->execute($goodInfo->api_hook,$this->order);
+        if($result)
+            $this->order->status = Order::STATUS_COMPLETED;
+        else
+            $this->order->status = Order::STATUS_FAILURE;
+        $this->order->save();
         
-        $opts = [
-            'http' => [
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/json',
-                'content' => json_encode($postdata,JSON_UNESCAPED_UNICODE)
-            ]
-        ];
-        $context  = stream_context_create($opts);
-        file_get_contents($goodInfo->api_hook, false, $context);
+        if(!$result)
+            throw new \Exception("Fail to complete order: (".$this->order->order_sn.")");
     }
 }

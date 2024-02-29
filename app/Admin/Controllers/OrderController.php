@@ -31,11 +31,11 @@ class OrderController extends AdminController
             $grid->column('id')->sortable();
             $grid->column('order_sn')->copyable();
             $grid->column('title');
-            $grid->column('type')->using(OrderModel::getTypeMap())
+            $grid->column('type')->using(Goods::getGoodsTypeMap())
                 ->label([
-                    OrderModel::AUTOMATIC_DELIVERY => Admin::color()->success(),
-                    OrderModel::MANUAL_PROCESSING => Admin::color()->info(),
-                    OrderModel::AUTOMATIC_PROCESSING => Admin::color()->warning(),
+                    Goods::AUTOMATIC_DELIVERY => Admin::color()->success(),
+                    Goods::MANUAL_PROCESSING => Admin::color()->info(),
+                    Goods::AUTOMATIC_PROCESSING => Admin::color()->warning(),
                 ]);
             $grid->column('email')->copyable();
             $grid->column('goods.gd_name', admin_trans('order.fields.goods_id'));
@@ -61,7 +61,7 @@ class OrderController extends AdminController
                 $filter->equal('status')->select(OrderModel::getStatusMap());
                 $filter->equal('email');
                 $filter->equal('trade_no');
-                $filter->equal('type')->select(OrderModel::getTypeMap());
+                $filter->equal('type')->select(Goods::getGoodsTypeMap());
                 $filter->equal('goods_id')->select(Goods::query()->pluck('gd_name', 'id'));
                 $filter->equal('coupon_id')->select(Coupon::query()->pluck('coupon', 'id'));
                 $filter->equal('pay_id')->select(Pay::query()->pluck('pay_name', 'id'));
@@ -116,7 +116,7 @@ class OrderController extends AdminController
             $show->field('status')->using(OrderModel::getStatusMap());
             $show->field('search_pwd');
             $show->field('trade_no');
-            $show->field('type')->using(OrderModel::getTypeMap());
+            $show->field('type')->using(Goods::getGoodsTypeMap());
             $show->field('created_at');
             $show->field('updated_at');
             $show->disableEditButton();
@@ -146,10 +146,12 @@ class OrderController extends AdminController
             $form->textarea('info');
             $form->display('buy_ip');
             $form->display('pay.pay_name', admin_trans('order.fields.pay_id'));
-            $form->radio('status')->options(OrderModel::getStatusMap());
+            $form->radio('status')
+                ->options(OrderModel::getStatusMap())
+                ->help(admin_trans('order.helps.status'));
             $form->text('search_pwd');
             $form->text('trade_no');
-            $form->radio('type')->options(OrderModel::getTypeMap());
+            $form->radio('type')->options(Goods::getGoodsTypeMap());
             $form->display('created_at');
             $form->display('updated_at');
         });

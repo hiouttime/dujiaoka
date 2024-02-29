@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Pay;
+use App\Models\Goods;
 use App\Models\Articles;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\QueryException;
@@ -28,6 +29,15 @@ class HomeController extends BaseController
      * @var \App\Service\PayService
      */
     private $payService;
+    
+    /**
+     * 商品处理类型Map
+     */
+    private $serviceType = [
+            Goods::AUTOMATIC_DELIVERY => ["color" => "success", "icon" => "&#xe7cf;", "type" => "automatic_delivery"],
+            Goods::MANUAL_PROCESSING => ["color" => "warning", "icon" => "&#xe74b;", "type" => "manual_processing"],
+            Goods::AUTOMATIC_PROCESSING => ["color" => "info", "icon" => "&#xe7db;", "type" => "automatic_processing"],
+            ];
 
     public function __construct()
     {
@@ -52,7 +62,11 @@ class HomeController extends BaseController
         ->orderBy('updated_at', 'desc')
         ->get();
         return $this->render('static_pages/home',
-        ['data' => $goods, 'articles' => $articles],
+        [
+            'data' => $goods, 
+            'articles' => $articles,
+            'types' => $this->serviceType,
+            ],
         __('dujiaoka.page-title.home'));
     }
 
@@ -91,6 +105,7 @@ class HomeController extends BaseController
              }
              if($goods->preselection > 0)
                 $formatGoods->selectable = $this->goodsService->getSelectableCarmis($id);
+            $formatGoods->types = $this->serviceType;
             return $this->render('static_pages/buy', $formatGoods, $formatGoods->gd_name);
         } catch (RuleValidationException $ruleValidationException) {
             return $this->err($ruleValidationException->getMessage());
