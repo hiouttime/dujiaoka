@@ -20,9 +20,6 @@
                 <div class="mb-1"><label>{{ __('hyper.bill_commodity_price') }}：</label><span>{{ $goods_price }}</span></div>
                 {{-- 购买数量 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_purchase_quantity') }}：</label><span>x {{ $buy_amount }}</span></div>
-                @if($preselection ?? '')
-                 <div class="mb-1"><label>{{ __('order.fields.preselection') }}：</label><span>{{  }}</span></div>
-                @endif
                 @if(!empty($coupon))
                 {{-- 优惠码 --}}
                 <div class="mb-1"><label>{{ __('hyper.bill_promo_code') }}：</label><span>{{ $coupon['coupon'] }}</span></div>

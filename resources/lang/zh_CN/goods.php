@@ -14,7 +14,6 @@ return [
         'buy_prompt' => '购买提示',
         'description' => '商品描述',
         'gd_name' => '商品名称',
-        'gd_id' => '商品ID',
         'gd_description' => '商品描述',
         'gd_keywords' => '商品关键字',
         'in_stock' => '库存',
@@ -43,6 +42,6 @@ return [
         'other_ipu_cnf' => '格式为<code>唯一标识(英文)=输入框名字=是否必填</code>，例如：填写 <code>qq_account=QQ账号=true</code> 表示产品详情页会新增一个 <code>QQ账号</code> 输入框。true 为必填，false 为选填。（一行一个）',
         'wholesale_price_cnf' => '例如：填写 5=3 表示客户购买 5 件或以上时，每件价格为 3 元。一行一个',
         'payment_limit' => '仅允许使用这些支付方式购买此商品，若为空，则支持全部已启用的的支付方式',
-        'preselection' => '自动发货的商品支持在下单时预先选择想要的卡密，填写一个价格则代表开启自选加价；添加卡密时需填写卡密说明。'
+        'preselection' => '自动发货的商品支持在下单时预先选择想要的卡密，填写一个价格则代表开启自选加价。需在卡密处完成设置。'
     ]
 ];

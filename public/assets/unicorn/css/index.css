@@ -393,3 +393,40 @@ body {
 		border: 1px solid rgba(70, 70, 70, 0.2);
 	}
 }
+/* Article */
+ .article-grid{
+     display: grid;
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+     gap: 12px;
+ }
+ .articles tr{
+     border-bottom: 1px solid #eef2f7;
+ }
+ .articles td{
+     padding: .3rem 0;
+ }
+ .articles td a,
+ .articles h3
+ {
+     color: #000;
+ }
+ .article-title{
+     padding: 12px;
+     margin: -24px -24px 12px -24px;
+     background-color: #F1F1F1;
+     justify-content: space-between;
+     display: flex;
+     align-items: center;
+ }
+ @media screen and (max-width: 768px) {
+     .article-grid{
+         grid-template-columns: repeat(1, minmax(0, 1fr));
+     }
+     .header-navbar{
+         margin-bottom: 1rem;
+     }
+ }
+ /* Article Page */
+ .article-list tbody td a{
+     color: #000;
+ }

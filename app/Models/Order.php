@@ -75,6 +75,23 @@ class Order extends BaseModel
     }
 
     /**
+     * 类型映射
+     *
+     * @return array
+     *
+     * @author    assimon<ashang@utf8.hk>
+     * @copyright assimon<ashang@utf8.hk>
+     * @link      http://utf8.hk/
+     */
+    public static function getTypeMap()
+    {
+        return [
+            self::AUTOMATIC_DELIVERY => admin_trans('goods.fields.automatic_delivery'),
+            self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing')
+        ];
+    }
+
+    /**
      * 关联商品
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -127,12 +144,18 @@ class Order extends BaseModel
      * @link      https://outti.me
      */
     public function setStatusAttribute($value){
-        $this->attributes['status'] = $value;
-        // 人工处理订单直接设置
-        if($this->type == Order::MANUAL_PROCESSING)
+        // 如果订单状态不是待支付，或者状态不是已完成，直接返回
+        if($this->status != Order::STATUS_WAIT_PAY || intval($value) != Order::STATUS_COMPLETED){
+            $this->attributes['status'] = $value;
             return;
-        // 设置为处理中时执行订单事物
-        if($this->getOriginal('status') != self::STATUS_PROCESSING && $value == self::STATUS_PROCESSING)
+        }
+        // 如果订单类型不是自动发货，直接返回
+        if(!empty($this->info) || $this->type != Order::AUTOMATIC_DELIVERY){
+            $this->attributes['status'] = $value;
+            return;
+        }
+        // 手动补单进行发货处理
+        if($value == Order::STATUS_COMPLETED)
             app('Service\OrderProcessService')->completedOrder($this->order_sn, $this->actual_price);
     }
 }

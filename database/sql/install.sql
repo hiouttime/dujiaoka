@@ -537,6 +537,7 @@ CREATE TABLE `articles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
   `link` varchar(255) NOT NULL COMMENT '文章链接',
   `title` varchar(255) NOT NULL COMMENT '文章标题',
+  `category` varchar(255) NULL COMMENT '文章分类',
   `content` text NOT NULL COMMENT '文章内容',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',

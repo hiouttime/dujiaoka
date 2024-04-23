@@ -79,7 +79,7 @@
                                                         <i class="ali-icon">{{ $info['icon'] }}</i>
                                                         {{ __('goods.fields.'.$info['type']) }}
                                                     </span>
-                                                @if($goods['in_stock'] <= 0)
+                                                @if($goods['in_stock'] === 0)
                                                      <div class="badge-soldout">
                                                          <span>{{ __('goods.labels.soldout') }}</span>
                                                      </div>

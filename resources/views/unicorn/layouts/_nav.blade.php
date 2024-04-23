@@ -31,6 +31,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link @if(\Illuminate\Support\Facades\Request::url() == url('order-search')) active @endif" href="{{ url('order-search') }}">{{ __('dujiaoka.order_search') }}</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link @if(\Illuminate\Support\Facades\Request::url() == url('article')) active @endif" href="{{ url('article') }}">{{ __('dujiaoka.article_page') }}</a>
+                                    </li>
                                 </ul>
                                 @if(\Illuminate\Support\Facades\Request::path() == '/')
                                     <form class="d-flex">

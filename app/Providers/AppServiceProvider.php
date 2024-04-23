@@ -9,7 +9,6 @@ use App\Service\GoodsService;
 use App\Service\OrderProcessService;
 use App\Service\OrderService;
 use App\Service\PayService;
-use App\Service\RemoteServerService;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
@@ -42,9 +41,6 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton('Service\EmailtplService', function () {
             return $this->app->make(EmailtplService::class);
-        });
-        $this->app->singleton('Service\RemoteServerService', function () {
-            return $this->app->make(RemoteServerService::class);
         });
         $this->app->singleton('Jenssegers\Agent', function () {
             return $this->app->make(Agent::class);

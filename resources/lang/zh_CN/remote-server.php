@@ -9,7 +9,6 @@ return [
     'labels' => [
         'RemoteServer' => '回调服务器',
         'remote-server' => '回调服务器',
-        'uid'   => '唯一标识',
     ],
     "fields" => [
         "remote-server" => "回调服务器",
@@ -36,8 +35,7 @@ return [
         "http_request" => "格式：key1=value1&key2=value2 ，发送的数据将会被url编码。",
         "http_return" => "请确保服务器仅返回此字符，有差异将视为处理失败。",
         "rcon_return" => "RCON返回内容请务必进行测试，避免出现格式不对造成匹配失败的情况。",
-        "rcon_command" => "要执行的RCON命令，一行一个。",
-        "uid" => "商品的其他输入框配置中的唯一标识"
+        "rcon_command" => "要执行的RCON命令，一行一个。"
         ],
     "you_can_use" => "你可以在执行的命令中使用如下变量："
     ];

@@ -9,20 +9,27 @@
                         <div class="card mt-3">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                     @if($in_stock <= 0)
+                                     @if($in_stock === 0)
                                          <div class="badge-soldout">
                                              <span>{{ __('goods.labels.soldout') }}</span>
                                          </div>
                                      @endif
                                     <img src="{{ picture_ulr($picture) }}"
                                          class="card-img-top p-5" alt="{{ $gd_name }}">
-                                    @php
-                                        $info = $types[$type];
-                                    @endphp
-                                    <h6><small class="badge bg-{{ $info['color'] }}  position-absolute top-0 start-0">
-                                        <i class="ali-icon">{{ $info['icon'] }}</i>
-                                            {{ __('goods.fields.'.$info['type']) }}
-                                    </small></h6>
+                                    @if($type == \App\Models\Goods::AUTOMATIC_DELIVERY)
+                                        <h6><small class="badge bg-success  position-absolute top-0 start-0">
+                                                <i class="ali-icon">&#xe7db;</i>
+                                                {{ __('goods.fields.automatic_delivery') }}</small>
+
+                                        </h6>
+                                    @else
+                                        <h6>
+                                            <small class="badge bg-warning  position-absolute top-0 start-0">
+                                                <i class="ali-icon">&#xe7db;</i>
+                                                {{ __('goods.fields.manual_processing') }}
+                                            </small>
+                                        </h6>
+                                    @endif
 
                                 </div>
                                 <div class="col-md-8">
@@ -123,7 +130,7 @@
                                                 @endif
 
                                                 <div class="form-group row">
-                                                    @if(is_array($other_ipu))
+                                                    @if($type == \App\Models\Goods::MANUAL_PROCESSING && is_array($other_ipu))
                                                         @foreach($other_ipu as $ipu)
                                                             <div class="col-xs-12 col-md-6">
                                                                 <label for="{{ $ipu['field'] }}" class="col-form-label">{{ $ipu['desc'] }}:</label>

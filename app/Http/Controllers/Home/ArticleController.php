@@ -8,15 +8,18 @@ use App\Http\Controllers\BaseController;
 class ArticleController extends BaseController {
     
     public function listAll(){
-        $articles = Articles::select('title', 'link', 'content', 'updated_at')
+        $articles = Articles::select('title', 'link', 'category', 'content', 'updated_at')
         ->get()
         ->map(function ($article) {
             $article->summary = $article->getSummary();
             return $article;
         });
+        $articles_sort = $articles->groupBy('category');
+        $categories = $articles_sort->keys();
         
         return $this->render('static_pages/article', [
-            'articles' => $articles
+            'articles' => $articles_sort,
+            'category' => $categories
         ], __('dujiaoka.page-title.article'));
     }
     

@@ -14,6 +14,7 @@ return [
         'unicorn' => 'Unicorn独角兽',
         'luna' => 'Luna[Author: Julyssn]',
         'hyper' => 'Hyper[Author: Bimoe]',
+        'hyper_row' => 'HyperRow[Author: Bimoe]',
     ],
     // 语言
     'language' => [

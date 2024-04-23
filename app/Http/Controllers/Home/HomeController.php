@@ -29,15 +29,6 @@ class HomeController extends BaseController
      * @var \App\Service\PayService
      */
     private $payService;
-    
-    /**
-     * 商品处理类型Map
-     */
-    private $serviceType = [
-            Goods::AUTOMATIC_DELIVERY => ["color" => "success", "icon" => "&#xe7cf;", "type" => "automatic_delivery"],
-            Goods::MANUAL_PROCESSING => ["color" => "warning", "icon" => "&#xe74b;", "type" => "manual_processing"],
-            Goods::AUTOMATIC_PROCESSING => ["color" => "info", "icon" => "&#xe7db;", "type" => "automatic_processing"],
-            ];
 
     public function __construct()
     {
@@ -57,6 +48,11 @@ class HomeController extends BaseController
     public function index(Request $request)
     {
         $goods = $this->goodsService->withGroup();
+        $serviceType = [
+            Goods::AUTOMATIC_DELIVERY => ["color" => "success", "icon" => "&#xe7cf;", "type" => "automatic_delivery"],
+            Goods::MANUAL_PROCESSING => ["color" => "warning", "icon" => "&#xe74b;", "type" => "manual_processing"],
+            Goods::AUTOMATIC_PROCESSING => ["color" => "info", "icon" => "&#xe7db;", "type" => "automatic_processing"],
+            ];
         $articles = Articles::select('title', 'link', 'updated_at')
         ->take(8)
         ->orderBy('updated_at', 'desc')
@@ -65,7 +61,7 @@ class HomeController extends BaseController
         [
             'data' => $goods, 
             'articles' => $articles,
-            'types' => $this->serviceType,
+            'types' => $serviceType,
             ],
         __('dujiaoka.page-title.home'));
     }
@@ -105,7 +101,6 @@ class HomeController extends BaseController
              }
              if($goods->preselection > 0)
                 $formatGoods->selectable = $this->goodsService->getSelectableCarmis($id);
-            $formatGoods->types = $this->serviceType;
             return $this->render('static_pages/buy', $formatGoods, $formatGoods->gd_name);
         } catch (RuleValidationException $ruleValidationException) {
             return $this->err($ruleValidationException->getMessage());

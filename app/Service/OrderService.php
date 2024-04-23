@@ -188,7 +188,7 @@ class OrderService
     }
 
     /**
-     * 其他输入框
+     * 代充框验证.
      *
      * @param Goods $goods
      * @param Request $request
@@ -202,8 +202,8 @@ class OrderService
     public function validatorChargeInput(Goods $goods, Request $request): string
     {
         $otherIpt = '';
-        // 其他输入框
-        if (!empty($goods->other_ipu_cnf)) {
+        // 代充框验证
+        if ($goods->type == Goods::MANUAL_PROCESSING && !empty($goods->other_ipu_cnf)) {
             // 如果有其他输入框 判断其他输入框内容  然后载入信息
             $formatIpt = format_charge_input($goods->other_ipu_cnf);
             foreach ($formatIpt as $item) {
@@ -211,8 +211,7 @@ class OrderService
                     $errMessage = $item['desc'] . __('dujiaoka.prompt.can_not_be_empty');
                     throw new RuleValidationException($errMessage);
                 }
-                $input = str_replace(":","",$request->input($item['field'])); // 避免影响格式化
-                $otherIpt .= $item['field'].':'.$item['desc'].':'.$input . PHP_EOL;
+                $otherIpt .= $item['desc'].':'.$request->input($item['field']) . PHP_EOL;
             }
         }
         return $otherIpt;

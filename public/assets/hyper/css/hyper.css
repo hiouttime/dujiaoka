@@ -26,10 +26,6 @@ body, .wrapper, .content-page {
     align-items: center;
     justify-content: space-between;
 }
-.header-right {
-    display: flex;
-    align-items: center;
-}
 .logo-title {
     font-size: 24px;
     font-weight: 700;
@@ -42,8 +38,7 @@ body, .wrapper, .content-page {
 
 body {
     background-color: #fafafa;
-    top: 0 !important;
-    padding-bottom: 57px;
+    height: 100%;
 }
 body[data-leftbar-compact-mode=condensed] {
     min-height: 0;
@@ -104,15 +99,6 @@ body[data-layout=topnav] .content-page {
 }
 
 /* Home Page */
-.carmis {
-  display: grid;   
-  height: auto;
-}
-
-.carmis label {
-  margin: 0.5rem .5rem;
-}
-
 
 /* modal-dialog */
 .modal-body img {
@@ -507,89 +493,8 @@ body[data-layout=topnav] .content-page {
     height: 44px;
 }
 
-/* buy.blade.php */
-
-@media (max-width: 767px) {
-    .buy-pay-grid {
-        display: grid;
-        grid-template-columns: repeat(1, minmax(0, 200px));
-        grid-gap: 12px;
-    }
-}
-
-@media (min-width: 767px) {
-    .buy-pay-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 200px));
-        grid-gap: 12px;
-    }
-}
-@media (max-width: 767px) {
-    .buy-img img {
-        max-width: 150px;
-    }
-    .buy-img {
-        margin-bottom: 12px;
-    }
-}
-@media (min-width: 768px) {
-    .buy-form {
-        display: grid;
-        grid-template-rows: auto auto;
-        grid-template-columns: 225px auto;
-    }
-    .buy-img img {
-        max-width: 180px;
-    }
-    .buy-type {
-        max-width: 90%;
-    }
-}
-@media (min-width: 1200px) {
-    .buy-form {
-        display: grid;
-        grid-template-rows: auto auto;
-        grid-template-columns: 375px auto;
-    }
-    .buy-img img {
-        max-width: 200px;
-    }
-    .buy-type {
-        max-width: 70%;
-    }
-}
-
-.buy-img {
-    display: flex;
-    grid-row-start: 1;
-    grid-column-end: 2;
-    grid-row-end: 3;
-    justify-content: center;
-    align-items: center;
-}
-.buy-type {
-    grid-row-start: 2;
-    grid-column-end: 3;
-}
-
-.buy-group {
-    position: relative;
-    line-height: 36px;
-    padding-left: 94px;
-}
-
-.buy-title {
-    position: absolute;
-    left: 0;
-    font-weight: 600;
-}
-.buy-product img {
-    max-width:100%;
-    height: auto;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.geetest_holder.geetest_wind {
-    width: 100%!important;
-    min-width: 100%!important;
+/* Articles */
+.articles a{
+    display: block;
+    text-align: right;
 }
