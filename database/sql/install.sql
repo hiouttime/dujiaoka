@@ -225,6 +225,7 @@ DROP TABLE IF EXISTS `carmis`;
 CREATE TABLE `carmis` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `goods_id` int NOT NULL COMMENT '所属商品',
+  `sub_id` int unsigned DEFAULT '0' COMMENT '子规格ID',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 1未售出 2已售出',
   `is_loop` tinyint(1) NOT NULL DEFAULT '0' COMMENT '循环卡密 1是 0否',
   `carmi` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '卡密',
@@ -341,8 +342,9 @@ CREATE TABLE `goods` (
   `gd_description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品描述',
   `gd_keywords` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '商品关键字',
   `picture` text CHARACTER SET utf8 COLLATE utf8_unicode_ci COMMENT '商品图片',
-  `sell_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
-  `in_stock` int NOT NULL DEFAULT '0' COMMENT '库存',
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
+  `is_sub` tinyint(1) unsigned DEFAULT '0' COMMENT '是否是多规格商品',
+  `stock` int NOT NULL DEFAULT '0' COMMENT '库存',
   `sales_volume` int DEFAULT '0' COMMENT '销量',
   `ord` int DEFAULT '1' COMMENT '排序权重 越大越靠前',
   `payment_limit` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '仅允许的支付方式',
@@ -363,6 +365,30 @@ CREATE TABLE `goods` (
 
 -- ----------------------------
 -- Records of goods
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for goods_sub
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_sub`;
+CREATE TABLE `goods_sub` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `goods_id` int DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
+  `name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `stock` int DEFAULT NULL COMMENT '库存',
+  `sales_volume` int DEFAULT NULL COMMENT '销量',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `good_id` (`goods_id`),
+  CONSTRAINT `good_id` FOREIGN KEY (`goods_id`) REFERENCES `goods` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Records of goods_sub
 -- ----------------------------
 BEGIN;
 COMMIT;
@@ -413,6 +439,7 @@ CREATE TABLE `orders` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `order_sn` varchar(150) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '订单号',
   `goods_id` int NOT NULL COMMENT '关联商品id',
+  `sub_id` int unsigned DEFAULT '0' COMMENT '子分类ID',
   `coupon_id` int DEFAULT '0' COMMENT '关联优惠码id',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '订单名称',
   `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1自动发货 2人工处理 3自动处理',

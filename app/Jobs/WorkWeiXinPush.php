@@ -73,7 +73,7 @@ class WorkWeiXinPush implements ShouldQueue
 				.'>'.__('order.fields.actual_price') .': <font color="comment">'.$this->order->actual_price."</font>\n"
 				.'>'.__('order.fields.email') .': <font color="comment">'.$this->order->email."</font>\n"
 				.'>'.__('goods.fields.gd_name') .': <font color="comment">'.$goodInfo->gd_name."</font>\n"
-				.'>'.__('goods.fields.in_stock') .': <font color="comment">'.$goodInfo->in_stock."</font>\n"
+				.'>'.__('goods.fields.stock') .': <font color="comment">'.$goodInfo->stock."</font>\n"
 				.'>'.__('order.fields.order_created') .': <font color="comment">'.$this->order->created_at."</font>"
 			]
 		];

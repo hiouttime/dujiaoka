@@ -72,7 +72,7 @@ class BarkPush implements ShouldQueue
 				. __('order.fields.actual_price') .': '.$this->order->actual_price."\n"
 				. __('order.fields.email') .': '.$this->order->email."\n"
 				. __('goods.fields.gd_name') .': '.$goodInfo->gd_name."\n"
-				. __('goods.fields.in_stock') .': '.$goodInfo->in_stock."\n"
+				. __('goods.fields.stock') .': '.$goodInfo->stock."\n"
 				. __('order.fields.order_created') .': '.$this->order->created_at,
 			"icon"=>url('assets/common/images/default.jpg'),
 			"level"=>"timeSensitive",

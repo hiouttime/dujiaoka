@@ -66,7 +66,7 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection gd_keywords
      * @property Grid\Column|Collection picture
      * @property Grid\Column|Collection sell_price
-     * @property Grid\Column|Collection in_stock
+     * @property Grid\Column|Collection stock
      * @property Grid\Column|Collection sales_volume
      * @property Grid\Column|Collection ord
      * @property Grid\Column|Collection buy_limit_num
@@ -152,7 +152,7 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection gd_keywords(string $label = null)
      * @method Grid\Column|Collection picture(string $label = null)
      * @method Grid\Column|Collection sell_price(string $label = null)
-     * @method Grid\Column|Collection in_stock(string $label = null)
+     * @method Grid\Column|Collection stock(string $label = null)
      * @method Grid\Column|Collection sales_volume(string $label = null)
      * @method Grid\Column|Collection ord(string $label = null)
      * @method Grid\Column|Collection buy_limit_num(string $label = null)
@@ -243,7 +243,7 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection gd_keywords
      * @property Show\Field|Collection picture
      * @property Show\Field|Collection sell_price
-     * @property Show\Field|Collection in_stock
+     * @property Show\Field|Collection stock
      * @property Show\Field|Collection sales_volume
      * @property Show\Field|Collection ord
      * @property Show\Field|Collection buy_limit_num
@@ -329,7 +329,7 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection gd_keywords(string $label = null)
      * @method Show\Field|Collection picture(string $label = null)
      * @method Show\Field|Collection sell_price(string $label = null)
-     * @method Show\Field|Collection in_stock(string $label = null)
+     * @method Show\Field|Collection stock(string $label = null)
      * @method Show\Field|Collection sales_volume(string $label = null)
      * @method Show\Field|Collection ord(string $label = null)
      * @method Show\Field|Collection buy_limit_num(string $label = null)

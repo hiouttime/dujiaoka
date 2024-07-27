@@ -185,11 +185,11 @@ class GoodsController extends AdminController
      * 获得商品子规格列表
      *
      * @param Request $request
-     * @return Content
+     * @return Json
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
+     * @author    outtime<beprivacy@icloud.com>
+     * @copyright outtime<beprivacy@icloud.com>
+     * @link      https://outti.me
      */
     public function getGoodsSub(\Illuminate\Http\Request $request)
     {
