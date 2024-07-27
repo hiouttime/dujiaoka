@@ -39,6 +39,12 @@ class OrderController extends AdminController
                 ]);
             $grid->column('email')->copyable();
             $grid->column('goods.gd_name', admin_trans('order.fields.goods_id'));
+            $grid->column('sub_id')->display(function () {
+                if ($this->sub_id == 0) 
+                    return admin_trans('carmis.options.non_sub');
+                $goodsSub = \App\Models\GoodsSub::find($this->sub_id);
+                return $goodsSub ? $goodsSub->name : $this->sub_id;
+            });
             $grid->column('goods_price');
             $grid->column('buy_amount');
             $grid->column('total_price');
@@ -117,7 +123,6 @@ class OrderController extends AdminController
             $show->field('search_pwd');
             $show->field('trade_no');
             $show->field('type')->using(OrderModel::getTypeMap());
-            $show->field('created_at');
             $show->field('updated_at');
             $show->disableEditButton();
         });
@@ -135,6 +140,13 @@ class OrderController extends AdminController
             $form->display('order_sn');
             $form->text('title');
             $form->display('goods.gd_name', admin_trans('order.fields.goods_id'));
+            $form->display('sub_id')->with(function ($value) {
+                if ($value == 0) {
+                    return admin_trans('carmis.options.non_sub');
+                }
+                $goodsSub = \App\Models\GoodsSub::find($value);
+                return $goodsSub ? $goodsSub->name : $value;
+            });
             $form->display('goods_price');
             $form->display('buy_amount');
             $form->display('coupon.coupon', admin_trans('order.fields.coupon_id'));

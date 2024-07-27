@@ -35,7 +35,7 @@
         svg_e = '</svg>';
     
 
-    //页面操作
+    //支付单选
     $('.pay-type').each(function() {
         let t = $(this),
             type = t.data('type'),
@@ -50,9 +50,23 @@
             }
             t.append(svg_h + svg + svg_e + ' ' + name);
     }).click(function() {
-        $('.pay-type').removeClass('pay-select')
-        $(this).toggleClass("pay-select");
+        $('.pay-type').removeClass('select-selected')
+        $(this).toggleClass("select-selected");
         $('input[name=payway]').val($(this).data('id'));
+    });
+    
+    //规格单选
+    $('.sub-type').each(function() {
+        let t = $(this);
+        if (t.data('stock') == 0)
+            $(this).addClass("select-disbaled");
+        t.append(t.data('name'));
+    }).click(function() {
+        if ($(this).data('stock') == 0)
+            return;
+        $('.sub-type').removeClass('select-selected')
+        $(this).toggleClass("select-selected");
+        $('input[name=sub_id]').val($(this).data('id'));
     });
 
 

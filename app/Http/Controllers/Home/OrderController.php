@@ -61,6 +61,18 @@ class OrderController extends BaseController
         try {
             $this->orderService->validatorCreateOrder($request);
             $goods = $this->orderService->validatorGoods($request);
+            // 多规格商品处理
+            if ($goods->is_sub) {
+                $subid = $request->input('sub_id');
+                if(!$subid)
+                    throw new RuleValidationException(__('dujiaoka.prompt.need_sub_id'));
+                $goods_sub = $goods->goods_sub()->where('id', $subid);
+                if(!$goods_sub->exists())
+                    throw new RuleValidationException(__('dujiaoka.prompt.server_illegal_request'));
+                $goods_sub = $goods_sub->first();
+                $goods->price = $goods_sub->price;
+                $goods->gd_name = $goods->gd_name . " [$goods_sub->name]";
+            }
             $this->orderService->validatorLoopCarmis($request);
             // 设置商品
             $this->orderProcessService->setGoods($goods);
@@ -73,7 +85,7 @@ class OrderController extends BaseController
             //设置预选卡密
             $carmi_id = intval($request->input('carmi_id'));
             $this->orderProcessService->setCarmi($carmi_id);
-            // 数量，如果预选了卡密，则只能购买一个
+            // 数量，如果预选了卡密，则数量只能是1
             $this->orderProcessService->setBuyAmount($carmi_id ? 1 : $request->input('by_amount'));
             // 支付方式
             $payment_limit = json_decode($goods->payment_limit,true);
@@ -86,6 +98,8 @@ class OrderController extends BaseController
             $this->orderProcessService->setBuyIP($request->getClientIp());
             // 查询密码
             $this->orderProcessService->setSearchPwd($request->input('search_pwd', ''));
+            // 商品规格ID
+            $this->orderProcessService->setSubID($request->input('sub_id', 0));
             // 创建订单
             $order = $this->orderProcessService->createOrder();
             DB::commit();

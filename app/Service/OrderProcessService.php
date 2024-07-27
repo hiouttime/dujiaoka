@@ -107,7 +107,7 @@ class OrderProcessService
     private $searchPwd;
 
     /**
-     * 下单id
+     * 下单IP
      * @var string
      */
     private $buyIP;
@@ -123,6 +123,12 @@ class OrderProcessService
      * @var int
      */
     private $carmiID;
+    
+    /**
+     * 商品规格ID
+     * @var int
+     */
+    private $sub_id;
 
     public function __construct()
     {
@@ -203,6 +209,16 @@ class OrderProcessService
     public function setGoods(Goods $goods)
     {
         $this->goods = $goods;
+    }
+    
+    /**
+     * 设置商品规格ID
+     *
+     * @param int $sub_id
+     */
+    public function setSubID($sub_id)
+    {
+        $this->sub_id = $sub_id;
     }
 
     /**
@@ -304,7 +320,7 @@ class OrderProcessService
      */
     private function calculateTheTotalPrice(): float
     {
-        $price = $this->goods->sell_price;
+        $price = $this->goods->price;
         
         // 如果预选了卡密，则加上预选加价
         if($this->carmiID)
@@ -368,8 +384,9 @@ class OrderProcessService
             $order = new Order();
             // 生成订单号
             $order->order_sn = strtoupper(Str::random(16));
-            // 设置商品
+            // 设置商品及多规格ID
             $order->goods_id = $this->goods->id;
+            $order->sub_id = $this->sub_id;
             // 标题
             $order->title = $this->goods->gd_name . ' x ' . $this->buyAmount;
             // 订单类型
@@ -381,7 +398,7 @@ class OrderProcessService
             // 支付方式.
             $order->pay_id = $this->payID;
             // 商品单价
-            $order->goods_price = $this->goods->sell_price;
+            $order->goods_price = $this->goods->price;
             // 购买数量
             $order->buy_amount = $this->buyAmount;
             // 预选卡密
@@ -546,7 +563,7 @@ class OrderProcessService
             $ids = [$carmis['id']];
         }else{
             // 批量获得卡密
-            $carmis = $this->carmisService->withGoodsByAmountAndStatusUnsold($order->goods_id, $order->buy_amount);
+            $carmis = $this->carmisService->takes($order->goods_id, $order->buy_amount, $order->sub_id);
             // 实际可使用的库存已经少于购买数量了
             if (count($carmis) != $order->buy_amount) {
                 $order->info = __('dujiaoka.prompt.order_carmis_insufficient_quantity_available');

@@ -133,7 +133,8 @@ return [
         'loop_carmis_limit' => '此商品最多购买一件！',
         'payment_limit' => '商品不支持此支付方式支付！',
         'preselect_unable' => '预选的卡密已失效，请重新下单。',
-        'payment_only_once' => '此支付方式仅允许打开付款页一次，请重新下单。'
+        'payment_only_once' => '此支付方式仅允许打开付款页一次，请重新下单。',
+        'need_sub_id' => '多规格商品必须选择具体规格下单'
     ],
 
     'equipment' => [

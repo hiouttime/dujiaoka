@@ -30,8 +30,14 @@ class CarmisController extends AdminController
             $grid->model()->orderBy('id', 'DESC');
             $grid->column('id')->sortable();
             $grid->column('goods.gd_name', admin_trans('carmis.fields.goods_id'));
+            $grid->column('sub_id')->display(function () {
+                if ($this->sub_id == 0) 
+                    return admin_trans('carmis.options.non_sub');
+                $goodsSub = \App\Models\GoodsSub::find($this->sub_id);
+                return $goodsSub ? $goodsSub->name : $this->sub_id;
+            });
             $grid->column('status')->select(CarmisModel::getStatusMap());
-            $grid->column('is_loop')->display(function($v){return $v==1?admin_trans('carmis.fields.yes'):"";});
+            $grid->column('is_loop')->display(fn($v) => admin_trans('carmis.fields.' . ($v == 1 ? 'yes' : 'no')));
             $grid->column('carmi')->limit(20);
             $grid->column('info')->limit(20);
             $grid->column('updated_at')->sortable();
@@ -39,7 +45,9 @@ class CarmisController extends AdminController
                 $filter->equal('id');
                 $filter->equal('goods_id')->select(
                     Goods::query()->where('type', Goods::AUTOMATIC_DELIVERY)->pluck('gd_name', 'id')
-                );
+                )
+                ->load('sub_id', '/goods_api/goods_sub');
+                $filter->equal('sub_id')->select()->default(0);
                 $filter->equal('status')->select(CarmisModel::getStatusMap());
                 $filter->scope(admin_trans('dujiaoka.trashed'))->onlyTrashed();
             });
@@ -76,7 +84,7 @@ class CarmisController extends AdminController
                     return admin_trans('carmis.fields.status_sold');
                 }
             });
-			$show->field('is_loop')->as(function ($v) {return $v==1?admin_trans('carmis.fields.yes'):"";});
+		    $show->field('is_loop')->as(fn($v) => admin_trans('carmis.fields.' . ($v == 1 ? 'yes' : 'no')));
             $show->field('carmi');
             $show->field('info');
             $show->field('created_at');
@@ -95,7 +103,9 @@ class CarmisController extends AdminController
             $form->display('id');
             $form->select('goods_id')->options(
                 Goods::query()->where('type', Goods::AUTOMATIC_DELIVERY)->pluck('gd_name', 'id')
-            )->required();
+            )->required()
+            ->load('sub_id', '/goods_api/goods_sub');
+            $form->select('sub_id')->default(0)->required();
             $form->radio('status')
                 ->options(CarmisModel::getStatusMap())
                 ->default(CarmisModel::STATUS_UNSOLD);

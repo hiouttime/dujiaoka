@@ -204,14 +204,19 @@ body {
 	background-color: transparent;
 }
 
-/* pay-type */
-.pay {
+/* select */
+.select {
 	margin-top: 20px;
 	border-top: 1px solid #f7f7f7;
 	padding-top: 10px;
 }
 
-.pay-type {
+.select-disbaled {
+    background: #d9d9d9 !important;
+    cursor: not-allowed !important;
+}
+
+.select-type {
 	display: inline-block;
 	text-align: center;
 	background: #f7f7f7;
@@ -224,11 +229,11 @@ body {
 	cursor: pointer;
 }
 
-.pay-type svg {
+.select-type svg {
 	vertical-align: middle;
 }
 
-.pay-select {
+.select-selected {
 	border: 2px solid rgb(51, 105, 255);
 	background: rgb(248, 250, 255);
 	color: rgb(51, 105, 255);

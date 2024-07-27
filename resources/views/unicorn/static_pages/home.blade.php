@@ -79,7 +79,7 @@
                                                         <i class="ali-icon">{{ $info['icon'] }}</i>
                                                         {{ __('goods.fields.'.$info['type']) }}
                                                     </span>
-                                                @if($goods['in_stock'] === 0)
+                                                @if($goods['stock'] === 0)
                                                      <div class="badge-soldout">
                                                          <span>{{ __('goods.labels.soldout') }}</span>
                                                      </div>
@@ -93,7 +93,7 @@
 
                                                     <button type="button" class="btn btn-sm btn-outline-success">
                                                         <i class="ali-icon">&#xe703;</i>
-                                                        <strong>{{ $goods['sell_price'] }}</strong>
+                                                        <strong>{{ $goods['price'] }}</strong>
                                                     </button>
                                                     @if($goods['wholesale_price_cnf'])
                                                         <button type="button" class="btn btn-sm btn-outline-warning">
@@ -104,8 +104,8 @@
                                                         <button type="button" class="btn btn-sm btn-outline-primary">
                                                             <strong>{{__('goods.fields.sales_volume')}}：{{ $goods['sales_volume'] }}</strong>
                                                         </button>                                                    
-                                                    <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.in_stock')}}：{{ $goods['in_stock'] }}</small></h6>
-                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['in_stock'] === 0) disabled @endif">
+                                                    <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.stock')}}：{{ $goods['stock'] }}</small></h6>
+                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['stock'] === 0) disabled @endif">
                                                         <i class="ali-icon">&#xe7d8;</i>
                                                         {{ __('dujiaoka.order_now') }}
                                                     </a>
@@ -136,7 +136,7 @@
                                         {{ __('goods.fields.manual_processing') }}
                                     </span>
                                                 @endif
-                                                @if($goods['in_stock'] === 0)
+                                                @if($goods['stock'] === 0)
                                                      <div class="badge-soldout">
                                                          <span>{{ __('goods.labels.soldout') }}</span>
                                                      </div>
@@ -150,7 +150,7 @@
 
                                                         <button type="button" class="btn btn-sm btn-outline-success">
                                                             <i class="ali-icon">&#xe703;</i>
-                                                            <strong>{{ $goods['sell_price'] }}</strong>
+                                                            <strong>{{ $goods['price'] }}</strong>
                                                         </button>
                                                         @if($goods['wholesale_price_cnf'])
                                                             <button type="button" class="btn btn-sm btn-outline-warning">
@@ -161,8 +161,8 @@
                                                         <button type="button" class="btn btn-sm btn-outline-primary">
                                                             <strong>{{__('goods.fields.sales_volume')}}：{{ $goods['sales_volume'] }}</strong>
                                                         </button>
-                                                    <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.in_stock')}}：{{ $goods['in_stock'] }}</small></h6>
-                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['in_stock'] === 0) disabled @endif">
+                                                    <h6 class="mt-2"><small class="text-muted">{{__('goods.fields.stock')}}：{{ $goods['stock'] }}</small></h6>
+                                                    <a href="{{ url("/buy/{$goods['id']}") }}" class="btn btn-primary fr @if($goods['stock'] === 0) disabled @endif">
                                                         <i class="ali-icon">&#xe7d8;</i>
                                                         {{ __('dujiaoka.order_now') }}
                                                     </a>

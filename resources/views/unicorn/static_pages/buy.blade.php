@@ -9,7 +9,7 @@
                         <div class="card mt-3">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
-                                     @if($in_stock === 0)
+                                     @if($stock === 0)
                                          <div class="badge-soldout">
                                              <span>{{ __('goods.labels.soldout') }}</span>
                                          </div>
@@ -36,7 +36,7 @@
                                     <div class="card-body p-4">
                                         <h3 class="card-title">{{ $gd_name }}</h3>
                                         <h6>
-                                            <small class="text-muted">{{__('goods.fields.in_stock')}}：{{ $in_stock }}</small>
+                                            <small class="text-muted">{{__('goods.fields.stock')}}：{{ $stock }}</small>
                                         </h6>
                                         @if($buy_limit_num > 0)
                                             <h6><small class="badge bg-danger">
@@ -58,9 +58,22 @@
                                             <form  action="{{ url('create-order') }}" onsubmit="return order()" method="post">
                                                 {{ csrf_field() }}
                                                 <div class="form-group row">
+                                                    {{-- 商品价格 --}}
                                                     <div class="col-12">
-                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} {{ $sell_price }}</h6>
+                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} {{ $price }}</h6>
                                                     </div>
+                                                    {{-- 商品规格 --}}
+                                                    @if($is_sub)
+                                                    <div class="col-12">
+                                                        <div class="select notSelection">
+                                                            <input type="hidden" name="sub_id" value="{{ $goods_sub[0]['id'] ?? 0 }}">
+                                                                @foreach($goods_sub as $key => $one)
+                                                                    <div class="sub-type select-type @if($key == 0) select-selected @endif" data-stock="{{ $one['stock'] }}" data-id="{{ $one['id'] }}" data-name="{{ $one['name'] }}">
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                    </div>
+                                                    @endif
                                                     <div class="col-xs-12 col-md-6">
                                                         <input type="hidden" name="gid" value="{{ $id }}">
                                                         <label for="email" class=" col-form-label">{{ __('dujiaoka.shipping_email') }}:</label>
@@ -142,16 +155,16 @@
                                                     @endif
                                                     
                                                         <div class="col-12">
-                                                            <div class="pay notSelection">
+                                                            <div class="select notSelection">
                                                                 <input type="hidden" name="payway" lay-verify="payway" value="{{ $payways[0]['id'] ?? 0 }}">
                                                                 @foreach($payways as $key => $way)
-                                                                    <div class="pay-type @if($key == 0) pay-select @endif" data-type="{{ $way['pay_check'] }}" data-id="{{ $way['id'] }}" data-name="{{ $way['pay_name'] }}">
+                                                                    <div class="pay-type select-type @if($key == 0) select-selected @endif" data-type="{{ $way['pay_check'] }}" data-id="{{ $way['id'] }}" data-name="{{ $way['pay_name'] }}">
                                                                     </div>
                                                                 @endforeach
                                                             </div>
                                                         </div>
                                                     <div class="col-12 mt-2">
-                                                        <button type="submit" id="submit" class="btn btn-outline-primary @if($in_stock === 0) disabled @endif"> <i
+                                                        <button type="submit" id="submit" class="btn btn-outline-primary @if($stock === 0) disabled @endif"> <i
                                                                 class="ali-icon">&#xe7d8;</i> {{ __('dujiaoka.order_now') }}</button>
                                                     </div>
                                                 </div>
@@ -246,7 +259,7 @@
             @endif
             $("input[type='number']").inputSpinner();
             function order(){
-                if($("input[name='by_amount']").val() > {{ $in_stock }}){
+                if($("input[name='by_amount']").val() > {{ $stock }}){
                     {{-- 数量不允许大于库存 --}}
                     $(".modal-body").html("{{ __('dujiaoka.prompt.inventory_shortage') }}")
                     myModal.show()

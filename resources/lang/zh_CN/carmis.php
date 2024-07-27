@@ -14,14 +14,17 @@ return [
         'status_unsold' => '未售出',
         'status_sold' => '已售出',
         'is_loop' => '循环卡密',
-		'yes'=>'是',
+		'yes' => '是',
+		'no' => '否',
         'import_carmis' => '导入卡密',
         'carmis_list' => '卡密列表',
         'carmis_txt' => '卡密文本',
         'are_you_import_sure' => '确定要导入卡密吗？',
         'remove_duplication' => '是否去重',
+        'sub_id' => '对应规格'
     ],
     'options' => [
+        'non_sub' => '默认规格'
     ],
     'helps' => [
         'carmis_list' => '一行一个，回车分隔。请勿导入单个文本长度过大的卡密，容易导致内存溢出。如果卡密过大建议修改商品为人工处理',

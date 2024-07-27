@@ -19,8 +19,6 @@ use App\Models\RemoteServer as RemoteServerModel;
 
 class GoodsController extends AdminController
 {
-
-
     /**
      * Make a grid builder.
      *
@@ -41,8 +39,8 @@ class GoodsController extends AdminController
                     GoodsModel::MANUAL_PROCESSING => Admin::color()->info(),
                     GoodsModel::AUTOMATIC_PROCESSING => Admin::color()->warning(),
                 ]);
-            $grid->column('sell_price')->sortable();
-            $grid->column('in_stock')->display(function () {
+            $grid->column('price')->sortable();
+            $grid->column('stock')->display(function () {
                 // 如果为自动发货，则加载库存卡密
                 if ($this->type == GoodsModel::AUTOMATIC_DELIVERY) {
                     return Carmis::query()->where('goods_id', $this->id)
@@ -94,8 +92,8 @@ class GoodsController extends AdminController
             $show->field('gd_description');
             $show->field('gd_keywords');
             $show->field('picture')->image();
-            $show->field('sell_price');
-            $show->field('in_stock');
+            $show->field('price');
+            $show->field('stock');
             $show->field('ord');
             $show->field('sales_volume');
             $show->field('type')->as(function ($type) {
@@ -126,8 +124,8 @@ class GoodsController extends AdminController
      */
     protected function form()
     {
-        
-        return Form::make(new Goods(), function (Form $form) {
+        $repository = new Goods(['goods_sub']);
+        return Form::make($repository, function (Form $form) {
             $form->display('id');
             $form->text('gd_name')->required();
             $form->text('gd_description')->required();
@@ -142,14 +140,28 @@ class GoodsController extends AdminController
                     $form->picture = $form->picture_url;
                 $form->deleteInput('picture_url');
             });
-            $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY)->required();
-            $form->currency('sell_price')->default(0)->required();
+            $form->radio('type')->options(GoodsModel::getGoodsTypeMap())->default(GoodsModel::AUTOMATIC_DELIVERY);
+            $form->radio('is_sub')
+            ->options([
+                GoodsModel::STATUS_CLOSE => admin_trans('goods.options.not_sub'),
+                GoodsModel::STATUS_OPEN => admin_trans('goods.options.is_sub')
+             ])->default(GoodsModel::STATUS_CLOSE)
+             ->when(GoodsModel::STATUS_CLOSE, function (Form $form) { 
+                $form->currency('price')->default(0)->required();
+                $form->number('stock')->help(admin_trans('goods.helps.in_stock'));
+                $form->number('sales_volume');
+            })->when(GoodsModel::STATUS_OPEN, function (Form $form) { 
+                $form->hasMany('goods_sub', function (Form\NestedForm $form) {
+                    $form->text('name')->required();
+                    $form->currency('price')->default(0)->required();
+                    $form->number('stock')->help(admin_trans('goods.helps.in_stock'));
+                    $form->number('sales_volume');
+                })->useTable();
+            });
             $form->multipleSelect('payment_limit')
             ->options(PayModel::where('is_open', PayModel::STATUS_OPEN)->pluck('pay_name', 'id')->toArray())
             ->saving(function ($v) {return json_encode($v);})
             ->help(admin_trans('goods.helps.payment_limit'));
-            $form->number('in_stock')->help(admin_trans('goods.helps.in_stock'));
-            $form->number('sales_volume');
             $form->number('buy_limit_num')->help(admin_trans('goods.helps.buy_limit_num'));
             $form->currency('preselection')->default(0)->help(admin_trans('goods.helps.preselection'));
             $form->editor('buy_prompt');
@@ -167,5 +179,33 @@ class GoodsController extends AdminController
             $form->number('ord')->default(1)->help(admin_trans('dujiaoka.ord'));
             $form->switch('is_open')->default(GoodsModel::STATUS_OPEN);
         });
+    }
+    
+     /**
+     * 获得商品子规格列表
+     *
+     * @param Request $request
+     * @return Content
+     *
+     * @author    assimon<ashang@utf8.hk>
+     * @copyright assimon<ashang@utf8.hk>
+     * @link      http://utf8.hk/
+     */
+    public function getGoodsSub(\Illuminate\Http\Request $request)
+    {
+        $goods_id = $request->get('q');
+        $goods = GoodsModel::find($goods_id);
+        $subs = [];
+        if ($goods->is_sub == GoodsModel::STATUS_OPEN) {
+            $subs = GoodsModel::with(['goods_sub' => function($query) {
+                $query->select('id', 'goods_id', \Illuminate\Support\Facades\DB::raw('name as text'));
+            }])->find($goods_id);
+        }
+        
+        if ($subs) {
+            return response()->json($subs->goods_sub);
+        } else {
+            return response()->json([['id'=>0, 'text'=>admin_trans('carmis.options.non_sub')]]);
+        }
     }
 }

@@ -39,6 +39,7 @@ class ImportCarmis extends Form
             if (trim($val) != "") {
                 $carmisData[] = [
                     'goods_id' => $input['goods_id'],
+                    'sub_id' => $input['sub_id'],
                     'carmi' => trim($val),
                     'info' => $this->formatInfo(trim($val)),
                     'status' => Carmis::STATUS_UNSOLD,
@@ -89,8 +90,10 @@ class ImportCarmis extends Form
     {
         $this->confirm(admin_trans('carmis.fields.are_you_import_sure'));
         $this->select('goods_id')->options(
-            Goods::query()->where('type', Goods::AUTOMATIC_DELIVERY)->pluck('gd_name', 'id')
-        )->required();
+            Goods::query()->where('type', Goods::AUTOMATIC_DELIVERY)->pluck('gd_name', 'id', 'is_sub')
+        )->required()
+        ->load('sub_id', '/goods_api/goods_sub');
+        $this->select('sub_id')->default(0)->required();
         $this->textarea('carmis_list')
             ->rows(20)
             ->help(admin_trans('carmis.helps.carmis_list'));

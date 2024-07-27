@@ -67,15 +67,15 @@ class Goods extends BaseModel
      * @copyright assimon<ashang@utf8.hk>
      * @link      http://utf8.hk/
      */
-    public function getInStockAttribute()
+    public function getStockAttribute()
     {
         if (isset($this->attributes['carmis_count'])
             &&
             $this->attributes['type'] == self::AUTOMATIC_DELIVERY
         ) {
-           $this->attributes['in_stock'] = $this->attributes['carmis_count'];
+           $this->attributes['stock'] = $this->attributes['carmis_count'];
         }
-        return $this->attributes['in_stock'];
+        return $this->attributes['stock'];
     }
 
     /**
@@ -95,5 +95,11 @@ class Goods extends BaseModel
             self::AUTOMATIC_PROCESSING => admin_trans('goods.fields.automatic_processing'),
         ];
     }
+    
+    public function goods_sub()
+    {
+        return $this->hasMany(GoodsSub::class);
+    }
+    
     
 }

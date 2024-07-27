@@ -26,10 +26,11 @@ class CarmisService
      * @copyright assimon<ashang@utf8.hk>
      * @link      http://utf8.hk/
      */
-    public function withGoodsByAmountAndStatusUnsold(int $goodsID, int $byAmount)
+    public function takes(int $goodsID, int $byAmount, int $sub_id)
     {
         $carmis = Carmis::query()
             ->where('goods_id', $goodsID)
+            ->where('sub_id', $sub_id)
             ->where('status', Carmis::STATUS_UNSOLD)
             ->take($byAmount)
             ->get();

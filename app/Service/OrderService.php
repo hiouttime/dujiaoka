@@ -122,7 +122,7 @@ class OrderService
             throw new RuleValidationException(__('dujiaoka.prompt.purchase_limit_exceeded'));
         }
         // 库存不足
-        if ($request->input('by_amount') > $goods->in_stock) {
+        if ($request->input('by_amount') > $goods->stock) {
             throw new RuleValidationException(__('dujiaoka.prompt.inventory_shortage'));
         }
         // 预选，且预选卡密不存在

@@ -13,6 +13,9 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
     $router->resource('goods', 'GoodsController');
+    $router->group(['prefix' => 'goods_api'], function (Router $router) {
+        $router->get('goods_sub', 'GoodsController@getGoodsSub');
+    });
     $router->resource('goods-group', 'GoodsGroupController');
     $router->resource('carmis', 'CarmisController');
     $router->resource('coupon', 'CouponController');

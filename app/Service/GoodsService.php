@@ -48,7 +48,6 @@ class GoodsService
             ->where('is_open', GoodsGroup::STATUS_OPEN)
             ->orderBy('ord', 'DESC')
             ->get();
-        // 将自动
         return $goods ? $goods->toArray() : null;
     }
 
@@ -65,7 +64,7 @@ class GoodsService
     public function detail(int $id)
     {
         $goods = Goods::query()
-            ->with(['coupon'])
+            ->with(['coupon','goods_sub'])
             ->withCount(['carmis' => function($query) {
                 $query->where('status', Carmis::STATUS_UNSOLD);
             }])->where('id', $id)->first();

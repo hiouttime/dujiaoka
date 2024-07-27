@@ -14,6 +14,7 @@ return [
         'preselection' => '自选卡密',
         'email' => '下单邮箱',
         'goods_id' => '所属商品',
+        'sub_id' => '所属规格',
         'goods_price' => '商品单价',
         'info' => '订单详情',
         'order_id' => '订单ID',
