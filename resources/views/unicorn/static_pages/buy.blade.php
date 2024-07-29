@@ -36,7 +36,7 @@
                                     <div class="card-body p-4">
                                         <h3 class="card-title">{{ $gd_name }}</h3>
                                         <h6>
-                                            <small class="text-muted">{{__('goods.fields.stock')}}：{{ $stock }}</small>
+                                            <small class="text-muted">{{__('goods.fields.stock')}}：<b id="stock">{{ $stock }}</b></small>
                                         </h6>
                                         @if($buy_limit_num > 0)
                                             <h6><small class="badge bg-danger">
@@ -60,7 +60,7 @@
                                                 <div class="form-group row">
                                                     {{-- 商品价格 --}}
                                                     <div class="col-12">
-                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} {{ $price }}</h6>
+                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} <b id="price">{{ $price }}</b></h6>
                                                     </div>
                                                     {{-- 商品规格 --}}
                                                     @if($is_sub)
@@ -68,7 +68,7 @@
                                                         <div class="select notSelection">
                                                             <input type="hidden" name="sub_id" value="{{ $goods_sub[0]['id'] ?? 0 }}">
                                                                 @foreach($goods_sub as $key => $one)
-                                                                    <div class="sub-type select-type @if($key == 0) select-selected @endif" data-stock="{{ $one['stock'] }}" data-id="{{ $one['id'] }}" data-name="{{ $one['name'] }}">
+                                                                    <div class="sub-type select-type" data-stock="{{ $one['stock'] }}" data-id="{{ $one['id'] }}" data-price="{{ $one['price'] }}" data-name="{{ $one['name'] }}">
                                                                     </div>
                                                                 @endforeach
                                                             </div>

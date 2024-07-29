@@ -67,6 +67,8 @@
         $('.sub-type').removeClass('select-selected')
         $(this).toggleClass("select-selected");
         $('input[name=sub_id]').val($(this).data('id'));
+        $('#stock').text($(this).data('stock'));
+        $('#price').text($(this).data('price'));
     });
 
 
