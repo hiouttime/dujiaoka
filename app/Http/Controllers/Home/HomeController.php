@@ -69,15 +69,17 @@ class HomeController extends BaseController
     /**
      * 商品详情
      *
-     * @param int $id
+     * @param any $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
      * @author    assimon<ashang@utf8.hk>
      * @copyright assimon<ashang@utf8.hk>
      * @link      http://utf8.hk/
      */
-    public function buy(int $id)
+    public function buy($id)
     {
+        if(!is_numeric($id))
+            return $this->err();
         try {
             $goods = $this->goodsService->detail($id);
             $this->goodsService->validatorGoodsStatus($goods);
