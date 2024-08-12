@@ -79,9 +79,11 @@ class HomeController extends BaseController
     public function buy($id)
     {
         if(!is_numeric($id))
-            return $this->err();
+            return $this->err(__('dujiaoka.prompt.the_goods_is_not_on_the_shelves'));
         try {
             $goods = $this->goodsService->detail($id);
+            if(empty($goods))
+                return $this->err(__('dujiaoka.prompt.the_goods_is_not_on_the_shelves'));
             $this->goodsService->validatorGoodsStatus($goods);
             // 有没有优惠码可以展示
             if (count($goods->coupon)) {

@@ -129,7 +129,7 @@ class GoodsService
      */
     public function inStockDecr(int $id, int $number = 1): bool
     {
-        return Goods::query()->where('id', $id)->decrement('in_stock', $number);
+        return Goods::query()->where('id', $id)->decrement('stock', $number);
     }
 
     /**

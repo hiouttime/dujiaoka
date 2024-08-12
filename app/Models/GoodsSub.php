@@ -31,10 +31,14 @@ class GoodsSub extends BaseModel
      * @copyright outtime<beprivacy@icloud.com>
      * @link      https://outti.me
      */
-    public function getStockAttribute()
-    {
-        return Carmis::where('sub_id', $this->id)
-            ->where('status', Carmis::STATUS_UNSOLD)
-            ->count();
-    }
+     public function getStockAttribute()
+     {
+        
+        if ($this->goods->type == self::AUTOMATIC_DELIVERY) {
+            return Carmis::where('sub_id', $this->id)
+                ->where('status', Carmis::STATUS_UNSOLD)
+                ->count();
+        }
+        return $this->attributes['stock'];
+     }
 }
