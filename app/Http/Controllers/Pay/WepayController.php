@@ -73,8 +73,9 @@ class WepayController extends PayController
      */
     public function notifyUrl()
     {
-        $json = json_decode(file_get_contents('php://input'),true);
-        $oid = $json['out_trade_no'];
+        $xml = file_get_contents('php://input');
+        $arr = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        $oid = $arr['out_trade_no'];
         $order = $this->orderService->detailOrderSN($oid);
         if (!$order) {
             return 'error';
@@ -86,11 +87,20 @@ class WepayController extends PayController
         if($payGateway->pay_handleroute != '/pay/wepay'){
             return 'error';
         }
+        $config = [
+            'app_id' => $payGateway->merchant_id,
+            'mch_id' => $payGateway->merchant_key,
+            'key' => $payGateway->merchant_pem,
+        ];
+        $pay = Pay::wechat($config);
         try{
-            $this->orderProcessService->completedOrder($oid, $json['price'], $json['tid']);
+            // 验证签名
+            $result = $pay->verify();
+            $total_fee = bcdiv($result->total_fee, 100, 2);
+            $this->orderProcessService->completedOrder($result->out_trade_no, $total_fee, $result->transaction_id);
             return 'success';
         } catch (\Exception $exception) {
-            return $exception;
+            return 'fail';
         }
     }
 

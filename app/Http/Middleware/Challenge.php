@@ -43,7 +43,11 @@ class Challenge
             $isoCode = $_SERVER["HTTP_CF_IPCOUNTRY"];
         else{
             $reader = new Reader(storage_path('app/library/GeoLite2-Country.mmdb'));
-            $isoCode = $reader->country($request->ip())->country->isoCode;
+            try {
+                $isoCode = $reader->country($request->ip())->country->isoCode;
+            }catch(Exception $e){
+                $isoCode = "";
+            }
         }
         if($isoCode != 'CN'){
             session(['challenge' => 'pass']);
