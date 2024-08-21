@@ -95,8 +95,8 @@ INSERT INTO `admin_permissions` VALUES (3, 'Roles', 'roles', '', '/auth/roles*',
 INSERT INTO `admin_permissions` VALUES (4, 'Permissions', 'permissions', '', '/auth/permissions*', 4, 1, now(), NULL);
 INSERT INTO `admin_permissions` VALUES (5, 'Menu', 'menu', '', '/auth/menu*', 5, 1, now(), NULL);
 INSERT INTO `admin_permissions` VALUES (6, 'Extension', 'extension', '', '/auth/extensions*', 6, 1, now(), NULL);
-INSERT INTO `admin_permissions` VALUES (7, 'Carmi management', 'carmi-management', '', '', 7, 0, now(), NULL),
-INSERT INTO `admin_permissions` VALUES (8, 'Import cramps', 'import-carmis', '', '/import-carmis*', 8, 7, now(), NULL),
+INSERT INTO `admin_permissions` VALUES (7, 'Carmi management', 'carmi-management', '', '', 7, 0, now(), NULL);
+INSERT INTO `admin_permissions` VALUES (8, 'Import carmis', 'import-carmis', '', '/import-carmis*', 8, 7, now(), NULL);
 INSERT INTO `admin_permissions` VALUES (9, 'Carmi', 'carmi', '', '/carmis*', 9, 7, now(), NULL);
 COMMIT;
 
