@@ -29,6 +29,15 @@ class BaseController extends Controller
     {
         $layout = dujiaoka_config_get('template', 'unicorn');
         $tplPath = $layout . '/' .$tpl;
+        switch (dujiaoka_config_get('currency', 'cny')) {
+            case 'usd':
+                $data["currency"] = "&#xe704;";
+                break;
+            
+            default:
+                $data["currency"] = "&#xe703;";
+                break;
+        }
         return view($tplPath, $data)->with('page_title', $pageTitle);
     }
 

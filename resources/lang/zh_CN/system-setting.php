@@ -50,6 +50,7 @@ return [
 
         'template' => '站点模板',
         'language' => '站点语言',
+        'currency' => '站点货币',
 
         'driver' => '邮件驱动',
         'host' => 'smtp服务器地址',

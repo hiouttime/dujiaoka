@@ -40,6 +40,9 @@ class SystemSetting extends Form
             $this->select('language', admin_trans('system-setting.fields.language'))
                 ->options(config('dujiaoka.language'))
                 ->required();
+            $this->select('currency', admin_trans('system-setting.fields.currency'))
+                ->options(config('dujiaoka.currencies'))
+                ->required();
             $this->text('manage_email', admin_trans('system-setting.fields.manage_email'));
             $this->switch('is_open_anti_red', admin_trans('system-setting.fields.is_open_anti_red'))
                 ->default(BaseModel::STATUS_CLOSE);

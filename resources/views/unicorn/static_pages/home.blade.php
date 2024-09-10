@@ -92,7 +92,7 @@
                                                     </h6>
 
                                                     <button type="button" class="btn btn-sm btn-outline-success">
-                                                        <i class="ali-icon">&#xe703;</i>
+                                                        <i class="ali-icon">{{ $currency }}</i>
                                                         <strong>{{ $goods['price'] }}</strong>
                                                     </button>
                                                     @if($goods['wholesale_price_cnf'])
@@ -149,7 +149,7 @@
                                                     </h6>
 
                                                         <button type="button" class="btn btn-sm btn-outline-success">
-                                                            <i class="ali-icon">&#xe703;</i>
+                                                            <i class="ali-icon">{{ $currency }}</i>
                                                             <strong>{{ $goods['price'] }}</strong>
                                                         </button>
                                                         @if($goods['wholesale_price_cnf'])
