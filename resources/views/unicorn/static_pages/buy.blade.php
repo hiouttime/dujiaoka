@@ -48,7 +48,7 @@
                                                 @foreach($wholesale_price_cnf as $ws)
                                                     <span class="badge bg-dark mt-1 mb-1">
                                                      <i class="ali-icon">&#xe77d;</i>
-                                                    {{ __('dujiaoka.by_amount') }}{{ $ws['number'] }}{{ __('dujiaoka.or_the_above') }},{{ __('dujiaoka.each') }}：{{ $ws['price']  }}{{ __('dujiaoka.money_symbol') }}
+                                                    {{ __('dujiaoka.by_amount') }}{{ $ws['number'] }}{{ __('dujiaoka.or_the_above') }},{{ __('dujiaoka.each') }}：{{ $ws['price']  }}<i class="ali-icon">{{ $currency }}</i>
                                                     </span>
                                                 @endforeach
                                             </div>
@@ -60,7 +60,7 @@
                                                 <div class="form-group row">
                                                     {{-- 商品价格 --}}
                                                     <div class="col-12">
-                                                        <h6>{{ __('dujiaoka.price') }}：{{ __('dujiaoka.money_symbol') }} <b id="price">{{ $price }}</b></h6>
+                                                        <h6>{{ __('dujiaoka.price') }}：<i class="ali-icon">{{ $currency }}</i> <b id="price">{{ $price }}</b></h6>
                                                     </div>
                                                     {{-- 商品规格 --}}
                                                     @if($is_sub)
@@ -130,7 +130,7 @@
                                                 
                                                 @if($preselection > 0)
                                                     <div class="form-group row">
-                                                        <label class="col-form-label">{{ __('dujiaoka.preselection')}} <b>{{ __('dujiaoka.money_symbol') . $preselection }}</b>:</label>
+                                                        <label class="col-form-label">{{ __('dujiaoka.preselection')}} <b><i class="ali-icon">{{ $currency }}</i>{{$preselection }}</b>:</label>
                                                         <div class="carmis form-control">
                                                             @foreach($selectable as $carmi)
                                                             <label>

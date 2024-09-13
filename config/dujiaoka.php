@@ -8,13 +8,14 @@
  */
 
 return [
-    'dujiaoka_version' => '2.0.5',
-    // 模板集合
-    'templates' => [
-        'unicorn' => '官方[unicorn-独角兽]',
-        'luna' => 'Luna[Julyssn]',
-        'hyper' => 'hyper[Bimoe]'
-    ],
+    'dujiaoka_version' => '2.1.0',
+     // 模板集合
+     'templates' => [
+         'unicorn' => 'Unicorn独角兽',
+         'luna' => 'Luna[Author: Julyssn]',
+         'hyper' => 'Hyper[Author: Bimoe]',
+         'hyper_row' => 'HyperRow[Author: Bimoe]',
+     ],
     // 语言
     'language' => [
         'zh_CN' => '简体中文',

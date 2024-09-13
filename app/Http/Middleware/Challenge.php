@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\BaseModel;
 use GeoIp2\Database\Reader;
+use GeoIp2\Exception\AddressNotFoundException;
 
 class Challenge
 {
@@ -45,7 +46,7 @@ class Challenge
             $reader = new Reader(storage_path('app/library/GeoLite2-Country.mmdb'));
             try {
                 $isoCode = $reader->country($request->ip())->country->isoCode;
-            }catch(Exception $e){
+            }catch(AddressNotFoundException $e){
                 $isoCode = "";
             }
         }
