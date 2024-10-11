@@ -39,17 +39,7 @@ class Challenge
             }
         }
         
-        // 对Cloudflare站点的支持优化
-        if(isset($_SERVER["HTTP_CF_IPCOUNTRY"]))
-            $isoCode = $_SERVER["HTTP_CF_IPCOUNTRY"];
-        else{
-            $reader = new Reader(storage_path('app/library/GeoLite2-Country.mmdb'));
-            try {
-                $isoCode = $reader->country($request->ip())->country->isoCode;
-            }catch(AddressNotFoundException $e){
-                $isoCode = "";
-            }
-        }
+        $isoCode = get_ip_country($request->ip());
         if($isoCode != 'CN'){
             session(['challenge' => 'pass']);
             return $next($request);

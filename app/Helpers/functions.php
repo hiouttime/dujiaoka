@@ -11,6 +11,8 @@
 use App\Exceptions\AppException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use GeoIp2\Database\Reader;
+use GeoIp2\Exception\AddressNotFoundException;
 
 if (! function_exists('replace_mail_tpl')) {
 
@@ -229,5 +231,23 @@ if (!function_exists('assoc_unique')) {
         }
         sort($arr); //sort函数对数组进行排序
         return $arr;
+    }
+}
+
+if (!function_exists('get_ip_country')) {
+    function get_ip_country($ip) {
+        // 对Cloudflare站点的支持优化
+        if(isset($_SERVER["HTTP_CF_IPCOUNTRY"]))
+            $isoCode = $_SERVER["HTTP_CF_IPCOUNTRY"];
+        else{
+            $reader = new Reader(storage_path('app/library/GeoLite2-Country.mmdb'));
+            try {
+                $isoCode = $reader->country($ip)->country->isoCode;
+            }catch(AddressNotFoundException $e){
+                $isoCode = "";
+            }
+        }
+        
+        return $isoCode;
     }
 }

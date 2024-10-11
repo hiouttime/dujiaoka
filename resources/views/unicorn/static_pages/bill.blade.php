@@ -34,10 +34,10 @@
                                     </div>
                                     @if(!empty($coupon))
                                         <div class="mb-1"><label>{{ __('order.fields.coupon_id') }}：</label><span>{{ $coupon['coupon'] }}</span></div>
-                                        <div class="mb-1"><label>{{ __('order.fields.coupon_discount_price') }}：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $coupon_discount_price }}</span></div>
+                                        <div class="mb-1"><label>{{ __('order.fields.coupon_discount_price') }}：</label><span><i class="ali-icon">{{ $currency }}</i>{{ $coupon_discount_price }}</span></div>
                                     @endif
                                     @if($wholesale_discount_price > 0 )
-                                        <div class="mb-1"><label>{{ __('order.fields.wholesale_discount_price') }}：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $wholesale_discount_price }}</span></div>
+                                        <div class="mb-1"><label>{{ __('order.fields.wholesale_discount_price') }}：</label><span><i class="ali-icon">{{ $currency }}</i>{{ $wholesale_discount_price }}</span></div>
                                     @endif
                                     @if(!empty($info))
                                         <div class="mb-1"><label>{{ __('dujiaoka.order_information') }}：</label><p>{{ $info }}</p></div>
@@ -46,7 +46,7 @@
                                     @if($pay['pay_fee'] > 0)
                                     <div class="mb-1"><label>{{ __('dujiaoka.payment_fee') }}：</label><span>{{ $pay['pay_fee'] }}%</span></div>  
                                     @endif
-                                    <div class="mb-1"><label>{{ __('order.fields.actual_price') }}：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $actual_price }}</span></div>
+                                    <div class="mb-1"><label>{{ __('order.fields.actual_price') }}：</label><span><i class="ali-icon">{{ $currency }}</i>{{ $actual_price }}</span></div>
                                     <div class="mb-1"><label>{{ __('order.fields.order_created') }}：</label><span>{{ $created_at }}</span></div>
 
                                     <div class="pay-now text-center mt-3">

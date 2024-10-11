@@ -31,6 +31,7 @@ class PayController extends AdminController
             $grid->column('merchant_id')->limit(20);
             $grid->column('pay_client')->select(PayModel::getClientMap());
             $grid->column('pay_handleroute');
+            $grid->column('china_only')->switch();
             $grid->column('is_open')->switch();
             $grid->disableDeleteButton();
             $grid->filter(function (Grid\Filter $filter) {
@@ -84,6 +85,13 @@ class PayController extends AdminController
                     return admin_trans('pay.fields.method_scan');
                 }
             });
+            $show->field('china_only')->as(function ($isOpen) {
+                if ($isOpen == PayModel::STATUS_OPEN) {
+                    return admin_trans('dujiaoka.status_open');
+                } else {
+                    return admin_trans('dujiaoka.status_close');
+                }
+            });
             $show->field('is_open')->as(function ($isOpen) {
                 if ($isOpen == PayModel::STATUS_OPEN) {
                     return admin_trans('dujiaoka.status_open');
@@ -120,6 +128,7 @@ class PayController extends AdminController
                 ->default(PayModel::METHOD_JUMP)
                 ->required();
             $form->text('pay_handleroute')->required();
+            $form->switch('china_only')->default(PayModel::STATUS_CLOSE);
             $form->switch('is_open')->default(PayModel::STATUS_OPEN);
             $form->display('created_at');
             $form->display('updated_at');

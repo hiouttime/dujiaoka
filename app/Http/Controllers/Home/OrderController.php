@@ -6,6 +6,7 @@ use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Order;
 use App\Models\Carmis;
+use App\Models\Pay;
 use App\Service\OrderProcessService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -91,6 +92,13 @@ class OrderController extends BaseController
             $payment_limit = json_decode($goods->payment_limit,true);
             if(is_array($payment_limit) && count($payment_limit) && !in_array($request->input('payway'),$payment_limit))
                 return $this->err(__('dujiaoka.prompt.payment_limit'));
+            // 支付方式适用检查
+            $payway = Pay::find($request->input('payway'));
+            if ($payway->china_only) {
+                $isoCode = get_ip_country($request->getClientIp());
+                if($isoCode != 'CN')
+                     return $this->err(__('dujiaoka.prompt.payment_china_only'));
+            }
             $this->orderProcessService->setPayID($request->input('payway'));
             // 下单邮箱
             $this->orderProcessService->setEmail($request->input('email'));
