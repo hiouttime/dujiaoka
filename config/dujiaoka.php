@@ -11,6 +11,7 @@ return [
     'dujiaoka_version' => '2.1.0',
      // 模板集合
      'templates' => [
+         'neon' => 'Neon[Author: @Riniba]',
          'unicorn' => 'Unicorn独角兽',
          'luna' => 'Luna[Author: Julyssn]',
          'hyper' => 'Hyper[Author: Bimoe]',
