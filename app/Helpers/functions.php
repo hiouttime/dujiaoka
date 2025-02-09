@@ -64,6 +64,23 @@ if (! function_exists('dujiaoka_config_get')) {
     }
 }
 
+if (! function_exists('dujiaoka_theme_get')) {
+
+    /**
+     * 系统配置获取
+     *
+     * @param string $key 要获取的key
+     * @param $default 默认
+     * @return mixed|null
+     *
+     */
+    function dujiaoka_theme_get(string $key, $default = null)
+    {
+       $sysConfig = Cache::get('theme-setting');
+       return $sysConfig[$key] ?? $default;
+    }
+}
+
 if (! function_exists('format_wholesale_price')) {
 
     /**

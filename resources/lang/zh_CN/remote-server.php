@@ -1,4 +1,11 @@
 <?php
+/**
+ * The file was created by Outtime.
+ *
+ * @author    outtime<beprivacy@icloud.com>
+ * @copyright outtime<beprivacy@icloud.com>
+ * @link      https://outti.me
+ */
 
 return [
     "types" => [

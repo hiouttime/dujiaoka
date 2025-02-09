@@ -29,6 +29,7 @@ return [
         'order'        => '订单列表',
         'system_setting' => '系统设置',
         'email_test' => '邮件测试',
-        'remote_server' => '回调服务器'
+        'remote_server' => '回调服务器',
+        'theme_setting' => '主题设置',
     ],
 ];

@@ -46,6 +46,7 @@ INSERT INTO `admin_menu` VALUES (72, 70, 72, 'Pay_Configuration', 'fa-cc-visa', 
 INSERT INTO `admin_menu` VALUES (73, 70, 73, 'Email_Template_Configuration', 'fa-envelope', '/emailtpl', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (74, 70, 74, 'Email_Test', 'fa-envelope', '/email-test', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (75, 70, 75, 'Remote_Server', 'fa-server', '/remote-server', '', 1, now(), now());
+INSERT INTO `admin_menu` VALUES (76, 70, 76, 'Theme_Setting', 'fa-paint-brush', '/theme-setting', '', 1, now(), now());
 INSERT INTO `admin_menu` VALUES (80,  0, 80, 'Article_Manage', 'fa-newspaper-o', '/article', '', 1, now(), now());
 COMMIT;
 

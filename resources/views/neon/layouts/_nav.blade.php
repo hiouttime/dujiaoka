@@ -23,9 +23,15 @@
           }'
           >
             <div class="swiper-wrapper min-w-0">
-              <div class="swiper-slide text-truncate text-center">本站商品仅用于测试,禁止用于任何非法行为</div>
-              <div class="swiper-slide text-truncate text-center">所有商品均为空白身份注册,不包含公民隐私信息</div>
-              <div class="swiper-slide text-truncate text-center">虚拟商品具有可复制可传播性,有问题请联系客服</div>
+            @php
+              $notices = explode("\n", dujiaoka_theme_get('notice',''));
+            @endphp
+
+            @if(!empty($notice))
+              @foreach($notices as $notice)
+                <div class="swiper-slide text-truncate text-center">{{ $notice }}</div>
+              @endforeach
+            @endif
             </div>
           </div>
           <div class="nav ms-2">

@@ -23,8 +23,9 @@ Route::group([
     $router->resource('pay', 'PayController');
     $router->resource('order', 'OrderController');
     $router->resource('article', 'ArticleController');
-    $router->get('import-carmis', 'CarmisController@importCarmis');
-    $router->get('system-setting', 'SystemSettingController@systemSetting');
-    $router->get('email-test', 'EmailTestController@emailTest');
     $router->resource('remote-server', 'RemoteServerController');
+    $router->get('import-carmis', 'CarmisController@importCarmis');
+    $router->get('email-test', 'EmailTestController@emailTest');
+    $router->get('system-setting', 'SystemSettingController@systemSetting');
+    $router->get('theme-setting', 'ThemeSettingController@themeSetting');
 });
