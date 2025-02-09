@@ -1,4 +1,4 @@
-@extends('riniba_03.layouts.default')
+@extends('neon.layouts.default')
 @section('content')
 <main class="content-wrapper">
     <section class="container pt-4">
@@ -71,19 +71,19 @@
                                     <div class="swiper-slide d-flex justify-content-end">
                                         <div class="ratio rtl-flip"
                                             style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="/assets/riniba_03/banner/1.webp" alt="Image">
+                                            <img src="/assets/neon/banner/1.webp" alt="Image">
                                         </div>
                                     </div>
                                     <div class="swiper-slide d-flex justify-content-end">
                                         <div class="ratio rtl-flip"
                                             style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="/assets/riniba_03/banner/2.webp" alt="Image">
+                                            <img src="/assets/neon/banner/2.webp" alt="Image">
                                         </div>
                                     </div>
                                     <div class="swiper-slide d-flex justify-content-end">
                                         <div class="ratio rtl-flip"
                                             style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="/assets/riniba_03/banner/3.webp" alt="Image">
+                                            <img src="/assets/neon/banner/3.webp" alt="Image">
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +145,7 @@
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">
                     @foreach($data as $group)
                         @foreach($group['goods'] as $goods)
-                        @include('riniba_03.layouts._goods', ['goods' => $goods])
+                        @include('neon.layouts._goods', ['goods' => $goods])
                         @endforeach
                     @endforeach
                 </div>
@@ -156,7 +156,7 @@
                 <div class="tab-pane fade" id="group-{{ $group['id'] }}" role="tabpanel" aria-labelledby="group-{{ $group['id'] }}-tab">
                     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">
                         @foreach($group['goods'] as $goods)
-                        @include('riniba_03.layouts._goods', ['goods' => $goods])                        
+                        @include('neon.layouts._goods', ['goods' => $goods])                        
                         @endforeach
                     </div>
                 </div>

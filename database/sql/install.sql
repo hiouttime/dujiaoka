@@ -532,7 +532,7 @@ CREATE TABLE `pays` (
 -- Records of pays
 -- ----------------------------
 BEGIN;
-INSERT INTO `pays` VALUES (null ,'USDT-TRC20', 'tokenpay-usdt-trc', 0, 1, 3, 'USDT_TRC20', '你的API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 1 now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'USDT-TRC20', 'tokenpay-usdt-trc', 0, 1, 3, 'USDT_TRC20', '你的API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null ,'TRX', 'tokenpay-trx', 0, 1, 3, 'TRX', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null, 'Epusdt[trc20]', 'epusdt', 0, 1, 3, 'API密钥', '不填即可', 'api请求地址', 'pay/epusdt', 0, 1, now(), now(), NULL);
 INSERT INTO `pays` VALUES (null, '支付宝当面付', 'zfbf2f', 0, 2, 3, '商户号', '支付宝公钥', '商户私钥', '/pay/alipay', 1, 1, now(), now(), NULL);

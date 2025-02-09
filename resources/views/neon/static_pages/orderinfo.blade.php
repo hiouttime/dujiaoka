@@ -1,4 +1,4 @@
-@extends('riniba_03.layouts.default')
+@extends('neon.layouts.default')
 
 @section('content')
 <main class="content-wrapper">

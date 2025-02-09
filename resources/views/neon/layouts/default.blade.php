@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_','-',strtolower(app()->getLocale())) }}">
 <body>
-@include('riniba_03.layouts._header')
-@include('riniba_03.layouts._nav')
+@include('neon.layouts._header')
+@include('neon.layouts._nav')
 @yield('content')
-@include('riniba_03.layouts._footer')
+@include('neon.layouts._footer')
 </body>
-@include('riniba_03.layouts._script')
+@include('neon.layouts._script')
 @section('js')
 @show
 </html>

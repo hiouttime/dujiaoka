@@ -43,16 +43,9 @@
             </a>
         </div>
 
-        {{-- 4) 价格及原价 --}}
+        {{-- 4) 售价 --}}
         <div class="h6 mb-1">
-            ${{ number_format($goods['actual_price'], 2) }}
-
-            {{-- 如果有原价且大于现价，显示 del 标签 --}}
-            @if(!empty($goods['original_price']) && $goods['original_price'] > $goods['actual_price'])
-                <del class="fs-sm fw-normal text-body-tertiary">
-                    ${{ number_format($goods['original_price'], 2) }}
-                </del>
-            @endif
+            ${{ number_format($goods['sell_price'], 2) }}
         </div>
 
         {{-- 5) 进度条（根据库存 in_stock）示例: 50 视为满库存 --}}

@@ -19,27 +19,27 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/png" href="/assets/riniba_03/app-icons/icon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/assets/neon/app-icons/icon-32x32.png" sizes="32x32" />
 
     @if(\request()->getScheme() == "https")
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     @endif
-    <link rel="apple-touch-icon" href="/assets/riniba_03/app-icons/icon-180x180.png" />
-    <script src="/assets/riniba_03/js/theme-switcher.js"></script>
-    <link rel="preload" href="/assets/riniba_03/fonts/inter-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/assets/riniba_03/icons/cartzilla-icons.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/assets/riniba_03/icons/cartzilla-icons.min.css" />
-    <link rel="stylesheet" href="/assets/riniba_03/css/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="/assets/riniba_03/css/glightbox.min.css" />
-    <link rel="stylesheet" href="/assets/riniba_03/css/simplebar.min.css" />
-    <link rel="preload" href="/assets/riniba_03/css/theme.min.css" as="style" />
-    <link rel="stylesheet" href="/assets/riniba_03/css/theme.min.css" id="theme-styles" />
+    <link rel="apple-touch-icon" href="/assets/neon/app-icons/icon-180x180.png" />
+    <script src="/assets/neon/js/theme-switcher.js"></script>
+    <link rel="preload" href="/assets/neon/fonts/inter-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/neon/icons/cartzilla-icons.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/neon/icons/cartzilla-icons.min.css" />
+    <link rel="stylesheet" href="/assets/neon/css/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/assets/neon/css/glightbox.min.css" />
+    <link rel="stylesheet" href="/assets/neon/css/simplebar.min.css" />
+    <link rel="preload" href="/assets/neon/css/theme.min.css" as="style" />
+    <link rel="stylesheet" href="/assets/neon/css/theme.min.css" id="theme-styles" />
 </head>
-@include('riniba_03.layouts._nav')
+@include('neon.layouts._nav')
 @yield('content')
-@include('riniba_03.layouts._footer')
+@include('neon.layouts._footer')
 </body>
-@include('riniba_03.layouts._script')
+@include('neon.layouts._script')
 @section('js')
 @show
 </html>

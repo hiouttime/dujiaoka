@@ -1,4 +1,4 @@
-@extends('riniba_03.layouts.default') @section('content')
+@extends('neon.layouts.default') @section('content')
 <main class="content-wrapper">
     <!-- Breadcrumb -->
     <nav class="container pt-2 pt-xxl-3 my-3 my-md-4" aria-label="breadcrumb">
