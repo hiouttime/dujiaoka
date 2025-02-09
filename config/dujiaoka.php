@@ -8,14 +8,10 @@
  */
 
 return [
-    'dujiaoka_version' => '2.1.0',
+    'dujiaoka_version' => '2.1.5',
      // 模板集合
      'templates' => [
          'neon' => 'Neon[Author: @Riniba]',
-         'unicorn' => 'Unicorn独角兽',
-         'luna' => 'Luna[Author: Julyssn]',
-         'hyper' => 'Hyper[Author: Bimoe]',
-         'hyper_row' => 'HyperRow[Author: Bimoe]',
      ],
     // 语言
     'language' => [
