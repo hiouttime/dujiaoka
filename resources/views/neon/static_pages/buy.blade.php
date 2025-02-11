@@ -19,11 +19,11 @@
             <div class="col-md-6 pb-4 pb-md-0 mb-2 mb-sm-3 mb-md-0">
               <div class="position-relative">
                 <a class="hover-effect-scale hover-effect-opacity position-relative d-flex rounded overflow-hidden mb-3 mb-sm-4 mb-md-3 mb-lg-4"
-                   href="{{ picture_ulr($picture) }}" data-glightbox="" data-gallery="product-gallery">
+                   href="{{ picture_url($picture) }}" data-glightbox="" data-gallery="product-gallery">
                   <i class="ci-zoom-in hover-effect-target fs-3 text-white position-absolute top-50 start-50 translate-middle opacity-0 z-2"></i>
                   <div class="ratio hover-effect-target bg-body-tertiary rounded"
                        style="--cz-aspect-ratio: calc(706 / 636 * 100%)">
-                    <img src="{{ picture_ulr($picture) }}" alt="{{ $gd_name }}">
+                    <img src="{{ picture_url($picture) }}" alt="{{ $gd_name }}">
                   </div>
                 </a>
               </div>
@@ -254,7 +254,7 @@
             <div class="navbar container flex-nowrap align-items-center bg-body pt-4 pt-lg-5 mt-lg-n2">
               <div class="d-flex align-items-center min-w-0 ms-lg-2 me-3">
                 <div class="ratio ratio-1x1 flex-shrink-0" style="width: 50px;">
-                  <img src="{{ picture_ulr($picture) }}" alt="{{ $gd_name }}">
+                  <img src="{{ picture_url($picture) }}" alt="{{ $gd_name }}">
                 </div>
                 <h4 class="h6 fw-medium d-none d-lg-block ps-3 mb-0">{{ $gd_name }}</h4>
                 <div class="w-100 min-w-0 d-lg-none ps-2">

@@ -27,7 +27,7 @@
               $notices = explode("\n", dujiaoka_theme_get('notice',''));
             @endphp
 
-            @if(!empty($notice))
+            @if(!empty($notices))
               @foreach($notices as $notice)
                 <div class="swiper-slide text-truncate text-center">{{ $notice }}</div>
               @endforeach
@@ -57,8 +57,8 @@
         <!-- Navbar brand (Logo) -->
         <a class="navbar-brand position-relative z-1 ms-4 ms-sm-5 ms-lg-4 me-2 me-sm-0 me-lg-3" href="/">
           <img
-            src="{{ picture_ulr(dujiaoka_config_get('img_logo')) }}"
-            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 bg-body-tertiary rounded-circle me-1"
+            src="{{ picture_url(dujiaoka_config_get('img_logo')) }}"
+            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 me-1 {{ dujiaoka_theme_get('invert_logo', 0)?'invert_logo':'' }}"
             style="width: 2.5rem; height: 2.5rem"
           />
           {{ dujiaoka_config_get('text_logo') }}

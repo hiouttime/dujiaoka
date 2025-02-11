@@ -31,5 +31,6 @@
     <link rel="stylesheet" href="/assets/neon/css/simplebar.min.css" />
     <link rel="preload" href="/assets/neon/css/theme.min.css" as="style" />
     <link rel="stylesheet" href="/assets/neon/css/theme.min.css" id="theme-styles" />
+    <link rel="stylesheet" href="/assets/neon/css/style.css" />
 </head>
 

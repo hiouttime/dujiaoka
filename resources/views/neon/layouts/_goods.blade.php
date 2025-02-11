@@ -24,7 +24,7 @@
                @endif
             >
                 <div class="ratio" style="--cz-aspect-ratio: calc(308 / 274 * 100%)">
-                    <img src="{{ picture_ulr($goods['picture']) }}" alt="{{ $goods['gd_name'] }}">
+                    <img src="{{ picture_url($goods['picture']) }}" alt="{{ $goods['gd_name'] }}">
                 </div>
             </a>
         </div>

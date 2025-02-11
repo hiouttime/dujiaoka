@@ -1,0 +1,3 @@
+[data-bs-theme=light] .invert_logo {
+    filter: brightness(0);
+}
