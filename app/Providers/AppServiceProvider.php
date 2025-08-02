@@ -46,6 +46,9 @@ class AppServiceProvider extends ServiceProvider
             return $this->app->make(Agent::class);
         });
 
+        $this->app->singleton('App\\Services\\ConfigService', function ($app) {
+            return new \App\Services\ConfigService();
+        });
     }
 
     /**

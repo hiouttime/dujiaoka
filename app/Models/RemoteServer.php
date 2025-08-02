@@ -26,9 +26,9 @@ class RemoteServer extends BaseModel
     public static function getServerTypeMap()
     {
         return [
-            self::HTTP_SERVER => admin_trans('remote-server.types.http_server'),
-            self::RCON_COMMAND => admin_trans('remote-server.types.rcon_command'),
-            self::SQL_EXECUTE => admin_trans('remote-server.types.sql_execute'),
+            self::HTTP_SERVER => __('remote-server.types.http_server'),
+            self::RCON_COMMAND => __('remote-server.types.rcon_command'),
+            self::SQL_EXECUTE => __('remote-server.types.sql_execute'),
         ];
     }
     

@@ -10,11 +10,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('pay-gateway/{handle}/{payway}/{orderSN}', 'PayController@redirectGateway');
 
-// 支付相关
+// 新的统一支付路由系统
+Route::paymentRoutes();
+
+// 兼容性路由 - 保持原有路由正常工作
+// 这些路由会逐步迁移到新的驱动系统
 Route::group(['prefix' => 'pay', 'namespace' => 'Pay', 'middleware' => ['dujiaoka.pay_gate_way']], function () {
-    // 支付宝
-    Route::get('alipay/{payway}/{orderSN}', 'AlipayController@gateway');
-    Route::post('alipay/notify_url', 'AlipayController@notifyUrl');
+    // 支付宝 - 已迁移到新系统，但保留兼容性
+    Route::get('alipay/{payway}/{orderSN}', function($payway, $orderSN) {
+        return app('App\Http\Controllers\UnifiedPaymentController')->gateway('alipay', $payway, $orderSN);
+    });
+    Route::post('alipay/notify_url', function(\Illuminate\Http\Request $request) {
+        return app('App\Http\Controllers\UnifiedPaymentController')->notify($request, 'alipay');
+    });
+    
     // 微信
     Route::get('wepay/{payway}/{orderSN}', 'WepayController@gateway');
     Route::post('wepay/notify_url', 'WepayController@notifyUrl');
@@ -59,5 +68,4 @@ Route::group(['prefix' => 'pay', 'namespace' => 'Pay', 'middleware' => ['dujiaok
     // Binance Pay
     Route::get('binance/{payway}/{orderSN}', 'BinancePayController@gateway');
     Route::post('binance/notify_url', 'BinancePayController@notifyUrl');
-
 });

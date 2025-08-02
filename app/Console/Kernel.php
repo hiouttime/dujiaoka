@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\PaymentDriverCommand::class,
+        Commands\ThemeCommand::class,
     ];
 
     /**

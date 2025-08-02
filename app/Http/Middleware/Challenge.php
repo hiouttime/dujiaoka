@@ -10,8 +10,8 @@ use GeoIp2\Exception\AddressNotFoundException;
 class Challenge
 {
     private $whiteClass = [
-        "App\Http\Controllers\Pay"
-        ];
+        "App\Http\Controllers\PayController"
+    ];
     /**
      * Handle an incoming request.
      *
@@ -22,7 +22,9 @@ class Challenge
     public function handle($request, Closure $next)
     {
         
-        if(in_array($request->route()->getAction()["namespace"],$this->whiteClass))
+        $routeAction = $request->route()->getAction();
+        $controller = $routeAction['controller'] ?? null;
+        if($controller && in_array(explode('@', $controller)[0], $this->whiteClass))
             return $next($request);
         
         if(dujiaoka_config_get('is_cn_challenge') == BaseModel::STATUS_CLOSE)

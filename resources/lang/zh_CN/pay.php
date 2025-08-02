@@ -9,6 +9,7 @@ return [
         'merchant_id' => '商户 ID',
         'merchant_key' => '商户 KEY',
         'merchant_pem' => '商户密钥',
+        'merchant_key_64' => '商户密钥(Base64)',
         'pay_check' => '支付标识',
         'pay_client' => '支付场景',
         'pay_fee' => '通道费率',

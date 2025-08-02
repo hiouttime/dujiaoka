@@ -27,7 +27,7 @@ class BaseController extends Controller
      */
     protected function render(string $tpl, $data = [], string $pageTitle = '')
     {
-        $layout = dujiaoka_config_get('template', 'unicorn');
+        $layout = dujiaoka_config_get('template', 'neon');
         $tplPath = $layout . '/' .$tpl;
         switch (dujiaoka_config_get('currency', 'cny')) {
             case 'usd':
@@ -54,7 +54,7 @@ class BaseController extends Controller
      */
     protected function err(string $content, $jumpUri = '')
     {
-        $layout = dujiaoka_config_get('template', 'unicorn');
+        $layout = dujiaoka_config_get('template', 'neon');
         $tplPath = $layout . '/errors/error';
         return view($tplPath, ['title' => __('dujiaoka.error_title'), 'content' => $content, 'url' => $jumpUri])
             ->with('page_title', __('dujiaoka.error_title'));

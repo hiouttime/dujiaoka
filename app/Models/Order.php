@@ -64,13 +64,13 @@ class Order extends BaseModel
     public static function getStatusMap()
     {
         return [
-            self::STATUS_WAIT_PAY => admin_trans('order.fields.status_wait_pay'),
-            self::STATUS_PENDING => admin_trans('order.fields.status_pending'),
-            self::STATUS_PROCESSING => admin_trans('order.fields.status_processing'),
-            self::STATUS_COMPLETED => admin_trans('order.fields.status_completed'),
-            self::STATUS_FAILURE => admin_trans('order.fields.status_failure'),
-            self::STATUS_ABNORMAL => admin_trans('order.fields.status_abnormal'),
-            self::STATUS_EXPIRED => admin_trans('order.fields.status_expired')
+            self::STATUS_WAIT_PAY => __('order.fields.status_wait_pay'),
+            self::STATUS_PENDING => __('order.fields.status_pending'),
+            self::STATUS_PROCESSING => __('order.fields.status_processing'),
+            self::STATUS_COMPLETED => __('order.fields.status_completed'),
+            self::STATUS_FAILURE => __('order.fields.status_failure'),
+            self::STATUS_ABNORMAL => __('order.fields.status_abnormal'),
+            self::STATUS_EXPIRED => __('order.fields.status_expired')
         ];
     }
 
@@ -86,8 +86,8 @@ class Order extends BaseModel
     public static function getTypeMap()
     {
         return [
-            self::AUTOMATIC_DELIVERY => admin_trans('goods.fields.automatic_delivery'),
-            self::MANUAL_PROCESSING => admin_trans('goods.fields.manual_processing')
+            self::AUTOMATIC_DELIVERY => __('goods.fields.automatic_delivery'),
+            self::MANUAL_PROCESSING => __('goods.fields.manual_processing')
         ];
     }
 

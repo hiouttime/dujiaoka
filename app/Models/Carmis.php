@@ -33,8 +33,8 @@ class Carmis extends BaseModel
     public static function getStatusMap()
     {
         return [
-            self::STATUS_UNSOLD => admin_trans('carmis.fields.status_unsold'),
-            self::STATUS_SOLD => admin_trans('carmis.fields.status_sold')
+            self::STATUS_UNSOLD => __('carmis.fields.status_unsold'),
+            self::STATUS_SOLD => __('carmis.fields.status_sold')
         ];
     }
 

@@ -33,9 +33,9 @@ class Coupon extends BaseModel
     public static function getTypeMap()
     {
         return [
-            self::TYPE_PERCENT => admin_trans('coupon.fields.type_percent'),
-            self::TYPE_FIXED => admin_trans('coupon.fields.type_fixed'),
-            self::TYPE_EACH => admin_trans('coupon.fields.type_each'),
+            self::TYPE_PERCENT => __('coupon.fields.type_percent'),
+            self::TYPE_FIXED => __('coupon.fields.type_fixed'),
+            self::TYPE_EACH => __('coupon.fields.type_each'),
         ];
     }
 

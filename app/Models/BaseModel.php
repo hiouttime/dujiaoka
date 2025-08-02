@@ -10,11 +10,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Dcat\Admin\Traits\HasDateTimeFormatter;
 
 class BaseModel extends Model
 {
-    use HasDateTimeFormatter;
 
     const STATUS_OPEN = 1; // 状态开启
     const STATUS_CLOSE = 0; // 状态关闭
@@ -35,8 +33,8 @@ class BaseModel extends Model
     public static function getIsOpenMap()
     {
         return [
-            self::STATUS_OPEN => admin_trans('dujiaoka.status_open'),
-            self::STATUS_CLOSE => admin_trans('dujiaoka.status_close')
+            self::STATUS_OPEN => __('dujiaoka.status_open'),
+            self::STATUS_CLOSE => __('dujiaoka.status_close')
         ];
     }
 

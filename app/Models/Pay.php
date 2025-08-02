@@ -40,17 +40,17 @@ class Pay extends BaseModel
     public static function getMethodMap()
     {
         return [
-            self::METHOD_JUMP => admin_trans('pay.fields.method_jump'),
-            self::METHOD_SCAN => admin_trans('pay.fields.method_scan'),
+            self::METHOD_JUMP => __('pay.fields.method_jump'),
+            self::METHOD_SCAN => __('pay.fields.method_scan'),
         ];
     }
 
     public static function getClientMap()
     {
         return [
-            self::PAY_CLIENT_PC => admin_trans('pay.fields.pay_client_pc'),
-            self::PAY_CLIENT_MOBILE => admin_trans('pay.fields.pay_client_mobile'),
-            self::PAY_CLIENT_ALL => admin_trans('pay.fields.pay_client_all'),
+            self::PAY_CLIENT_PC => __('pay.fields.pay_client_pc'),
+            self::PAY_CLIENT_MOBILE => __('pay.fields.pay_client_mobile'),
+            self::PAY_CLIENT_ALL => __('pay.fields.pay_client_all'),
         ];
     }
 

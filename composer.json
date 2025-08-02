@@ -2,34 +2,30 @@
     "name": "outtimes/dujiaoka",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "amrshawky/laravel-currency": "^6.0",
-        "dcat/easy-excel": "^1.1.0",
-        "dcat/laravel-admin": "2.*",
-        "fideloper/proxy": "^4.4",
+        "php": "^8.2",
+        "filament/filament": "^3.2",
+        "filament/spatie-laravel-settings-plugin": "^3.3",
         "geoip2/geoip2": "^2.13",
         "jenssegers/agent": "^2.6",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^12.0",
         "laravel/tinker": "^2.8",
         "mews/captcha": "^3.0",
-        "paypal/rest-api-sdk-php": "^1.14",
-        "simplesoftwareio/simple-qrcode": "2.0.0",
+        "mgcodeur/laravel-currency-converter": "^1.0",
+        "paypal/paypal-server-sdk": "^0.6",
+        "simplesoftwareio/simple-qrcode": "^4.0",
         "stripe/stripe-php": "^7.84",
         "xhat/payjs-laravel": "^1.6",
         "yansongda/pay": "^3.2"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^1.0",
-        "fakerphp/faker": "^1.9.1",
-        "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^8.5.8|^9.3.3"
+        "spatie/laravel-ignition": "^2.0",
+        "fakerphp/faker": "^1.23",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.0",
+        "phpunit/phpunit": "^10.5|^11.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -50,7 +46,7 @@
             "database/seeds",
             "database/factories"
         ],
-        "files":[
+        "files": [
             "app/Helpers/functions.php"
         ]
     },
@@ -62,6 +58,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        
+        "post-autoload-dump": [
+            "@php artisan filament:upgrade"
+        ]
     }
 }
