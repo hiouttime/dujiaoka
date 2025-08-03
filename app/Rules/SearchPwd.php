@@ -26,7 +26,7 @@ class SearchPwd implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (dujiaoka_config_get('is_open_search_pwd') == BaseModel::STATUS_OPEN && empty($value)) {
+        if (cfg('is_open_search_pwd') == BaseModel::STATUS_OPEN && empty($value)) {
             return false;
         }
         return true;

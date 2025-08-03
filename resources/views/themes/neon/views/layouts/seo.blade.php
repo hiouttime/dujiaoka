@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>{{ isset($page_title) ? $page_title : '' }} | {{ dujiaoka_config_get('title') }}</title>
+    <title>{{ isset($page_title) ? $page_title : '' }} | {{ cfg('title') }}</title>
     <meta name="keywords" content="{{ $gd_keywords }}">
     <meta name="description" content="{{ $gd_description }}">
     <meta property="og:type" content="article">

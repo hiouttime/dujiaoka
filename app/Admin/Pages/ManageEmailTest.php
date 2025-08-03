@@ -2,6 +2,7 @@
 
 namespace App\Admin\Pages;
 
+use App\Settings\MailSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -16,8 +17,8 @@ class ManageEmailTest extends Page
 
     protected static string $view = 'filament.pages.manage-email-test';
 
-    protected static ?string $navigationGroup = '系统设置';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = '邮件设置';
+    protected static ?int $navigationSort = 3;
 
     public static function getNavigationLabel(): string
     {
@@ -77,20 +78,20 @@ class ManageEmailTest extends Page
             $title = $data['title'];
             $body = $data['body'];
 
-            // 获取系统邮件配置
-            $sysConfig = cache('system-setting', []);
+            // 获取邮件配置
+            $mailSettings = app(MailSettings::class);
             
             $mailConfig = [
-                'driver' => $sysConfig['driver'] ?? 'smtp',
-                'host' => $sysConfig['host'] ?? '',
-                'port' => $sysConfig['port'] ?? '465',
-                'username' => $sysConfig['username'] ?? '',
+                'driver' => $mailSettings->driver ?? 'smtp',
+                'host' => $mailSettings->host ?? '',
+                'port' => $mailSettings->port ?? '465',
+                'username' => $mailSettings->username ?? '',
                 'from' => [
-                    'address' => $sysConfig['from_address'] ?? '',
-                    'name' => $sysConfig['from_name'] ?? '独角发卡'
+                    'address' => $mailSettings->from_address ?? '',
+                    'name' => $mailSettings->from_name ?? '独角发卡'
                 ],
-                'password' => $sysConfig['password'] ?? '',
-                'encryption' => $sysConfig['encryption'] ?? 'ssl'
+                'password' => $mailSettings->password ?? '',
+                'encryption' => $mailSettings->encryption ?? 'ssl'
             ];
 
             // 临时覆盖邮件配置

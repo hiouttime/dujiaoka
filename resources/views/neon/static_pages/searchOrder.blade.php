@@ -103,7 +103,7 @@
                                         placeholder="请输入邮箱"
                                     />
                                 </div>
-                                @if(dujiaoka_config_get('is_open_search_pwd',
+                                @if(cfg('is_open_search_pwd',
                                 \App\Models\BaseModel::STATUS_CLOSE) ==
                                 \App\Models\BaseModel::STATUS_OPEN)
                                 <div class="mb-3">

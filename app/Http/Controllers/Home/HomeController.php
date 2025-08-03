@@ -7,6 +7,8 @@ use App\Http\Controllers\BaseController;
 use App\Models\Pay;
 use App\Models\Goods;
 use App\Models\Articles;
+use App\Services\Shop;
+use App\Services\Payment;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\QueryException;
 use Illuminate\Encryption\Encrypter;
@@ -20,20 +22,20 @@ class HomeController extends BaseController
 
     /**
      * 商品服务层.
-     * @var \App\Service\PayService
+     * @var \App\Services\Shop
      */
     private $goodsService;
 
     /**
      * 支付服务层
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     private $payService;
 
-    public function __construct()
+    public function __construct(Shop $goodsService, Payment $payService)
     {
-        $this->goodsService = app('Service\GoodsService');
-        $this->payService = app('Service\PayService');
+        $this->goodsService = $goodsService;
+        $this->payService = $payService;
     }
 
     /**
@@ -41,9 +43,6 @@ class HomeController extends BaseController
      *
      * @param Request $request
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function index(Request $request)
     {
@@ -72,9 +71,6 @@ class HomeController extends BaseController
      * @param any $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function buy($id)
     {
@@ -117,9 +113,6 @@ class HomeController extends BaseController
      *
      * @param Request $request
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function geetest(Request $request)
     {
@@ -140,9 +133,6 @@ class HomeController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function install(Request $request)
     {
@@ -154,9 +144,6 @@ class HomeController extends BaseController
      *
      * @param Request $request
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function doInstall(Request $request)
     {

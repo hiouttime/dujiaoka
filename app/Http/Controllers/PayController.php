@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\RuleValidationException;
 use App\Models\Order;
-use App\Service\OrderProcessService;
+use App\Services\OrderProcess;
 
 class PayController extends BaseController
 {
@@ -24,13 +24,13 @@ class PayController extends BaseController
 
     /**
      * 订单服务层
-     * @var \App\Service\OrderService
+     * @var \App\Services\Orders
      */
     protected $orderService;
 
     /**
      * 支付服务层
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     protected $payService;
 
@@ -43,9 +43,9 @@ class PayController extends BaseController
 
     public function __construct()
     {
-        $this->orderService = app('Service\OrderService');
-        $this->payService = app('Service\PayService');
-        $this->orderProcessService = app('Service\OrderProcessService');
+        $this->orderService = app('Services\Orders');
+        $this->payService = app('Services\Pay');
+        $this->orderProcessService = app('Services\OrderProcess');
     }
 
     /**
@@ -54,9 +54,6 @@ class PayController extends BaseController
      * @param string $orderSN
      * @throws RuleValidationException
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function checkOrder(string $orderSN)
     {
@@ -82,9 +79,6 @@ class PayController extends BaseController
      * @param string $payCheck 支付标识
      * @throws RuleValidationException
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function loadGateWay(string $orderSN, string $payCheck)
     {
@@ -105,9 +99,6 @@ class PayController extends BaseController
      * @param string $payway 支付标识
      * @param string $orderSN 订单.
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function redirectGateway(string $handle,string $payway, string $orderSN)
     {

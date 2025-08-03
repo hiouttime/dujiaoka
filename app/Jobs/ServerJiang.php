@@ -66,7 +66,7 @@ class ServerJiang implements ShouldQueue
             ]
         ];
         $context  = stream_context_create($opts);
-        $apiToken = dujiaoka_config_get('server_jiang_token');
+        $apiToken = cfg('server_jiang_token');
         file_get_contents('https://sctapi.ftqq.com/' . $apiToken . '.send', false, $context);
     }
 }

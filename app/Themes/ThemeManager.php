@@ -232,7 +232,7 @@ class ThemeManager
     protected function getActiveThemeFromConfig(): string
     {
         // 从系统配置获取
-        return dujiaoka_config_get('website_style', 'neon');
+        return cfg('website_style', 'neon');
     }
 
     /**

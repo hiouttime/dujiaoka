@@ -36,7 +36,7 @@ class WorkWeiXinPush implements ShouldQueue
 
     /**
      * 商品服务层.
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     private $goodsService;
 
@@ -49,7 +49,7 @@ class WorkWeiXinPush implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Service\GoodsService');
+        $this->goodsService = app('Services\Shop');
     }
 
     /**
@@ -61,7 +61,7 @@ class WorkWeiXinPush implements ShouldQueue
     {
         $goodInfo = $this->goodsService->detail($this->order->goods_id);
         $client = new Client();
-        $apiUrl = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='. dujiaoka_config_get('qywxbot_key');
+        $apiUrl = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='. cfg('qywxbot_key');
 		$params = [
 			"msgtype"=>"markdown",
 			"markdown"=>[

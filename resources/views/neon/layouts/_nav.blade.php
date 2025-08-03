@@ -24,7 +24,7 @@
           >
             <div class="swiper-wrapper min-w-0">
             @php
-              $notices = explode("\n", dujiaoka_theme_get('notice',''));
+              $notices = explode("\n", theme('notice',''));
             @endphp
 
             @if(!empty($notices))
@@ -57,11 +57,11 @@
         <!-- Navbar brand (Logo) -->
         <a class="navbar-brand position-relative z-1 ms-4 ms-sm-5 ms-lg-4 me-2 me-sm-0 me-lg-3" href="/">
           <img
-            src="{{ picture_url(dujiaoka_config_get('img_logo')) }}"
-            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 me-1 {{ dujiaoka_theme_get('invert_logo', 0)?'invert_logo':'' }}"
+            src="{{ pictureUrl(cfg('img_logo')) }}"
+            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 me-1 {{ theme('invert_logo', 0)?'invert_logo':'' }}"
             style="width: 2.5rem; height: 2.5rem"
           />
-          {{ dujiaoka_config_get('text_logo') }}
+          {{ cfg('text_logo') }}
         </a>
 
         <!-- Main navigation that turns into offcanvas on screens < 992px wide (lg breakpoint) -->
@@ -171,7 +171,7 @@
             <div class="py-2 px-2 px-md-2">
             <h4 class="">{{ __('dujiaoka.site_announcement') }}：</h4>
                                     
-            <p class="lead">{!! dujiaoka_config_get('notice') !!}</p>
+            <p class="lead">{!! cfg('notice') !!}</p>
             </div>
           </div>
           <div class="modal-footer flex-column flex-sm-row align-items-stretch">

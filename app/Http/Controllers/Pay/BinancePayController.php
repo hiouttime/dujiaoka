@@ -73,7 +73,7 @@ class BinancePayController extends PayController
                     "buyerEmail" => $this->order->email
                     ],
                 "returnUrl" => url('detail-order-sn', ['orderSN' => $this->order->order_sn]),
-                "orderExpireTime" => $this->timestamp + dujiaoka_config_get('order_expire_time', 5) * 60 * 1000,
+                "orderExpireTime" => $this->timestamp + cfg('order_expire_time', 5) * 60 * 1000,
                 "webhookUrl" => url($this->payGateway->pay_handleroute . '/notify_url')
                 ];
 

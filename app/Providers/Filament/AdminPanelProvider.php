@@ -80,8 +80,8 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(false)  // 暂时禁用暗色模式，可根据需要调整
             ->navigationGroups([
                 '商店管理',
-                '订单管理',
                 '支付配置',
+                '邮件设置',
                 '内容管理',
                 '外观设置',
                 '系统设置',

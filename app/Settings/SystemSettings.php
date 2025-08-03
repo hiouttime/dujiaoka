@@ -15,7 +15,6 @@ class SystemSettings extends Settings
     public string $template;
     public string $language;
     public string $currency;
-    public ?string $manage_email;
     public bool $is_open_anti_red;
     public bool $is_cn_challenge;
     public bool $is_open_search_pwd;
@@ -41,15 +40,6 @@ class SystemSettings extends Settings
     public bool $is_open_qywxbot_push;
     public ?string $qywxbot_key;
 
-    // 邮件设置
-    public string $driver;
-    public ?string $host;
-    public ?int $port;
-    public ?string $username;
-    public ?string $password;
-    public ?string $encryption;
-    public ?string $from_address;
-    public ?string $from_name;
 
     // 极验设置
     public ?string $geetest_id;

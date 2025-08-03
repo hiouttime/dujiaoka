@@ -26,9 +26,6 @@ class Carmis extends BaseModel
      *
      * @return array
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public static function getStatusMap()
     {
@@ -43,9 +40,6 @@ class Carmis extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function goods()
     {

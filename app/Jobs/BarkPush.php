@@ -37,7 +37,7 @@ class BarkPush implements ShouldQueue
 
     /**
      * 商品服务层.
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     private $goodsService;
 
@@ -50,7 +50,7 @@ class BarkPush implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Service\GoodsService');
+        $this->goodsService = app('Services\Shop');
     }
 
     /**
@@ -62,7 +62,7 @@ class BarkPush implements ShouldQueue
     {
         $goodInfo = $this->goodsService->detail($this->order->goods_id);
         $client = new Client();
-        $apiUrl = dujiaoka_config_get('bark_server') .'/'. dujiaoka_config_get('bark_token');
+        $apiUrl = cfg('bark_server') .'/'. cfg('bark_token');
 		$params = [
 			"title" => __('dujiaoka.prompt.new_order_push').'('.$this->order->actual_price.'元)',
 			"body" => __('order.fields.order_id') .': '.$this->order->id."\n"
@@ -76,9 +76,9 @@ class BarkPush implements ShouldQueue
 				. __('order.fields.order_created') .': '.$this->order->created_at,
 			"icon"=>url('assets/common/images/default.jpg'),
 			"level"=>"timeSensitive",
-			"group"=>dujiaoka_config_get('text_logo', '独角数卡')
+			"group"=>cfg('text_logo', '独角数卡')
 		];
-		if (dujiaoka_config_get('is_open_bark_push_url', 0) == BaseModel::STATUS_OPEN) {
+		if (cfg('is_open_bark_push_url', 0) == BaseModel::STATUS_OPEN) {
 			$params["url"] = url('detail-order-sn/'.$this->order->order_sn);
 		}
         $client->post($apiUrl,['form_params' => $params, 'verify' => false]);

@@ -5,6 +5,7 @@ namespace App\Models;
 
 use App\Events\GoodsDeleted;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Services\CacheManager;
 
 class Goods extends BaseModel
 {
@@ -16,6 +17,19 @@ class Goods extends BaseModel
     protected $dispatchesEvents = [
         'deleted' => GoodsDeleted::class
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::updated(function ($goods) {
+            CacheManager::forgetGoods($goods->id);
+        });
+        
+        static::deleted(function ($goods) {
+            CacheManager::forgetGoods($goods->id);
+        });
+    }
     
 
     /**
@@ -23,9 +37,6 @@ class Goods extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function group()
     {
@@ -37,9 +48,6 @@ class Goods extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function coupon()
     {
@@ -51,9 +59,6 @@ class Goods extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function carmis()
     {
@@ -63,9 +68,6 @@ class Goods extends BaseModel
     /**
      * 库存读取器,将自动发货的库存更改为未出售卡密的数量
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function getStockAttribute()
     {
@@ -83,9 +85,6 @@ class Goods extends BaseModel
      *
      * @return array
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public static function getGoodsTypeMap()
     {

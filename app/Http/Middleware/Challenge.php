@@ -27,7 +27,7 @@ class Challenge
         if($controller && in_array(explode('@', $controller)[0], $this->whiteClass))
             return $next($request);
         
-        if(dujiaoka_config_get('is_cn_challenge') == BaseModel::STATUS_CLOSE)
+        if(cfg('is_cn_challenge') == BaseModel::STATUS_CLOSE)
             return $next($request);
             
         $status = session('challenge');

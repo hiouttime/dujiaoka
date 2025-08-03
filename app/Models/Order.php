@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\OrderUpdated;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Services\CacheManager;
 
 class Order extends BaseModel
 {
@@ -11,6 +12,19 @@ class Order extends BaseModel
     use SoftDeletes;
 
     protected $table = 'orders';
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::updated(function ($order) {
+            CacheManager::forgetOrder($order->order_sn);
+        });
+        
+        static::deleted(function ($order) {
+            CacheManager::forgetOrder($order->order_sn);
+        });
+    }
 
     /**
      * 待支付
@@ -57,9 +71,6 @@ class Order extends BaseModel
      *
      * @return array
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public static function getStatusMap()
     {
@@ -79,9 +90,6 @@ class Order extends BaseModel
      *
      * @return array
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public static function getTypeMap()
     {
@@ -96,9 +104,6 @@ class Order extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function goods()
     {
@@ -110,9 +115,6 @@ class Order extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function coupon()
     {
@@ -124,9 +126,6 @@ class Order extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function pay()
     {
@@ -156,6 +155,6 @@ class Order extends BaseModel
         }
         // 手动补单进行发货处理
         if($value == Order::STATUS_COMPLETED)
-            app('Service\OrderProcessService')->completedOrder($this->order_sn, $this->actual_price);
+            app('App\Services\OrderProcess')->completedOrder($this->order_sn, $this->actual_price);
     }
 }

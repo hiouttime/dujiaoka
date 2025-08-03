@@ -49,7 +49,7 @@ class CouponBack implements ShouldQueue
         // 如果订单有使用优惠码
         if ($this->order->coupon_id) {
             // 优惠码次数+1
-            app('Service\CouponService')->retIncrByID($this->order->coupon_id);
+            app('App\Services\Coupons')->retIncrByID($this->order->coupon_id);
         }
     }
 }

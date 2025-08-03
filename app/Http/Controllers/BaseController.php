@@ -2,9 +2,6 @@
 /**
  * The file was created by Assimon.
  *
- * @author    assimon<ashang@utf8.hk>
- * @copyright assimon<ashang@utf8.hk>
- * @link      http://utf8.hk/
  */
 
 namespace App\Http\Controllers;
@@ -21,15 +18,12 @@ class BaseController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     protected function render(string $tpl, $data = [], string $pageTitle = '')
     {
-        $layout = dujiaoka_config_get('template', 'neon');
+        $layout = cfg('template', 'neon');
         $tplPath = $layout . '/' .$tpl;
-        switch (dujiaoka_config_get('currency', 'cny')) {
+        switch (cfg('currency', 'cny')) {
             case 'usd':
                 $data["currency"] = "&#xe704;";
                 break;
@@ -48,13 +42,10 @@ class BaseController extends Controller
      * @param string $jumpUri 跳转url
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     protected function err(string $content, $jumpUri = '')
     {
-        $layout = dujiaoka_config_get('template', 'neon');
+        $layout = cfg('template', 'neon');
         $tplPath = $layout . '/errors/error';
         return view($tplPath, ['title' => __('dujiaoka.error_title'), 'content' => $content, 'url' => $jumpUri])
             ->with('page_title', __('dujiaoka.error_title'));

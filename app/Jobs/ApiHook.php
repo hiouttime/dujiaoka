@@ -34,7 +34,7 @@ class ApiHook implements ShouldQueue
 
     /**
      * 商品服务层.
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     private $goodsService;
 
@@ -47,7 +47,7 @@ class ApiHook implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Service\GoodsService');
+        $this->goodsService = app('Services\Shop');
     }
 
     /**

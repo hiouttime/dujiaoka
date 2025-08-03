@@ -38,7 +38,7 @@
                     product: "{{ 'popup' }}",
                     offline: !data.success,
                     new_captcha: data.new_captcha,
-                    lang: '{{ dujiaoka_config_get('language') ?? 'zh_CN' }}',
+                    lang: '{{ cfg('language') ?? 'zh_CN' }}',
                     http: '{{ (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" }}' + '://'
                 }, handlerEmbed);
             }

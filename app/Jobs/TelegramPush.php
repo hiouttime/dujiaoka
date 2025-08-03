@@ -36,7 +36,7 @@ class TelegramPush implements ShouldQueue
 
     /**
      * 商品服务层.
-     * @var \App\Service\PayService
+     * @var \App\Services\Payment
      */
     private $goodsService;
 
@@ -49,7 +49,7 @@ class TelegramPush implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Service\GoodsService');
+        $this->goodsService = app('Services\Shop');
     }
 
     /**
@@ -74,8 +74,8 @@ class TelegramPush implements ShouldQueue
             'timeout' => 30,
             'proxy'=> ''
         ]);
-        $apiUrl = 'https://api.telegram.org/bot' . dujiaoka_config_get('telegram_bot_token') .
-            '/sendMessage?chat_id=' . dujiaoka_config_get('telegram_userid') . '&parse_mode=Markdown&text='.$formatText;
+        $apiUrl = 'https://api.telegram.org/bot' . cfg('telegram_bot_token') .
+            '/sendMessage?chat_id=' . cfg('telegram_userid') . '&parse_mode=Markdown&text='.$formatText;
         $client->post($apiUrl);
     }
 }

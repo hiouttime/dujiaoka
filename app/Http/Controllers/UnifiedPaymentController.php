@@ -32,14 +32,14 @@ class UnifiedPaymentController extends Controller
             $paymentDriver = $this->paymentManager->driver($driver);
             
             // 加载订单和支付网关信息
-            $orderService = app('App\\Service\\OrderService');
+            $orderService = app('App\\Services\\Orders');
             $order = $orderService->detailOrderSN($orderSN);
             
             if (!$order) {
                 throw new RuleValidationException(__('dujiaoka.prompt.order_does_not_exist'));
             }
 
-            $payService = app('App\\Service\\PayService');
+            $payService = app('App\\Services\\Payment');
             $payGateway = $payService->detail($order->pay_id);
             
             if (!$payGateway) {
@@ -77,7 +77,7 @@ class UnifiedPaymentController extends Controller
     /**
      * 支付返回页面
      */
-    public function returnUrl(Request $request, string $driver)
+    public function return(Request $request, string $driver)
     {
         try {
             if (!$this->paymentManager->hasDriver($driver)) {

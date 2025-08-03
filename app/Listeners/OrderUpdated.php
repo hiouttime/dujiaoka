@@ -68,13 +68,10 @@ class OrderUpdated
      * @param array $order 内容
      * @param string $to 接受者
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     private static function sendMailToOrderStatus(array $mailtpl, array $order, string $to) :void
     {
-        $info = replace_mail_tpl($mailtpl, $order);
+        $info = replaceMailTemplate($mailtpl, $order);
         MailSend::dispatch($to, $info['tpl_name'], $info['tpl_content']);
     }
 }

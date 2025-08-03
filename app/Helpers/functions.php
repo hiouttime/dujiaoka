@@ -2,9 +2,6 @@
 /**
  * The file was created by Assimon.
  *
- * @author    assimon<ashang@utf8.hk>
- * @copyright assimon<ashang@utf8.hk>
- * @link      http://utf8.hk/
  */
 
 
@@ -14,69 +11,64 @@ use Illuminate\Support\Facades\Storage;
 use GeoIp2\Database\Reader;
 use GeoIp2\Exception\AddressNotFoundException;
 
-if (! function_exists('replace_mail_tpl')) {
+if (! function_exists('replaceMailTemplate')) {
 
     /**
      * 替换邮件模板
      *
-     * @param array $mailtpl 模板
+     * @param array $template 模板
      * @param array $data 内容
      * @return array|false|mixed
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
-    function replace_mail_tpl($mailtpl = [], $data = [])
+    function replaceMailTemplate($template = [], $data = [])
     {
-        if (!$mailtpl) {
+        if (!$template) {
             return false;
         }
         if ($data) {
             foreach ($data as $key => $val) {
-                $title = str_replace('{' . $key . '}', $val, isset($title) ? $title : $mailtpl['tpl_name']);
-                $content = str_replace('{' . $key . '}', $val, isset($content) ? $content : $mailtpl['tpl_content']);
+                $title = str_replace('{' . $key . '}', $val, isset($title) ? $title : $template['tpl_name']);
+                $content = str_replace('{' . $key . '}', $val, isset($content) ? $content : $template['tpl_content']);
             }
             return ['tpl_name' => $title, 'tpl_content' => $content];
         }
-        return $mailtpl;
+        return $template;
     }
 }
 
 
-if (! function_exists('dujiaoka_config_get')) {
-    function dujiaoka_config_get(string $key, $default = null)
+if (! function_exists('cfg')) {
+    function cfg(string $key, $default = null)
     {
        return app('App\\Services\\ConfigService')->get($key, $default);
     }
 }
 
-if (! function_exists('dujiaoka_theme_get')) {
-    function dujiaoka_theme_get(string $key, $default = null)
+if (! function_exists('theme')) {
+    function theme(string $key, $default = null)
     {
        return app('theme.manager')->getThemeConfigValue($key, $default);
     }
 }
 
-if (! function_exists('format_wholesale_price')) {
+
+if (! function_exists('formatWholesalePrice')) {
 
     /**
      * 格式化批发价
      *
-     * @param string $wholesalePriceArr 批发价配置
+     * @param string $priceConfig 批发价配置
      * @return array|null
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
-    function format_wholesale_price(string $wholesalePriceArr): ?array
+    function formatWholesalePrice(string $priceConfig): ?array
     {
-        $waitArr = explode(PHP_EOL, $wholesalePriceArr);
+        $waitArr = explode(PHP_EOL, $priceConfig);
         $formatData = [];
         foreach ($waitArr as $key => $val) {
             if ($val != "") {
-                $explodeFormat = explode('=', delete_html_code($val));
+                $explodeFormat = explode('=', cleanHtml($val));
                 if (count($explodeFormat) != 2) {
                     return null;
                 }
@@ -89,14 +81,14 @@ if (! function_exists('format_wholesale_price')) {
     }
 }
 
-if (! function_exists('delete_html_code')) {
+if (! function_exists('cleanHtml')) {
 
     /**
      * 去除html内容
      * @param string $str 需要去掉的字符串
      * @return string
      */
-    function delete_html_code(string $str): string
+    function cleanHtml(string $str): string
     {
         $str = trim($str); //清除字符串两边的空格
         $str = preg_replace("/\t/", "", $str); //使用正则表达式替换内容，如：空格，换行，并将替换为空。
@@ -109,7 +101,7 @@ if (! function_exists('delete_html_code')) {
     }
 }
 
-if (! function_exists('format_charge_input')) {
+if (! function_exists('formatChargeInput')) {
 
     /**
      * 格式化代充框
@@ -117,17 +109,14 @@ if (! function_exists('format_charge_input')) {
      * @param string $charge
      * @return array|null
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
-    function format_charge_input(string $charge): ?array
+    function formatChargeInput(string $charge): ?array
     {
         $inputArr = explode(PHP_EOL, $charge);
         $formatData = [];
         foreach ($inputArr as $key => $val) {
             if ($val != "") {
-                $explodeFormat = explode('=', delete_html_code($val));
+                $explodeFormat = explode('=', cleanHtml($val));
                 if (count($explodeFormat) != 3) {
                     return null;
                 }
@@ -140,13 +129,13 @@ if (! function_exists('format_charge_input')) {
     }
 }
 
-if (! function_exists('site_url')) {
+if (! function_exists('siteUrl')) {
 
     /**
      * 获取顶级域名 带协议
      * @return string
      */
-    function site_url()
+    function siteUrl()
     {
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $domainName = $_SERVER['HTTP_HOST'] . '/';
@@ -154,9 +143,9 @@ if (! function_exists('site_url')) {
     }
 }
 
-if (! function_exists('md5_signquery')) {
+if (! function_exists('md5SignQuery')) {
 
-    function md5_signquery(array $parameter, string $signKey)
+    function md5SignQuery(array $parameter, string $signKey)
     {
         ksort($parameter); //重新排序$data数组
         reset($parameter); //内部指针指向数组中的第一个元素
@@ -179,9 +168,9 @@ if (! function_exists('md5_signquery')) {
     }
 }
 
-if (! function_exists('signquery_string')) {
+if (! function_exists('signQueryString')) {
 
-    function signquery_string(array $data)
+    function signQueryString(array $data)
     {
         ksort($data); //排序post参数
         reset($data); //内部指针指向数组中的第一个元素
@@ -195,7 +184,7 @@ if (! function_exists('signquery_string')) {
     }
 }
 
-if (!function_exists('picture_url')) {
+if (!function_exists('pictureUrl')) {
 
     /**
      * 生成前台图片链接 不存在使用默认图
@@ -204,7 +193,7 @@ if (!function_exists('picture_url')) {
      * @param false $getHost 是否只获取图片前缀域名
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\UrlGenerator|string
      */
-    function picture_url($file, $getHost = false)
+    function pictureUrl($file, $getHost = false)
     {
         if ($getHost) return Storage::disk('admin')->url('');
         if (Illuminate\Support\Facades\URL::isValidUrl($file)) return $file;
@@ -212,8 +201,8 @@ if (!function_exists('picture_url')) {
     }
 }
 
-if (!function_exists('assoc_unique')) {
-    function assoc_unique($arr, $key)
+if (!function_exists('assocUnique')) {
+    function assocUnique($arr, $key)
     {
         $tmp_arr = array();
         foreach ($arr as $k => $v) {
@@ -228,8 +217,8 @@ if (!function_exists('assoc_unique')) {
     }
 }
 
-if (!function_exists('get_ip_country')) {
-    function get_ip_country($ip) {
+if (!function_exists('getIpCountry')) {
+    function getIpCountry($ip) {
         // 对Cloudflare站点的支持优化
         if(isset($_SERVER["HTTP_CF_IPCOUNTRY"]))
             $isoCode = $_SERVER["HTTP_CF_IPCOUNTRY"];

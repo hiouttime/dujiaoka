@@ -7,7 +7,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Order;
 use App\Models\Carmis;
 use App\Models\Pay;
-use App\Service\OrderProcessService;
+use App\Services\OrderProcess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +29,7 @@ class OrderController extends BaseController
 
     /**
      * 订单服务层
-     * @var \App\Service\OrderService
+     * @var \App\Services\Orders
      */
     private $orderService;
 
@@ -41,8 +41,8 @@ class OrderController extends BaseController
 
     public function __construct()
     {
-        $this->orderService = app('Service\OrderService');
-        $this->orderProcessService = app('Service\OrderProcessService');
+        $this->orderService = app('Services\Orders');
+        $this->orderProcessService = app('App\Services\OrderProcess');
     }
 
     /**
@@ -52,9 +52,6 @@ class OrderController extends BaseController
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function createOrder(Request $request)
     {
@@ -143,9 +140,6 @@ class OrderController extends BaseController
      * @param string $orderSN
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function bill(string $orderSN)
     {
@@ -169,9 +163,6 @@ class OrderController extends BaseController
      * @param string $orderSN 订单号
      * @return \Illuminate\Http\JsonResponse
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function checkOrderStatus(string $orderSN)
     {
@@ -196,9 +187,6 @@ class OrderController extends BaseController
      * @param string $orderSN 订单号.
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function detailOrderSN(string $orderSN)
     {
@@ -216,9 +204,6 @@ class OrderController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function searchOrderBySN(Request $request)
     {
@@ -231,16 +216,13 @@ class OrderController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function searchOrderByEmail(Request $request)
     {
         if (
             !$request->has('email') ||
             (
-                dujiaoka_config_get('is_open_search_pwd', \App\Models\BaseModel::STATUS_CLOSE) == \App\Models\BaseModel::STATUS_OPEN &&
+                cfg('is_open_search_pwd', \App\Models\BaseModel::STATUS_CLOSE) == \App\Models\BaseModel::STATUS_OPEN &&
                 !$request->has('search_pwd')
             )
         ) {
@@ -258,9 +240,6 @@ class OrderController extends BaseController
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function searchOrderByBrowser(Request $request)
     {
@@ -279,9 +258,6 @@ class OrderController extends BaseController
      * @param Request $request
      * @return mixed
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function orderSearch(Request $request)
     {

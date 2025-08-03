@@ -22,9 +22,6 @@ class GoodsGroup extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      *
-     * @author    assimon<ashang@utf8.hk>
-     * @copyright assimon<ashang@utf8.hk>
-     * @link      http://utf8.hk/
      */
     public function goods()
     {
