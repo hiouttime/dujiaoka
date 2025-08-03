@@ -11,7 +11,7 @@ return [
     'dujiaoka_version' => '2.1.5',
      // 模板集合
      'templates' => [
-         'neon' => 'Neon[Author: @Riniba]',
+         'morpho' => 'morpho[Author: @Riniba]',
      ],
     // 语言
     'language' => [

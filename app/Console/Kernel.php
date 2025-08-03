@@ -14,7 +14,6 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\PaymentDriverCommand::class,
-        Commands\ThemeCommand::class,
     ];
 
     /**

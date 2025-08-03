@@ -43,9 +43,9 @@ class PayController extends BaseController
 
     public function __construct()
     {
-        $this->orderService = app('Services\Orders');
-        $this->payService = app('Services\Pay');
-        $this->orderProcessService = app('Services\OrderProcess');
+        $this->orderService = app('App\Services\Orders');
+        $this->payService = app('App\Services\Payment');
+        $this->orderProcessService = app('App\Services\OrderProcess');
     }
 
     /**

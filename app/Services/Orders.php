@@ -36,7 +36,7 @@ class Orders
 
     public function __construct()
     {
-        $this->goodsService = app('Services\Shop');
+        $this->goodsService = app('App\Services\Shop');
         $this->couponService = app('App\Services\Coupons');
     }
 

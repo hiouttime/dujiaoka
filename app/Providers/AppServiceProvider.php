@@ -39,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('App\\Services\\ConfigService', function ($app) {
             return new \App\Services\ConfigService();
         });
+        
+        $this->app->singleton('App\\Services\\ThemeService');
     }
 
     /**

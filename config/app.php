@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\PaymentServiceProvider::class,
-        App\Providers\ThemeServiceProvider::class,
+        App\Providers\SimpleThemeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         Jenssegers\Agent\AgentServiceProvider::class

@@ -41,7 +41,7 @@ class OrderController extends BaseController
 
     public function __construct()
     {
-        $this->orderService = app('Services\Orders');
+        $this->orderService = app('App\Services\Orders');
         $this->orderProcessService = app('App\Services\OrderProcess');
     }
 

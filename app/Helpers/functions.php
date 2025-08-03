@@ -45,10 +45,24 @@ if (! function_exists('cfg')) {
     }
 }
 
-if (! function_exists('theme')) {
-    function theme(string $key, $default = null)
+if (! function_exists('theme_config')) {
+    function theme_config(string $key, $default = null)
     {
-       return app('theme.manager')->getThemeConfigValue($key, $default);
+       return app('App\Services\ThemeService')->getConfig($key, $default);
+    }
+}
+
+if (! function_exists('theme_asset')) {
+    function theme_asset(string $path): string
+    {
+       return app('App\Services\ThemeService')->asset($path);
+    }
+}
+
+if (! function_exists('current_theme')) {
+    function current_theme(): string
+    {
+       return app('App\Services\ThemeService')->getCurrentTheme();
     }
 }
 

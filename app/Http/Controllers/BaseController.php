@@ -21,18 +21,10 @@ class BaseController extends Controller
      */
     protected function render(string $tpl, $data = [], string $pageTitle = '')
     {
-        $layout = cfg('template', 'neon');
-        $tplPath = $layout . '/' .$tpl;
-        switch (cfg('currency', 'cny')) {
-            case 'usd':
-                $data["currency"] = "&#xe704;";
-                break;
-            
-            default:
-                $data["currency"] = "&#xe703;";
-                break;
-        }
-        return view($tplPath, $data)->with('page_title', $pageTitle);
+        $theme = current_theme();
+        $data["currency"] = cfg('currency', 'cny') === 'usd' ? "&#xe704;" : "&#xe703;";
+        
+        return view("{$theme}::{$tpl}", $data)->with('page_title', $pageTitle);
     }
 
     /**
@@ -45,10 +37,12 @@ class BaseController extends Controller
      */
     protected function err(string $content, $jumpUri = '')
     {
-        $layout = cfg('template', 'neon');
-        $tplPath = $layout . '/errors/error';
-        return view($tplPath, ['title' => __('dujiaoka.error_title'), 'content' => $content, 'url' => $jumpUri])
-            ->with('page_title', __('dujiaoka.error_title'));
+        $theme = current_theme();
+        return view("{$theme}::errors/error", [
+            'title' => __('dujiaoka.error_title'), 
+            'content' => $content, 
+            'url' => $jumpUri
+        ])->with('page_title', __('dujiaoka.error_title'));
     }
 
 }

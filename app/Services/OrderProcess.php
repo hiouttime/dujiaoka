@@ -129,12 +129,12 @@ class OrderProcess
 
     public function __construct()
     {
-        $this->couponService = app('Services\Coupons');
-        $this->orderService = app('Services\Orders');
-        $this->carmisService = app('Services\Cards');
-        $this->emailtplService = app('Services\Email');
-        $this->goodsService = app('Services\Shop');
-        $this->payService = app('Services\Pay');
+        $this->couponService = app('App\Services\Coupons');
+        $this->orderService = app('App\Services\Orders');
+        $this->carmisService = app('App\Services\Cards');
+        $this->emailtplService = app('App\Services\Email');
+        $this->goodsService = app('App\Services\Shop');
+        $this->payService = app('App\Services\Payment');
 
     }
 

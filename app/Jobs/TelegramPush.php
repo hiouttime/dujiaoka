@@ -49,7 +49,7 @@ class TelegramPush implements ShouldQueue
     public function __construct(Order $order)
     {
         $this->order = $order;
-        $this->goodsService = app('Services\Shop');
+        $this->goodsService = app('App\Services\Shop');
     }
 
     /**
