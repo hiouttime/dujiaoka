@@ -12,20 +12,19 @@ class Carmis extends BaseModel
     protected $table = 'carmis';
 
     /**
-     * 未售出
+     * 未售出状态
      */
     const STATUS_UNSOLD = 1;
 
     /**
-     * 已售出
+     * 已售出状态
      */
     const STATUS_SOLD = 2;
 
     /**
-     * 获取组建映射
+     * 获取状态映射
      *
      * @return array
-     *
      */
     public static function getStatusMap()
     {
@@ -36,14 +35,25 @@ class Carmis extends BaseModel
     }
 
     /**
-     * 关联商品
+     * 关联商品规格
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function goodsSub()
+    {
+        return $this->belongsTo(GoodsSub::class, 'sub_id');
+    }
+    
+    /**
+     * 关联商品（通过规格）
      *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function goods()
     {
-        return $this->belongsTo(Goods::class, 'goods_id');
+        return $this->belongsTo(Goods::class, 'goods_id')->withDefault(function () {
+            return $this->goodsSub?->goods;
+        });
     }
 
 }

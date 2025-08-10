@@ -59,18 +59,15 @@ class OrderController extends BaseController
         try {
             $this->orderService->validatorCreateOrder($request);
             $goods = $this->orderService->validatorGoods($request);
-            // 多规格商品处理
-            if ($goods->is_sub) {
-                $subid = $request->input('sub_id');
-                if(!$subid)
-                    throw new RuleValidationException(__('dujiaoka.prompt.need_sub_id'));
-                $goods_sub = $goods->goods_sub()->where('id', $subid);
-                if(!$goods_sub->exists())
-                    throw new RuleValidationException(__('dujiaoka.prompt.server_illegal_request'));
-                $goods_sub = $goods_sub->first();
-                $goods->price = $goods_sub->price;
-                $goods->gd_name = $goods->gd_name . " [$goods_sub->name]";
-            }
+            $subid = $request->input('sub_id');
+            if(!$subid)
+                throw new RuleValidationException(__('dujiaoka.prompt.need_sub_id'));
+            $goods_sub = $goods->goods_sub()->where('id', $subid);
+            if(!$goods_sub->exists())
+                throw new RuleValidationException(__('dujiaoka.prompt.server_illegal_request'));
+            $goods_sub = $goods_sub->first();
+            $goods->price = $goods_sub->price;
+            $goods->gd_name = $goods->gd_name . " [$goods_sub->name]";
             $this->orderService->validatorLoopCarmis($request);
             // 设置商品
             $this->orderProcessService->setGoods($goods);

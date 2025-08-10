@@ -1,85 +1,51 @@
 <?php
-/**
- * The file was created by Assimon.
- *
- */
 
 namespace App\Services;
-
 
 use App\Exceptions\RuleValidationException;
 use App\Models\Carmis;
 use App\Models\Goods;
 use App\Models\GoodsGroup;
-
-/**
- * 商品服务层
- *
- * Class Shop
- * @package App\Service
- * @author: Assimon
- * @email: Ashang@utf8.hk
- * @blog: https://utf8.hk
- * Date: 2021/5/30
- */
 class Shop
 {
-
     /**
      * 获取所有分类并加载该分类下的商品
      *
      * @return array|null
-     *
      */
     public function withGroup(): ?array
     {
         $goods = GoodsGroup::query()
-            ->with(['goods' => function($query) {
-                $query->withCount(['carmis' => function($query) {
-                    $query->where('status', Carmis::STATUS_UNSOLD);
-                }])->where('is_open', Goods::STATUS_OPEN)->orderBy('ord', 'DESC');
-            }])
+            ->with(['goods' => fn($query) => $query->with('goods_sub')->where('is_open', Goods::STATUS_OPEN)->orderBy('ord', 'DESC')])
             ->where('is_open', GoodsGroup::STATUS_OPEN)
             ->orderBy('ord', 'DESC')
             ->get();
-        return $goods ? $goods->toArray() : null;
+        return $goods?->toArray();
     }
 
     /**
      * 商品详情
      *
-     * @param int $id 商品id
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
-     *
+     * @param int $id
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function detail(int $id)
     {
-        return CacheManager::rememberGoods($id, function () use ($id) {
-            return Goods::query()
-                ->with(['coupon','goods_sub'])
-                ->withCount(['carmis' => function($query) {
-                    $query->where('status', Carmis::STATUS_UNSOLD);
-                }])->where('id', $id)->first();
-        });
+        return CacheManager::rememberGoods($id, fn() => 
+            Goods::with(['coupon', 'goods_sub'])->find($id)
+        );
     }
 
     /**
      * 格式化商品信息
      *
-     * @param Goods $goods 商品模型
+     * @param Goods $goods
      * @return Goods
-     *
      */
     public function format(Goods $goods)
     {
-        // 格式化批发配置以及输入框配置
-        $goods->wholesale_price_cnf = $goods->wholesale_price_cnf ?
-            formatWholesalePrice($goods->wholesale_price_cnf) :
-            null;
-        // 如果存在其他配置输入框且为代充
-        $goods->other_ipu = $goods->other_ipu_cnf ?
-            formatChargeInput($goods->other_ipu_cnf) :
-            null;
+        $goods->wholesale_price_cnf = $goods->wholesale_price_cnf ? formatWholesalePrice($goods->wholesale_price_cnf) : null;
+        $goods->other_ipu = $goods->other_ipu_cnf ? formatChargeInput($goods->other_ipu_cnf) : null;
         return $goods;
     }
 
@@ -89,14 +55,12 @@ class Shop
      * @param Goods $goods
      * @return Goods
      * @throws RuleValidationException
-     *
      */
     public function validatorGoodsStatus(Goods $goods): Goods
     {
         if (empty($goods)) {
             throw new RuleValidationException(__('dujiaoka.prompt.goods_does_not_exist'));
         }
-        // 上架判断.
         if ($goods->is_open != Goods::STATUS_OPEN) {
             throw new RuleValidationException(__('dujiaoka.prompt.the_goods_is_not_on_the_shelves'));
         }
@@ -104,66 +68,62 @@ class Shop
     }
 
     /**
-     * 库存减去
+     * 库存减少
      *
-     * @param int $id 商品id
-     * @param int $number 出库数量
-     *
+     * @param int $subId
+     * @param int $number
+     * @return bool
      */
-    public function inStockDecr(int $id, int $number = 1): bool
+    public function inStockDecr(int $subId, int $number = 1): bool
     {
-        return Goods::query()->where('id', $id)->decrement('stock', $number);
+        return \App\Models\GoodsSub::where('id', $subId)->decrement('stock', $number);
     }
 
     /**
-     * 商品销量加
+     * 商品销量增加
      *
-     * @param int $id 商品id
-     * @param int $number 数量
+     * @param int $id
+     * @param int $number
      * @return bool
-     *
      */
     public function salesVolumeIncr(int $id, int $number = 1): bool
     {
-        return Goods::query()->where('id', $id)->increment('sales_volume', $number);
+        return Goods::where('id', $id)->increment('sales_volume', $number);
     }
     
     /**
-     * 获得商品可供选择的卡密
+     * 获取商品可供选择的卡密
      *
-     * @param int $id 商品id
+     * @param int $id
      * @return array
-     *
-     * @author    outtime<i@treeo.cn>
-     * @copyright outtime<i@treeo.cn>
-     * @link      https://outti.me
      */
-    public function getSelectableCarmis(int $id){
-        $carmis = Carmis::where('goods_id', $id)
-                   ->where('status', Carmis::STATUS_UNSOLD)
-                   ->get(['id', 'info']);
-        return $carmis->toArray();
+    public function getSelectableCarmis(int $id): array
+    {
+        $goods = Goods::with('goods_sub')->find($id);
+        if (!$goods) return [];
+        
+        return Carmis::whereIn('sub_id', $goods->goods_sub->pluck('id'))
+            ->where('status', Carmis::STATUS_UNSOLD)
+            ->get(['id', 'info'])
+            ->toArray();
     }
     
     /**
      * 检查卡密归属
      *
-     * @param int $good_id 商品id
-     * @param int $carmi_id 卡密id
-     * @return array
-     *
-     * @author    outtime<i@treeo.cn>
-     * @copyright outtime<i@treeo.cn>
-     * @link      https://outti.me
-     */    
-    public function checkCarmiBelong(int $good_id, int $carmi_id){
-        $carmi = Carmis::where('id', $carmi_id)
-                  ->where('goods_id', $good_id)
-                  ->where('status', Carmis::STATUS_UNSOLD)
-                  ->limit(1)
-                  ->first();
-
-        return !is_null($carmi);
+     * @param int $good_id
+     * @param int $carmi_id
+     * @return bool
+     */
+    public function checkCarmiBelong(int $good_id, int $carmi_id): bool
+    {
+        $goods = Goods::with('goods_sub')->find($good_id);
+        if (!$goods) return false;
+        
+        return Carmis::where('id', $carmi_id)
+            ->whereIn('sub_id', $goods->goods_sub->pluck('id'))
+            ->where('status', Carmis::STATUS_UNSOLD)
+            ->exists();
     }
 
 }

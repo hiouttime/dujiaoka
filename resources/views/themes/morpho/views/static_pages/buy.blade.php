@@ -55,7 +55,7 @@
                     <!-- 库存 -->
                     <div class="d-flex align-items-center me-3">
                       <i class="ci-broccoli fs-xl text-body-emphasis me-2"></i>
-                      库存：{{ $in_stock }}
+                      库存：{{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}
                     </div>
   
                     <!-- 若有批发价配置 -->
@@ -67,11 +67,11 @@
                     @endif
                   </div>
   
-                  <!-- 价格显示 (如果有原价，也可以加个 <del> 原价 ) -->
+                  <!-- 价格显示 -->
                   <div class="h4 d-flex align-items-center my-3">
-                    {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
+                    ${{ number_format(collect($goods_sub)->min('price'), 2) }}
                     {{-- 如需显示原价:
-                    @if(isset($original_price) && $original_price > $actual_price)
+                    @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
                       <del class="fs-sm fw-normal text-body-tertiary ms-2">
                         {{ $original_price }} {{ __('dujiaoka.money_symbol') }}
                       </del>
@@ -260,21 +260,14 @@
                 <div class="w-100 min-w-0 d-lg-none ps-2">
                   <h4 class="fs-sm fw-medium text-truncate mb-1">{{ $gd_name }}</h4>
                   <div class="h6 mb-0">
-                    {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
-                    {{-- 原价可选
-                    @if(isset($original_price) && $original_price > $actual_price)
-                      <del class="fs-xs fw-normal text-body-tertiary">
-                        {{ $original_price }} {{ __('dujiaoka.money_symbol') }}
-                      </del>
-                    @endif
-                    --}}
+                    ${{ number_format(collect($goods_sub)->min('price'), 2) }}
                   </div>
                 </div>
               </div>
               <div class="h4 d-none d-lg-block mb-0 ms-auto me-4">
-                {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
+                ${{ number_format(collect($goods_sub)->min('price'), 2) }}
                 {{-- 原价可选
-                @if(isset($original_price) && $original_price > $actual_price)
+                @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
                   <del class="fs-sm fw-normal text-body-tertiary">
                     {{ $original_price }} {{ __('dujiaoka.money_symbol') }}
                   </del>
@@ -374,7 +367,7 @@
             @endif
             $("input[type='number']").inputSpinner();
             $('#submit').click(function(){
-                if($("input[name='by_amount']").val() > {{ $in_stock }}){
+                if($("input[name='by_amount']").val() > {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}){
                     {{-- 数量不允许大于库存 --}}
                     $(".modal-body").html("{{ __('dujiaoka.prompt.inventory_shortage') }}")
                     myModal.show()

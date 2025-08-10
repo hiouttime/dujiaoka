@@ -14,6 +14,28 @@ class Goods extends BaseModel
 
     protected $table = 'goods';
 
+    protected $fillable = [
+        'group_id', 'gd_name', 'gd_description', 'gd_keywords', 'picture', 'picture_url',
+        'sales_volume', 'ord', 'payment_limit',
+        'buy_limit_num', 'buy_min_num', 'buy_prompt', 'description', 'usage_instructions',
+        'type', 'wholesale_price_cnf', 'wholesale_prices', 'other_ipu_cnf', 
+        'customer_form_fields', 'api_hook', 'preselection', 'is_open'
+    ];
+
+    protected $casts = [
+        'customer_form_fields' => 'array',
+        'wholesale_prices' => 'array',
+        'payment_limit' => 'array',
+        'preselection' => 'decimal:2',
+        'sales_volume' => 'integer',
+        'ord' => 'integer',
+        'buy_limit_num' => 'integer',
+        'buy_min_num' => 'integer',
+        'type' => 'integer',
+        'api_hook' => 'integer',
+        'is_open' => 'boolean',
+    ];
+
     protected $dispatchesEvents = [
         'deleted' => GoodsDeleted::class
     ];
@@ -33,10 +55,9 @@ class Goods extends BaseModel
     
 
     /**
-     * 关联分类
+     * 关联分组
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     *
      */
     public function group()
     {
@@ -47,7 +68,6 @@ class Goods extends BaseModel
      * 关联优惠券
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     *
      */
     public function coupon()
     {
@@ -55,36 +75,19 @@ class Goods extends BaseModel
     }
 
     /**
-     * 关联卡密
+     * 关联卡密（通过子规格）
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function carmis()
     {
-        return $this->hasMany(Carmis::class, 'goods_id');
+        return $this->hasManyThrough(Carmis::class, GoodsSub::class, 'goods_id', 'sub_id');
     }
 
     /**
-     * 库存读取器,将自动发货的库存更改为未出售卡密的数量
-     *
-     */
-    public function getStockAttribute()
-    {
-        if (isset($this->attributes['carmis_count'])
-            &&
-            $this->attributes['type'] == self::AUTOMATIC_DELIVERY
-        ) {
-           $this->attributes['stock'] = $this->attributes['carmis_count'];
-        }
-        return $this->attributes['stock'];
-    }
-
-    /**
-     * 获取组建映射
+     * 获取商品类型映射
      *
      * @return array
-     *
      */
     public static function getGoodsTypeMap()
     {
@@ -95,6 +98,11 @@ class Goods extends BaseModel
         ];
     }
     
+    /**
+     * 关联商品规格
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function goods_sub()
     {
         return $this->hasMany(GoodsSub::class);

@@ -12,6 +12,12 @@ class GoodsGroup extends BaseModel
     use SoftDeletes;
 
     protected $table = 'goods_group';
+    
+    protected $fillable = [
+        'gp_name',
+        'is_open', 
+        'ord'
+    ];
 
     protected $dispatchesEvents = [
         'deleted' => GoodsGroupDeleted::class
