@@ -168,7 +168,7 @@
 
         <div class="tab-content" id="goodsTabContent">
             <div class="tab-pane fade show active" id="group-all" role="tabpanel" aria-labelledby="group-all-tab">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-3 pt-4">
                     @foreach($data as $group)
                         @foreach($group['goods'] as $goods)
                         @include('morpho::layouts._goods', ['goods' => $goods])
@@ -179,7 +179,7 @@
         
             @foreach($data as $group)
                 <div class="tab-pane fade" id="group-{{ $group['id'] }}" role="tabpanel" aria-labelledby="group-{{ $group['id'] }}-tab">
-                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">
+                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-3 pt-4">
                         @foreach($group['goods'] as $goods)
                         @include('morpho::layouts._goods', ['goods' => $goods])                        
                         @endforeach

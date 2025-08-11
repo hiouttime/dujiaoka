@@ -88,26 +88,18 @@
                       <ul class="dropdown-menu" style="--cz-dropdown-spacer: 1rem">
                         @foreach($item['children'] as $child)
                           <li>
-                            @if($child['url'] == '#modalId' || $child['name'] == '站点公告')
-                              <a class="dropdown-item" href="#modalId" data-bs-toggle="modal" data-bs-target="#modalId">{{ $child['name'] }}</a>
-                            @else
-                              <a class="dropdown-item" href="{{ $child['url'] }}" {{ isset($child['target_blank']) && $child['target_blank'] ? 'target="_blank"' : '' }}>{{ $child['name'] }}</a>
-                            @endif
+                            <a class="dropdown-item" href="{{ $child['url'] }}" {{ isset($child['target_blank']) && $child['target_blank'] ? 'target="_blank"' : '' }}>{{ $child['name'] }}</a>
                           </li>
                         @endforeach
                       </ul>
                     </li>
                   @else
                     <li class="nav-item me-lg-n2 me-xl-0">
-                      @if($item['url'] == '#modalId' || $item['name'] == '站点公告')
-                        <a class="nav-link fs-sm" href="#modalId" style="font-size: 0.625rem; letter-spacing: 0.05rem" data-bs-toggle="modal" data-bs-target="#modalId">{{ $item['name'] }}</a>
-                      @else
                         <a class="nav-link fs-sm @if(\Illuminate\Support\Facades\Request::url() == url($item['url'])) active @endif" 
                            href="{{ $item['url'] }}" 
                            {{ isset($item['target_blank']) && $item['target_blank'] ? 'target="_blank"' : '' }}>
                           {{ $item['name'] }}
                         </a>
-                      @endif
                     </li>
                   @endif
                 @endforeach
@@ -182,26 +174,4 @@
           <rect x=".75" y=".75" width="60.5" height="30.5" rx="15.25" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" style="stroke-dasharray: 155.201; stroke-dashoffset: 0"></rect>
         </svg>
       </a>
-    </div>
-    <!-- 公告 -->
-    <div class="modal fade" id="modalId" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">公告</h5>
-            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body bg-body-tertiary fs-sm">
-            <div class="py-2 px-2 px-md-2">
-            <h4 class="">{{ __('dujiaoka.site_announcement') }}：</h4>
-                                    
-            <p class="lead">{!! shop_cfg('notice') !!}</p>
-            </div>
-          </div>
-          <div class="modal-footer flex-column flex-sm-row align-items-stretch">
-            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">关闭</button>
-            <button class="btn btn-dark" type="button" data-bs-dismiss="modal">确定</button>
-          </div>
-        </div>
-      </div>
     </div>
