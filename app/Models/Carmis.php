@@ -11,6 +11,13 @@ class Carmis extends BaseModel
 
     protected $table = 'carmis';
 
+    protected $fillable = [
+        'goods_id',
+        'sub_id', 
+        'carmi',
+        'status'
+    ];
+
     /**
      * 未售出状态
      */

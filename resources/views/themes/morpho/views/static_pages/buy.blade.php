@@ -33,7 +33,7 @@
             <div class="col-md-6">
               <div class="ps-md-4 ps-xl-5">
                 <!-- 购买表单 -->
-                <form class="needs-validation" novalidate id="buy-form" action="{{ url('create-order') }}" method="post">
+                <form class="needs-validation" novalidate id="buy-form" action="{{ url('order/create') }}" method="post">
                   @csrf
   
                   <!-- 商品名称 -->
@@ -55,7 +55,13 @@
                     <!-- 库存 -->
                     <div class="d-flex align-items-center me-3">
                       <i class="ci-broccoli fs-xl text-body-emphasis me-2"></i>
-                      库存：{{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}
+                      库存：<span id="currentStock">
+                        @if(count($goods_sub) > 1)
+                          {{ $type == 1 ? \App\Models\Carmis::where('sub_id', $goods_sub[0]['id'])->where('status', 1)->count() : $goods_sub[0]['stock'] }}
+                        @else
+                          {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}
+                        @endif
+                      </span>
                     </div>
   
                     <!-- 若有批发价配置 -->
@@ -67,9 +73,46 @@
                     @endif
                   </div>
   
+                  <!-- 规格选择 -->
+                  @if(count($goods_sub) > 1)
+                    <div class="mb-4">
+                      <label class="form-label fw-semibold pb-1 mb-2">
+                        选择规格
+                        <span class="text-danger">*</span>:
+                      </label>
+                      <div class="d-flex flex-wrap gap-2" id="specGroup">
+                        @foreach($goods_sub as $index => $sub)
+                          @php
+                            $subStock = $type == 1 ? 
+                              \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count() : 
+                              $sub['stock'];
+                          @endphp
+                          <label class="spec-option" data-price="{{ $sub['price'] }}" data-stock="{{ $subStock }}" data-sub-id="{{ $sub['id'] }}">
+                            <input type="radio" class="btn-check" name="sub_id" value="{{ $sub['id'] }}" 
+                                   id="spec-{{ $sub['id'] }}" @if($index == 0) checked @endif
+                                   @if($subStock <= 0) disabled @endif>
+                            <span class="btn btn-outline-dark @if($subStock <= 0) disabled @endif">
+                              {{ $sub['name'] }} 
+                              <small class="text-muted">${{ number_format($sub['price'], 2) }}</small>
+                              @if($subStock <= 0)
+                                <small class="text-danger">(缺货)</small>
+                              @endif
+                            </span>
+                          </label>
+                        @endforeach
+                      </div>
+                    </div>
+                  @else
+                    <input type="hidden" name="sub_id" value="{{ $goods_sub[0]['id'] }}">
+                  @endif
+
                   <!-- 价格显示 -->
-                  <div class="h4 d-flex align-items-center my-3">
-                    ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                  <div class="h4 d-flex align-items-center my-3" id="priceDisplay">
+                    @if(count($goods_sub) > 1)
+                      $<span id="currentPrice">{{ number_format($goods_sub[0]['price'], 2) }}</span>
+                    @else
+                      ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                    @endif
                     {{-- 如需显示原价:
                     @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
                       <del class="fs-sm fw-normal text-body-tertiary ms-2">
@@ -209,8 +252,13 @@
                       <button type="button" class="btn btn-icon btn-lg" data-decrement aria-label="Decrement quantity">
                         <i class="ci-minus"></i>
                       </button>
+                      @php
+                        $initialStock = count($goods_sub) > 1 ? 
+                          ($type == 1 ? \App\Models\Carmis::where('sub_id', $goods_sub[0]['id'])->where('status', 1)->count() : $goods_sub[0]['stock']) :
+                          ($type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock'));
+                      @endphp
                       <input type="number" class="form-control form-control-xl w-50" name="by_amount" min="1"
-                             value="1">
+                             max="{{ $initialStock }}" value="1">
                       <button type="button" class="btn btn-icon btn-lg" data-increment aria-label="Increment quantity">
                         <i class="ci-plus"></i>
                       </button>
@@ -260,12 +308,20 @@
                 <div class="w-100 min-w-0 d-lg-none ps-2">
                   <h4 class="fs-sm fw-medium text-truncate mb-1">{{ $gd_name }}</h4>
                   <div class="h6 mb-0">
-                    ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                    @if(count($goods_sub) > 1)
+                      $<span class="sticky-price">{{ number_format($goods_sub[0]['price'], 2) }}</span>
+                    @else
+                      ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                    @endif
                   </div>
                 </div>
               </div>
               <div class="h4 d-none d-lg-block mb-0 ms-auto me-4">
-                ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                @if(count($goods_sub) > 1)
+                  $<span class="sticky-price">{{ number_format($goods_sub[0]['price'], 2) }}</span>
+                @else
+                  ${{ number_format(collect($goods_sub)->min('price'), 2) }}
+                @endif
                 {{-- 原价可选
                 @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
                   <del class="fs-sm fw-normal text-body-tertiary">
@@ -357,6 +413,24 @@
     </div>
     <!-- Modal end -->
 @stop
+@section('css')
+<style>
+.spec-option .btn-check:checked + .btn {
+    background-color: #212529;
+    border-color: #212529;
+    color: #fff;
+}
+
+.spec-option .btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.spec-option .btn:hover:not(.disabled) {
+    background-color: #f8f9fa;
+    border-color: #212529;
+}
+</style>
+@stop
 @section('js')
 <script>
             @if(!empty($buy_prompt))
@@ -365,17 +439,75 @@
                 myModal.show()
             });
             @endif
-            $("input[type='number']").inputSpinner();
+            const amountInput = $('input[name="by_amount"]');
+            const submitBtns = $('#submit, button[form="buy-form"]');
+            
+            $(document).on('click', 'button[data-increment]', function() {
+                const max = +amountInput.attr('max') || 999;
+                const val = +amountInput.val() || 1;
+                if (val < max) amountInput.val(val + 1);
+            });
+            
+            $(document).on('click', 'button[data-decrement]', function() {
+                const min = +amountInput.attr('min') || 1;
+                const val = +amountInput.val() || 1;
+                if (val > min) amountInput.val(val - 1);
+            });
+            
+            // 初始化按钮状态
+            $('button[data-increment], button[data-decrement]').prop('disabled', false).removeClass('disabled');
+            
+            @if(count($goods_sub) > 1)
+                const initStock = {{ $type == 1 ? \App\Models\Carmis::where('sub_id', $goods_sub[0]['id'])->where('status', 1)->count() : $goods_sub[0]['stock'] }};
+                if (initStock <= 0) {
+                    submitBtns.prop('disabled', true).text('缺货');
+                    $('button[data-increment], button[data-decrement]').prop('disabled', true);
+                }
+            @endif
+            
+            $('input[name="sub_id"]').change(function() {
+                const opt = $(this).closest('.spec-option');
+                const price = +opt.data('price');
+                const stock = +opt.data('stock');
+                
+                $('#currentPrice').text(price.toFixed(2));
+                $('.sticky-price').text(price.toFixed(2));
+                $('#currentStock').text(stock);
+                
+                const currentVal = +amountInput.val();
+                const oldMax = +amountInput.attr('max');
+                amountInput.attr('max', stock);
+                
+                if (currentVal > stock) {
+                    amountInput.val(Math.min(stock, 1));
+                }
+                
+                // 强制重新激活增减按钮
+                $('button[data-increment], button[data-decrement]').prop('disabled', false).removeClass('disabled');
+                
+                if (stock <= 0) {
+                    submitBtns.prop('disabled', true).text('缺货');
+                    $('button[data-increment], button[data-decrement]').prop('disabled', true);
+                } else {
+                    submitBtns.prop('disabled', false).text('立即购买');
+                }
+            });
+            
             $('#submit').click(function(){
-                if($("input[name='by_amount']").val() > {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}){
-                    {{-- 数量不允许大于库存 --}}
+                @if(count($goods_sub) > 1)
+                    const stock = +$('.spec-option input:checked').closest('.spec-option').data('stock');
+                @else
+                    const stock = {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }};
+                @endif
+                const amount = +amountInput.val();
+                
+                if(amount > stock){
                     $(".modal-body").html("{{ __('dujiaoka.prompt.inventory_shortage') }}")
                     myModal.show()
                     return false;
                 }
                 @if($buy_limit_num > 0)
-                if($("input[name='by_amount']").val() > {{ $buy_limit_num }}){
-                    {{-- 已超过限购数量 --}}
+                if(amount > {{ $buy_limit_num }}){
                     $(".modal-body").html("{{ __('dujiaoka.prompt.purchase_limit_exceeded') }}")
                     myModal.show()
                     return false;

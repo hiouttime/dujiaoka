@@ -25,7 +25,14 @@ class CarmisRelationManager extends RelationManager
                 Forms\Components\Select::make('sub_id')
                     ->label('商品规格')
                     ->options(fn ($livewire) => $livewire->ownerRecord->goods_sub()->pluck('name', 'id'))
-                    ->required(),
+                    ->required()
+                    ->afterStateUpdated(function (callable $set, $state, $livewire) {
+                        if ($state && $livewire->ownerRecord) {
+                            $set('goods_id', $livewire->ownerRecord->id);
+                        }
+                    }),
+                Forms\Components\Hidden::make('goods_id')
+                    ->default(fn ($livewire) => $livewire->ownerRecord?->id),
                 Forms\Components\Select::make('status')
                     ->label('状态')
                     ->options(Carmis::getStatusMap())
@@ -64,7 +71,6 @@ class CarmisRelationManager extends RelationManager
                     ->color(fn (string $state): string => match($state) {
                         Carmis::STATUS_UNSOLD => 'success',
                         Carmis::STATUS_SOLD => 'warning', 
-                        Carmis::STATUS_USED => 'danger',
                         default => 'gray',
                     }),
                 Tables\Columns\ToggleColumn::make('is_loop')

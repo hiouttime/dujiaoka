@@ -3,7 +3,7 @@
         {{ $this->form }}
         
         <div class="mt-6">
-            {{ $this->getFormActions() }}
+            <x-filament-actions::group :actions="$this->getFormActions()" />
         </div>
     </form>
 </x-filament-panels::page>

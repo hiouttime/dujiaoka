@@ -80,23 +80,18 @@ class ManageEmailTest extends Page
 
             // 获取邮件配置
             $mailSettings = app(MailSettings::class);
-            
-            $mailConfig = [
-                'driver' => $mailSettings->driver ?? 'smtp',
-                'host' => $mailSettings->host ?? '',
-                'port' => $mailSettings->port ?? '465',
-                'username' => $mailSettings->username ?? '',
-                'from' => [
-                    'address' => $mailSettings->from_address ?? '',
-                    'name' => $mailSettings->from_name ?? '独角发卡'
-                ],
-                'password' => $mailSettings->password ?? '',
-                'encryption' => $mailSettings->encryption ?? 'ssl'
-            ];
 
             // 临时覆盖邮件配置
             config([
-                'mail' => array_merge(config('mail'), $mailConfig)
+                'mail.default' => $mailSettings->driver ?? 'smtp',
+                'mail.mailers.smtp.transport' => 'smtp',
+                'mail.mailers.smtp.host' => $mailSettings->host ?? '',
+                'mail.mailers.smtp.port' => $mailSettings->port ?? 465,
+                'mail.mailers.smtp.encryption' => $mailSettings->encryption ?? 'ssl',
+                'mail.mailers.smtp.username' => $mailSettings->username ?? '',
+                'mail.mailers.smtp.password' => $mailSettings->password ?? '',
+                'mail.from.address' => $mailSettings->from_address ?? '',
+                'mail.from.name' => $mailSettings->from_name ?? '独角发卡',
             ]);
 
             // 重新注册邮件服务
