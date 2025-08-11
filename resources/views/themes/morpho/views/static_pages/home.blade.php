@@ -4,101 +4,129 @@
     <section class="container pt-4">
         <div class="row">
             <div class="w-100">
+                @php
+                    $banners = theme_cfg('banners', []);
+                    $notice = shop_cfg('notice', '');
+                    
+                    $slides = [];
+                    $slides[] = [
+                        'type' => 'notice',
+                        'title' => '站点公告',
+                        'content' => $notice ?: '暂无公告内容'
+                    ];
+                    foreach($banners as $banner) {
+                        $slides[] = [
+                            'type' => 'banner',
+                            'title' => $banner['title'] ?? '',
+                            'subtitle' => $banner['subtitle'] ?? '',
+                            'image' => $banner['image'] ?? '',
+                            'button_text' => $banner['button_text'] ?? '',
+                            'button_url' => $banner['button_url'] ?? '',
+                            'target_blank' => $banner['target_blank'] ?? false
+                        ];
+                    }
+                @endphp
+
                 <div class="position-relative">
                     <span class="position-absolute top-0 start-0 w-100 h-100 rounded-5 d-none-dark rtl-flip"
                         style="background: linear-gradient(90deg, #accbee 0%, #e7f0fd 100%)"></span>
                     <span class="position-absolute top-0 start-0 w-100 h-100 rounded-5 d-none d-block-dark rtl-flip"
                         style="background: linear-gradient(90deg, #1b273a 0%, #1f2632 100%)"></span>
-                    <div class="row justify-content-center position-relative z-2">
-                        <div class="col-xl-5 col-xxl-5  d-flex align-items-center mt-xl-n3">
-
-                            <!-- Text content master slider -->
-                            <div class="swiper px-5 pe-xl-0 ps-xxl-0 me-xl-n5" data-swiper='{
-                    "spaceBetween": 64,
-                    "loop": true,
-                    "speed": 400,
-                    "controlSlider": "#sliderImages",
-                    "autoplay": {
-                      "delay": 5500,
-                      "disableOnInteraction": false
-                    },
-                    "scrollbar": {
-                      "el": ".swiper-scrollbar"
-                    }
-                  }'>
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide text-center text-xl-start pt-5 py-xl-5">
-                                        <p class="text-body">近期热销产品</p>
-                                        <h2 class="display-4 pb-2 pb-xl-4">美区礼品卡50美刀</h2>
-                                        <a class="btn btn-lg btn-dark" href="buy/1">
-                                            立即 购买
-                                            <i class="ci-arrow-up-right fs-lg ms-2 me-n1"></i>
-                                        </a>
-                                    </div>
-                                    <div class="swiper-slide text-center text-xl-start pt-5 py-xl-5">
-                                        <p class="text-body">Telegram社区数万人社区</p>
-                                        <h2 class="display-4 pb-2 pb-xl-4">专业售后服务</h2>
-                                        <a class="btn btn-lg btn-dark" href="hhttps://t.me/RinibaGroup">
-                                            加入 社区
-                                            <i class="ci-arrow-up-right fs-lg ms-2 me-n1"></i>
-                                        </a>
-                                    </div>
-                                    <div class="swiper-slide text-center text-xl-start pt-5 py-xl-5">
-                                        <p class="text-body">发货时间少于两分钟</p>
-                                        <h2 class="display-4 pb-2 pb-xl-4">及时交货</h2>
-                                        <a class="btn btn-lg btn-dark rounded-pill"
-                                            href="https://youtu.be/me_Dc5PJrXk?si=QSILRHdbjUIJ7SmV" data-glightbox
-                                            data-gallery="video">
-                                            <i class="ci-play fs-lg ms-n1 me-2"></i>
-                                            播放 视频
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-9 col-sm-7 col-md-6 col-lg-5 col-xl-5">
-                            <!-- Binded images (controlled slider) -->
-                            <div class="swiper user-select-none" id="sliderImages" data-swiper='{
-                    "allowTouchMove": false,
-                    "loop": true,
-                    "effect": "fade",
-                    "fadeEffect": {
-                      "crossFade": true
-                    }
-                  }'>
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide d-flex justify-content-end">
-                                        <div class="ratio rtl-flip"
-                                            style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="{{ theme_asset('banner/1.webp') }}" alt="Image">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide d-flex justify-content-end">
-                                        <div class="ratio rtl-flip"
-                                            style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="{{ theme_asset('banner/2.webp') }}" alt="Image">
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide d-flex justify-content-end">
-                                        <div class="ratio rtl-flip"
-                                            style="max-width: 400px; --cz-aspect-ratio: calc(537 / 495 * 100%)">
-                                            <img src="{{ theme_asset('banner/3.webp') }}" alt="Image">
+                    
+                    <!-- 导航箭头 -->
+                    <i class="ci-chevron-left position-absolute text-white" id="heroPrev" 
+                       style="left: 2rem; top: 50%; transform: translateY(-50%); font-size: 3rem; cursor: pointer; z-index: 100; opacity: 0.7;"></i>
+                    <i class="ci-chevron-right position-absolute text-white" id="heroNext" 
+                       style="right: 2rem; top: 50%; transform: translateY(-50%); font-size: 3rem; cursor: pointer; z-index: 100; opacity: 0.7;"></i>
+                    
+                    <!-- 轮播内容 -->
+                    <div class="swiper position-relative z-2" id="heroSlider">
+                        <div class="swiper-wrapper">
+                            @foreach($slides as $slide)
+                            <div class="swiper-slide">
+                                <div class="row justify-content-center" style="min-height: 45vh;">
+                                    <div class="col-xxl-10">
+                                        <div class="row align-items-center h-100">
+                                            @if($slide['type'] === 'notice')
+                                                <div class="col-12 text-start">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <i class="ci-bell fs-4 text-muted me-2"></i>
+                                                        <span class="text-muted fw-medium">公告</span>
+                                                    </div>
+                                                    <div class="notice-content text-body fs-6 lh-lg pe-2" 
+                                                         style="height: 30vh; overflow-y: auto;">
+                                                        {!! $slide['content'] !!}
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="col-lg-6">
+                                                    <div class="text-center text-lg-start">
+                                                        @if($slide['subtitle'])
+                                                            <p class="text-muted mb-2">{{ $slide['subtitle'] }}</p>
+                                                        @endif
+                                                        @if($slide['title'])
+                                                            <h2 class="display-5 fw-bold mb-4">{{ $slide['title'] }}</h2>
+                                                        @endif
+                                                        @if($slide['button_text'] && $slide['button_url'])
+                                                            <a href="{{ $slide['button_url'] }}" 
+                                                               class="btn btn-dark btn-lg"
+                                                               {{ $slide['target_blank'] ? 'target="_blank"' : '' }}>
+                                                                {{ $slide['button_text'] }}
+                                                                <i class="ci-arrow-up-right ms-2"></i>
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="text-center">
+                                                        @if($slide['image'])
+                                                            <img src="{{ asset('storage/' . $slide['image']) }}" 
+                                                                 alt="{{ $slide['title'] }}" 
+                                                                 class="img-fluid rounded-4"
+                                                                 style="max-width: 400px;">
+                                                        @else
+                                                            <div class="bg-light rounded-4 p-5 border" style="max-width: 400px; margin: 0 auto;">
+                                                                <i class="ci-image display-1 text-muted mb-3"></i>
+                                                                <p class="text-muted">暂无图片</p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <!-- Scrollbar -->
-                    <div class="row justify-content-center" data-bs-theme="dark">
-                        <div class="col-xxl-10">
-                            <div class="position-relative mx-5 mx-xxl-0">
-                                <div class="swiper-scrollbar mb-4"></div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
+
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // 初始化轮播
+                    new Swiper('#heroSlider', {
+                        loop: true,
+                        autoplay: {
+                            delay: 5000,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true
+                        },
+                        navigation: {
+                            nextEl: '#heroNext',
+                            prevEl: '#heroPrev'
+                        },
+                        speed: 600
+                    });
+                    
+                    // 为溢出的公告内容添加虚线提示
+                    document.querySelectorAll('.notice-content').forEach(el => {
+                        if (el.scrollHeight > el.clientHeight) {
+                            el.style.borderBottom = '2px dashed #999';
+                        }
+                    });
+                });
+                </script>
             </div>
         </div>
     </section>
@@ -139,8 +167,6 @@
         </div>
 
         <div class="tab-content" id="goodsTabContent">
-
-            <!-- (A) “全部” 面板：展示所有分组下的商品 -->
             <div class="tab-pane fade show active" id="group-all" role="tabpanel" aria-labelledby="group-all-tab">
                 <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">
                     @foreach($data as $group)
@@ -151,7 +177,6 @@
                 </div>
             </div>
         
-            <!-- (B) 各分组面板：每个分组只展示自己商品 -->
             @foreach($data as $group)
                 <div class="tab-pane fade" id="group-{{ $group['id'] }}" role="tabpanel" aria-labelledby="group-{{ $group['id'] }}-tab">
                     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4 pt-4">

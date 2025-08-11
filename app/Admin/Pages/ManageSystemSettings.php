@@ -20,11 +20,11 @@ class ManageSystemSettings extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     
-    protected static ?string $navigationLabel = '系统设置';
+    protected static ?string $navigationLabel = '店铺设置';
     
     protected static string $settings = SystemSettings::class;
     
-    protected static ?string $navigationGroup = '系统设置';
+    protected static ?string $navigationGroup = '店铺设置';
     
     protected static ?int $navigationSort = 1;
 
@@ -34,85 +34,6 @@ class ManageSystemSettings extends SettingsPage
             ->schema([
                 Tabs::make('SystemSettings')
                     ->tabs([
-                        // 基础设置
-                        Tabs\Tab::make('基础设置')
-                            ->schema([
-                                Grid::make(2)
-                                    ->schema([
-                                        TextInput::make('title')
-                                            ->label('网站标题')
-                                            ->required()
-                                            ->maxLength(255),
-                                        
-                                        TextInput::make('text_logo')
-                                            ->label('文字Logo')
-                                            ->maxLength(255),
-                                    ]),
-                                
-                                FileUpload::make('img_logo')
-                                    ->label('图片Logo')
-                                    ->image()
-                                    ->directory('logos')
-                                    ->maxSize(1024),
-                                
-                                Grid::make(2)
-                                    ->schema([
-                                        TextInput::make('keywords')
-                                            ->label('关键词')
-                                            ->maxLength(255)
-                                            ->columnSpan(2),
-                                    ]),
-                                
-                                Textarea::make('description')
-                                    ->label('网站描述')
-                                    ->rows(3),
-                                
-                                Grid::make(3)
-                                    ->schema([
-                                        Select::make('template')
-                                            ->label('模板')
-                                            ->options(config('dujiaoka.templates', []))
-                                            ->required(),
-                                        
-                                        Select::make('language')
-                                            ->label('语言')
-                                            ->options(config('dujiaoka.language', []))
-                                            ->required(),
-                                        
-                                        Select::make('currency')
-                                            ->label('货币')
-                                            ->options(config('dujiaoka.currencies', []))
-                                            ->required(),
-                                    ]),
-                                
-                                Grid::make(2)
-                                    ->schema([
-                                        Toggle::make('is_open_anti_red')
-                                            ->label('开启防红')
-                                            ->default(false),
-                                        
-                                        Toggle::make('is_cn_challenge')
-                                            ->label('中国大陆验证')
-                                            ->default(true),
-                                        
-                                        Toggle::make('is_open_search_pwd')
-                                            ->label('开启查询密码')
-                                            ->default(false),
-                                        
-                                        Toggle::make('is_open_google_translate')
-                                            ->label('开启谷歌翻译')
-                                            ->default(false),
-                                    ]),
-                                
-                                RichEditor::make('notice')
-                                    ->label('公告')
-                                    ->columnSpanFull(),
-                                
-                                Textarea::make('footer')
-                                    ->label('页脚')
-                                    ->rows(3)
-                                    ->columnSpanFull(),
-                            ]),
                         
                         // 订单设置
                         Tabs\Tab::make('订单设置')

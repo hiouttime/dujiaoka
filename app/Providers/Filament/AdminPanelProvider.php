@@ -84,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
                 '邮件设置',
                 '内容管理',
                 '外观设置',
-                '系统设置',
+                '店铺设置',
                 '其他配置'
             ]);  // 导航分组
     }

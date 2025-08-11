@@ -66,6 +66,20 @@ if (! function_exists('current_theme')) {
     }
 }
 
+if (! function_exists('shop_cfg')) {
+    function shop_cfg(string $key, $default = null)
+    {
+        return app('App\Settings\ShopSettings')->{$key} ?? $default;
+    }
+}
+
+if (! function_exists('theme_cfg')) {
+    function theme_cfg(string $key, $default = null)
+    {
+        return app('App\Settings\ThemeSettings')->{$key} ?? $default;
+    }
+}
+
 
 if (! function_exists('formatWholesalePrice')) {
 

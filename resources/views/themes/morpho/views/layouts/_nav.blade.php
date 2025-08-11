@@ -24,12 +24,16 @@
           >
             <div class="swiper-wrapper min-w-0">
             @php
-              $notices = explode("\n", theme_config('notice',''));
+              $themeNotices = theme_cfg('notices', '');
+              $notices = !empty($themeNotices) ? explode("\n", $themeNotices) : explode("\n", shop_cfg('notice', ''));
+              $notices = array_filter($notices);
             @endphp
 
             @if(!empty($notices))
               @foreach($notices as $notice)
-                <div class="swiper-slide text-truncate text-center">{{ $notice }}</div>
+                @if(trim($notice))
+                  <div class="swiper-slide text-truncate text-center">{{ trim($notice) }}</div>
+                @endif
               @endforeach
             @endif
             </div>
@@ -57,11 +61,11 @@
         <!-- Navbar brand (Logo) -->
         <a class="navbar-brand position-relative z-1 ms-4 ms-sm-5 ms-lg-4 me-2 me-sm-0 me-lg-3" href="/">
           <img
-            src="{{ pictureUrl(cfg('img_logo')) }}"
-            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 me-1 {{ theme_config('invert_logo', 0)?'invert_logo':'' }}"
+            src="{{ pictureUrl(shop_cfg('img_logo')) }}"
+            class="d-flex d-none d-md-inline-flex justify-content-center align-items-center flex-shrink-0 me-1 {{ theme_cfg('invert_logo', false)?'invert_logo':'' }}"
             style="width: 2.5rem; height: 2.5rem"
           />
-          {{ cfg('text_logo') }}
+          {{ shop_cfg('text_logo') }}
         </a>
 
         <!-- Main navigation that turns into offcanvas on screens < 992px wide (lg breakpoint) -->
@@ -72,22 +76,42 @@
           </div>
           <div class="offcanvas-body pt-3 pb-4 py-lg-0 mx-lg-auto">
             <ul class="navbar-nav position-relative">
-              <li class="nav-item me-lg-n1 me-xl-0">
-                <a class="nav-link fs-sm @if(\Illuminate\Support\Facades\Request::url() == url('/')) active @endif" href="/">主页</a>
-              </li>
-              <li class="nav-item dropdown me-lg-n1 me-xl-0">
-                <a class="nav-link dropdown-toggle fs-sm" role="button" data-bs-toggle="dropdown" data-bs-trigger="hover" data-bs-auto-close="outside" aria-expanded="false">联系客服</a>
-                <ul class="dropdown-menu" style="--cz-dropdown-spacer: 1rem">
-                  <li><a class="dropdown-item" href="https://t.me/riniba" target="_blank">站点客服</a></li>
-                  <li><a class="dropdown-item" href="https://t.me/riniba" target="_blank">Telegram客服</a></li>
-                </ul>
-              </li>
-              <li class="nav-item me-lg-n2 me-xl-0">
-                <a class="nav-link fs-sm" href="#modalId" style="font-size: 0.625rem; letter-spacing: 0.05rem" data-bs-toggle="modal" data-bs-target="#modalId">站点公告</a>
-              </li>
-              <li class="nav-item me-lg-n2 me-xl-0">
-                <a class="nav-link fs-sm @if(\Illuminate\Support\Facades\Request::url() == url('order-search')) active @endif" href="/order-search">订单查询</a>
-              </li>
+              @php
+                $navItems = shop_cfg('nav_items', []);
+              @endphp
+              
+              @if(!empty($navItems))
+                @foreach($navItems as $item)
+                  @if(!empty($item['children']))
+                    <li class="nav-item dropdown me-lg-n1 me-xl-0">
+                      <a class="nav-link dropdown-toggle fs-sm" role="button" data-bs-toggle="dropdown" data-bs-trigger="hover" data-bs-auto-close="outside" aria-expanded="false">{{ $item['name'] }}</a>
+                      <ul class="dropdown-menu" style="--cz-dropdown-spacer: 1rem">
+                        @foreach($item['children'] as $child)
+                          <li>
+                            @if($child['url'] == '#modalId' || $child['name'] == '站点公告')
+                              <a class="dropdown-item" href="#modalId" data-bs-toggle="modal" data-bs-target="#modalId">{{ $child['name'] }}</a>
+                            @else
+                              <a class="dropdown-item" href="{{ $child['url'] }}" {{ isset($child['target_blank']) && $child['target_blank'] ? 'target="_blank"' : '' }}>{{ $child['name'] }}</a>
+                            @endif
+                          </li>
+                        @endforeach
+                      </ul>
+                    </li>
+                  @else
+                    <li class="nav-item me-lg-n2 me-xl-0">
+                      @if($item['url'] == '#modalId' || $item['name'] == '站点公告')
+                        <a class="nav-link fs-sm" href="#modalId" style="font-size: 0.625rem; letter-spacing: 0.05rem" data-bs-toggle="modal" data-bs-target="#modalId">{{ $item['name'] }}</a>
+                      @else
+                        <a class="nav-link fs-sm @if(\Illuminate\Support\Facades\Request::url() == url($item['url'])) active @endif" 
+                           href="{{ $item['url'] }}" 
+                           {{ isset($item['target_blank']) && $item['target_blank'] ? 'target="_blank"' : '' }}>
+                          {{ $item['name'] }}
+                        </a>
+                      @endif
+                    </li>
+                  @endif
+                @endforeach
+              @endif
             </ul>
           </div>
         </nav>
@@ -171,7 +195,7 @@
             <div class="py-2 px-2 px-md-2">
             <h4 class="">{{ __('dujiaoka.site_announcement') }}：</h4>
                                     
-            <p class="lead">{!! cfg('notice') !!}</p>
+            <p class="lead">{!! shop_cfg('notice') !!}</p>
             </div>
           </div>
           <div class="modal-footer flex-column flex-sm-row align-items-stretch">

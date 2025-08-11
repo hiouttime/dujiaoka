@@ -2,7 +2,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>{{ isset($page_title) ? $page_title : '' }} | {{ theme_config('site_name', cfg('title')) }}</title>
+    <title>{{ isset($page_title) ? $page_title : '' }} | {{ theme_config('site_name', shop_cfg('title')) }}</title>
     <style>
       html,
       body {
@@ -12,8 +12,8 @@
 
     <meta http-equiv="Cache-Control" content="max-age=3600" />
     <meta http-equiv="Expires" content="Sun, 17 Mar 2024 12:00:00 GMT" />
-    <meta name="Keywords" content="{{ cfg('keywords') }}">
-    <meta name="Description" content="{{ cfg('description')  }}">
+    <meta name="Keywords" content="{{ shop_cfg('keywords') }}">
+    <meta name="Description" content="{{ shop_cfg('description')  }}">
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     

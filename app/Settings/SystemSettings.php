@@ -6,21 +6,6 @@ use Spatie\LaravelSettings\Settings;
 
 class SystemSettings extends Settings
 {
-    // 基础设置
-    public string $title;
-    public ?string $img_logo;
-    public ?string $text_logo;
-    public ?string $keywords;
-    public ?string $description;
-    public string $template;
-    public string $language;
-    public string $currency;
-    public bool $is_open_anti_red;
-    public bool $is_cn_challenge;
-    public bool $is_open_search_pwd;
-    public bool $is_open_google_translate;
-    public ?string $notice;
-    public ?string $footer;
 
     // 订单设置
     public int $order_expire_time;
