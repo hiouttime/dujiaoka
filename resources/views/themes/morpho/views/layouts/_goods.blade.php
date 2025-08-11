@@ -9,11 +9,11 @@
 @endphp
 
 <div class="col">
-    <div class="card h-100 border rounded" style="transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;"
+    <div class="card h-100 border rounded-lg" style="transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;"
          onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='#6c757d'; this.style.boxShadow='0 0.5rem 1rem rgba(0,0,0,0.15)';"
          onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='#dee2e6'; this.style.boxShadow='none';">
         
-        <div class="position-relative bg-light rounded-top" style="aspect-ratio: 1;">
+        <div class="position-relative bg-light" style="aspect-ratio: 1; border-top-left-radius: var(--morpho-radius-lg); border-top-right-radius: var(--morpho-radius-lg);">
             <a href="{{ $buyUrl }}" class="d-block h-100 p-3 d-flex align-items-center justify-content-center"
                @if(!$isAvailable) onclick="showToast('商品库存不足, 请联系客服补货.');" @endif>
                 <img src="{{ pictureUrl($goods['picture']) }}" alt="{{ $goods['gd_name'] }}" 

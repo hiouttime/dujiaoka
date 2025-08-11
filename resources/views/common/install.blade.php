@@ -89,7 +89,7 @@
             color: #fff;
             border: 0;
             font-weight: bold;
-            border-radius: 4px;
+            border-radius: var(--morpho-radius-sm, 0.375rem);
             cursor: pointer;
             padding: 15px 30px;
             -webkit-appearance: none;
@@ -102,7 +102,7 @@
             background: #D83E3E;
             color: #fff;
             padding: 15px 20px;
-            border-radius: 4px;
+            border-radius: var(--morpho-radius-sm, 0.375rem);
             margin-bottom: 20px;
         }
         #success {

@@ -49,7 +49,6 @@
     @endif
     
     {{-- 字体和图标预加载 --}}
-    <script src="{{ theme_asset('js/theme-switcher.js') }}"></script>
     <link rel="preload" href="{{ theme_asset('fonts/inter-variable-latin.woff2') }}" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="{{ theme_asset('icons/cartzilla-icons.woff2') }}" as="font" type="font/woff2" crossorigin />
     
@@ -57,8 +56,8 @@
     <link rel="stylesheet" href="{{ theme_asset('icons/cartzilla-icons.min.css') }}" />
     <link rel="stylesheet" href="{{ theme_asset('css/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" href="{{ theme_asset('css/simplebar.min.css') }}" />
+    <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}" />
     <link rel="preload" href="{{ theme_asset('css/theme.min.css') }}" as="style" />
     <link rel="stylesheet" href="{{ theme_asset('css/theme.min.css') }}" id="theme-styles" />
-    <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}" />
 </head>
 

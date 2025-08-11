@@ -44,7 +44,7 @@
                         <div class="swiper-wrapper">
                             @foreach($slides as $slide)
                             <div class="swiper-slide">
-                                <div class="row justify-content-center" style="min-height: 45vh;">
+                                <div class="row justify-content-center" style="min-height: 30rem;">
                                     <div class="col-xxl-10">
                                         <div class="row align-items-center h-100">
                                             @if($slide['type'] === 'notice')
@@ -54,7 +54,7 @@
                                                         <span class="text-muted fw-medium">公告</span>
                                                     </div>
                                                     <div class="notice-content text-body fs-6 lh-lg pe-2" 
-                                                         style="height: 30vh; overflow-y: auto;">
+                                                         style="height: 22rem; overflow-y: auto;">
                                                         {!! $slide['content'] !!}
                                                     </div>
                                                 </div>
@@ -133,14 +133,14 @@
     <section class="container pt-3 mt-2 mt-sm-3 mt-lg-4 mt-xl-2">
         <div class="row g-0 overflow-x-auto pb-2 pb-sm-3 mb-3">
             <div class="col-auto pb-1 pb-sm-0 mx-auto">
-                <ul class="nav nav-pills  justify-content-center">
+                <ul class="nav nav-pills justify-content-center">
                     <li class="nav-item">
-                        <a href="#group-all" data-bs-toggle="tab" class="btn btn-outline-secondary active">{{
+                        <a href="#group-all" data-bs-toggle="tab" class="btn btn-outline-secondary active rounded-pill">{{
                             __('dujiaoka.group_all') }}</a>
                     </li>
                     @foreach($data as $index => $group)
                     <li class="nav-item">
-                        <a href="#group-{{ $group['id'] }}" data-bs-toggle="tab" class="btn btn-outline-secondary">{{
+                        <a href="#group-{{ $group['id'] }}" data-bs-toggle="tab" class="btn btn-outline-secondary rounded-pill">{{
                             $group['gp_name'] }}</a>
                     </li>
                     @endforeach
@@ -151,7 +151,7 @@
         <div class="d-flex justify-content-center mb-4">
             <div class="position-relative col-12 col-md-6">
                 <i class="ci-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
-                <input type="search" class="quicksearch form-control form-icon-start" placeholder="搜索您的商品...">
+                <input type="search" class="quicksearch form-control form-icon-start rounded-pill" placeholder="搜索您的商品...">
                 <button
                     class="btn btn-sm btn-outline-secondary w-auto border-0 p-1 position-absolute top-50 end-0 translate-middle-y me-2 clear-btn">
                     <svg class="opacity-75" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

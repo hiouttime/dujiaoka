@@ -1,3 +1,164 @@
+/* morpho主题自定义样式 */
+
+/* Logo反色样式 */
 [data-bs-theme=light] .invert_logo {
     filter: brightness(0);
+}
+
+/* CSS变量定义 */
+:root {
+    --primary-color: var(--theme-primary, #6366f1);
+    --secondary-color: var(--theme-secondary, #ec4899);
+    --accent-color: var(--theme-accent, #10b981);
+    --background-gradient: var(--theme-bg-gradient, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    
+    /* 统一圆角系统 - 4个等级 */
+    /* 小圆角 - 按钮、表单元素 */
+    --morpho-radius-sm: 0.375rem;   /* 6px */
+    /* 中圆角 - 卡片、容器 */  
+    --morpho-radius-md: 0.75rem;    /* 12px */
+    /* 大圆角 - 主要组件 */
+    --morpho-radius-lg: 1.25rem;    /* 20px */
+    /* 完全圆角 - 按钮、搜索框 */
+    --morpho-radius-pill: 50rem;
+    
+    /* 覆盖现有的 --cz-border-radius 系列变量 */
+    --cz-border-radius: var(--morpho-radius-md) !important;
+    --cz-border-radius-sm: var(--morpho-radius-sm) !important;
+    --cz-border-radius-lg: var(--morpho-radius-lg) !important;
+    --cz-border-radius-xl: var(--morpho-radius-lg) !important;
+    --cz-border-radius-xxl: var(--morpho-radius-lg) !important;
+    --cz-border-radius-2xl: var(--morpho-radius-lg) !important;
+    --cz-border-radius-pill: var(--morpho-radius-pill) !important;
+}
+
+/* 主题色应用 */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 80%, black);
+    border-color: color-mix(in srgb, var(--primary-color) 80%, black);
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* 霓虹效果 */
+.morpho-effect {
+    box-shadow: 
+        0 0 5px var(--primary-color),
+        0 0 10px var(--primary-color),
+        0 0 15px var(--primary-color),
+        0 0 20px var(--primary-color);
+}
+
+.morpho-text {
+    text-shadow: 
+        0 0 10px var(--primary-color),
+        0 0 20px var(--primary-color),
+        0 0 30px var(--primary-color),
+        0 0 40px var(--primary-color);
+}
+
+/* 背景渐变 */
+.hero-section {
+    background: var(--background-gradient);
+}
+
+/* 动画效果 */
+@media (prefers-reduced-motion: no-preference) {
+    .animate-enabled .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .animate-enabled .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* 统一圆角样式类 - 4个等级 */
+.morpho-rounded-sm {
+    border-radius: var(--morpho-radius-sm) !important;
+}
+
+.morpho-rounded-md {
+    border-radius: var(--morpho-radius-md) !important;
+}
+
+.morpho-rounded-lg {
+    border-radius: var(--morpho-radius-lg) !important;
+}
+
+.morpho-rounded-pill {
+    border-radius: var(--morpho-radius-pill) !important;
+}
+
+/* 覆盖现有的Bootstrap和主题圆角类 */
+.rounded {
+    border-radius: var(--morpho-radius-md) !important;
+}
+
+.rounded-sm {
+    border-radius: var(--morpho-radius-sm) !important;
+}
+
+.rounded-lg {
+    border-radius: var(--morpho-radius-lg) !important;
+}
+
+.rounded-pill {
+    border-radius: var(--morpho-radius-pill) !important;
+}
+
+.rounded-circle {
+    border-radius: 50% !important;
+}
+
+/* 覆盖数字类圆角 */
+.rounded-1, .rounded-2, .rounded-3 {
+    border-radius: var(--morpho-radius-sm) !important;
+}
+
+.rounded-4, .rounded-5 {
+    border-radius: var(--morpho-radius-lg) !important;
+}
+
+/* 统一所有卡片使用大圆角 */
+.card {
+    border-radius: var(--morpho-radius-lg) !important;
+}
+
+.card .card-img-top {
+    border-top-left-radius: var(--morpho-radius-lg) !important;
+    border-top-right-radius: var(--morpho-radius-lg) !important;
+}
+
+.card .card-img-bottom {
+    border-bottom-left-radius: var(--morpho-radius-lg) !important;
+    border-bottom-right-radius: var(--morpho-radius-lg) !important;
+}
+
+/* Badge样式优化 */
+.badge {
+    border-radius: var(--morpho-radius-lg) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .theme-auto {
+        /* 深色模式样式 */
+        --bs-body-bg: #1a1a1a;
+        --bs-body-color: #ffffff;
+    }
 }
