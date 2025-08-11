@@ -12,37 +12,25 @@
           </ol>
         </nav>
   
-        <!-- 商品主内容区域 -->
         <section class="container">
-          <div class="row">
-            <!-- 左侧：商品图片 / Gallery -->
-            <div class="col-md-6 pb-4 pb-md-0 mb-2 mb-sm-3 mb-md-0">
+          <div class="row align-items-start">
+            <div class="col-md-5 pb-4 pb-md-0 mb-2 mb-sm-3 mb-md-0 pe-md-4">
               <div class="position-relative">
-                <a class="hover-effect-scale hover-effect-opacity position-relative d-flex rounded overflow-hidden mb-3 mb-sm-4 mb-md-3 mb-lg-4"
-                   href="{{ pictureUrl($picture) }}" data-glightbox="" data-gallery="product-gallery">
-                  <i class="ci-zoom-in hover-effect-target fs-3 text-white position-absolute top-50 start-50 translate-middle opacity-0 z-2"></i>
-                  <div class="ratio hover-effect-target bg-body-tertiary rounded"
-                       style="--cz-aspect-ratio: calc(706 / 636 * 100%)">
-                    <img src="{{ pictureUrl($picture) }}" alt="{{ $gd_name }}">
-                  </div>
-                </a>
+                <div class="product-image-container bg-body-tertiary rounded mb-3 mb-sm-4 mb-md-3 mb-lg-4">
+                  <img src="{{ pictureUrl($picture) }}" alt="{{ $gd_name }}" class="product-image">
+                </div>
               </div>
             </div>
   
-            <!-- 右侧：商品详情 & 购买表单 -->
-            <div class="col-md-6">
+            <div class="col-md-7">
               <div class="ps-md-4 ps-xl-5">
-                <!-- 购买表单 -->
                 <form class="needs-validation" novalidate id="buy-form" action="{{ url('order/create') }}" method="post">
                   @csrf
   
-                  <!-- 商品名称 -->
                   <h1 class="h3 mb-3">{{ $gd_name }}</h1>
   
-                  <!-- 关键信息 (如：自动/人工、库存、批发价提示等) -->
                   <div class="d-flex flex-wrap gap-3 gap-xxl-4 fs-sm text-dark-emphasis mb-2">
   
-                    <!-- 判断自动/人工发货 -->
                     <div class="d-flex align-items-center me-3">
                       <i class="ci-delivery fs-xl text-body-emphasis me-2"></i>
                       @if($type == \App\Models\Goods::AUTOMATIC_DELIVERY)
@@ -52,7 +40,6 @@
                       @endif
                     </div>
   
-                    <!-- 库存 -->
                     <div class="d-flex align-items-center me-3">
                       <i class="ci-broccoli fs-xl text-body-emphasis me-2"></i>
                       库存：<span id="currentStock">
@@ -64,7 +51,6 @@
                       </span>
                     </div>
   
-                    <!-- 若有批发价配置 -->
                     @if(!empty($wholesale_price_cnf) && is_array($wholesale_price_cnf))
                       <div class="d-flex align-items-center me-3">
                         <i class="ci-leaf fs-xl text-body-emphasis me-2"></i>
@@ -73,7 +59,6 @@
                     @endif
                   </div>
   
-                  <!-- 规格选择 -->
                   @if(count($goods_sub) > 1)
                     <div class="mb-4">
                       <label class="form-label fw-semibold pb-1 mb-2">
@@ -106,23 +91,14 @@
                     <input type="hidden" name="sub_id" value="{{ $goods_sub[0]['id'] }}">
                   @endif
 
-                  <!-- 价格显示 -->
                   <div class="h4 d-flex align-items-center my-3" id="priceDisplay">
                     @if(count($goods_sub) > 1)
                       $<span id="currentPrice">{{ number_format($goods_sub[0]['price'], 2) }}</span>
                     @else
                       ${{ number_format(collect($goods_sub)->min('price'), 2) }}
                     @endif
-                    {{-- 如需显示原价:
-                    @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
-                      <del class="fs-sm fw-normal text-body-tertiary ms-2">
-                        {{ $original_price }} {{ __('dujiaoka.money_symbol') }}
-                      </del>
-                    @endif
-                    --}}
                   </div>
   
-                  <!-- 批发 / 优惠价列表 (可自行排版) -->
                   @if(!empty($wholesale_price_cnf) && is_array($wholesale_price_cnf))
                     <div class="mb-3">
                       @foreach($wholesale_price_cnf as $ws)
@@ -134,7 +110,6 @@
                     </div>
                   @endif
   
-                  <!-- 如果有限购 -->
                   @if($buy_limit_num > 0)
                     <h6 class="mb-3">
                       <small class="badge bg-danger">
@@ -143,20 +118,17 @@
                     </h6>
                   @endif
   
-                  <!-- [1] 电子邮箱 -->
                   <div class="mb-3">
                     <label for="email" class="form-label">
                       {{ __('dujiaoka.email') }}
                       <span class="text-danger">*</span>
                     </label>
-                    <!-- 传递商品ID隐藏域 -->
                     <input type="hidden" name="gid" value="{{ $id }}">
                     <input type="email" class="form-control" name="email" id="email"
                            required placeholder="查询订单或发送卡密会用到">
                     <div class="invalid-feedback">请输入您的电子邮箱!</div>
                   </div>
   
-                  <!-- [2] 查询密码 (如果开启) -->
                   @if(cfg('is_open_search_pwd') == \App\Models\Goods::STATUS_OPEN)
                     <div class="mb-3">
                       <label for="search_pwd" class="form-label">
@@ -169,7 +141,6 @@
                     </div>
                   @endif
   
-                  <!-- 如果是人工发货并且有额外表单字段 -->
                   @if($type == \App\Models\Goods::MANUAL_PROCESSING && is_array($other_ipu))
                     @foreach($other_ipu as $ipu)
                       <div class="mb-3">
@@ -192,7 +163,6 @@
                     @endforeach
                   @endif
   
-                  <!-- [3] 优惠券 (如果需要) -->
                   @if(isset($open_coupon))
                     <div class="mb-3">
                       <label for="coupon" class="form-label">
@@ -202,7 +172,6 @@
                     </div>
                   @endif
   
-                  <!-- [4] 图片验证码 (如果开启) -->
                   @if(cfg('is_open_img_code') == \App\Models\Goods::STATUS_OPEN)
                     <div class="mb-3">
                       <label for="verifyCode" class="form-label">
@@ -224,7 +193,6 @@
                     </script>
                   @endif
   
-                  <!-- [5] 支付方式 (payways) -->
                   <div class="mb-4">
                     <label class="form-label fw-semibold pb-1 mb-2">
                       {{ __('dujiaoka.payment_method') }}
@@ -246,7 +214,6 @@
                     </div>
                   </div>
   
-                  <!-- [6] 购买数量 -->
                   <div class="d-flex gap-3 pb-3 pb-lg-4 mb-3">
                     <div class="count-input flex-shrink-0 w-50 d-flex justify-content-center align-items-center">
                       <button type="button" class="btn btn-icon btn-lg" data-decrement aria-label="Decrement quantity">
@@ -263,7 +230,6 @@
                         <i class="ci-plus"></i>
                       </button>
                     </div>
-                    <!-- 如果有 aff 之类的可以隐藏 -->
                     <input type="hidden" name="aff" value="">
   
                     <button type="submit" id="submit" class="btn btn-lg btn-dark w-100">
@@ -271,7 +237,6 @@
                     </button>
                   </div>
   
-                  <!-- 一些额外提示 -->
                   <ul class="list-unstyled gap-3 pb-3 pb-lg-4 mb-3 fs-sm">
                     <li class="d-flex flex-wrap">
                       <span class="d-flex align-items-center fw-medium text-dark-emphasis me-2">
@@ -296,7 +261,6 @@
           </div>
         </section>
   
-        <!-- 吸顶的购买栏 (可选) -->
         <section class="sticky-product-banner sticky-top" data-sticky-element>
           <div class="sticky-product-banner-inner pt-5">
             <div class="navbar container flex-nowrap align-items-center bg-body pt-4 pt-lg-5 mt-lg-n2">
@@ -322,16 +286,8 @@
                 @else
                   ${{ number_format(collect($goods_sub)->min('price'), 2) }}
                 @endif
-                {{-- 原价可选
-                @if(isset($original_price) && $original_price > collect($goods_sub)->min('price'))
-                  <del class="fs-sm fw-normal text-body-tertiary">
-                    {{ $original_price }} {{ __('dujiaoka.money_symbol') }}
-                  </del>
-                @endif
-                --}}
               </div>
               <div class="d-flex gap-2">
-                <!-- 点击提交同一个表单 #buy-form -->
                 <button type="submit" form="buy-form" id="submit" class="btn btn-dark animate-pulse d-md-none">
                   <i class="ci-shopping-cart fs-base animate-target me-2"></i> {{ __('dujiaoka.order_now') }}
                 </button>
@@ -343,7 +299,6 @@
           </div>
         </section>
   
-        <!-- 商品描述/提示/教程等Tab (可选) -->
         <section class="container pt-5 mt-2 mt-sm-3 mt-lg-4 mt-xl-5" >
           <ul class="nav nav-underline flex-nowrap border-bottom" role="tablist">
             <li class="nav-item me-md-1" role="presentation">
@@ -370,20 +325,16 @@
           </ul>
   
           <div class="tab-content pt-4 mt-sm-1 mt-md-3">
-            <!-- Description tab -->
             <div class="tab-pane fade active show" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab">
               <div class="row">
-                <!-- 直接输出商品描述 -->
                 {!! $description !!}
               </div>
             </div>
   
-            <!-- Washing instructions tab -->
             <div class="tab-pane fade fs-sm" id="washing-tab-pane" role="tabpanel" aria-labelledby="washing-tab">
               <p>这里放一些商品提示/使用须知...</p>
             </div>
   
-            <!-- Delivery and returns tab -->
             <div class="tab-pane fade fs-sm" id="delivery-tab-pane" role="tabpanel" aria-labelledby="delivery-tab">
               <p>在这里放一些使用教程 / 文章 等...</p>
             </div>
@@ -394,7 +345,6 @@
     </div>
   </div>
 
-    <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -411,7 +361,6 @@
             </div>
         </div>
     </div>
-    <!-- Modal end -->
 @stop
 @section('css')
 <style>
@@ -428,6 +377,56 @@
 .spec-option .btn:hover:not(.disabled) {
     background-color: #f8f9fa;
     border-color: #212529;
+}
+
+.product-image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.product-image-container:hover .product-image {
+    transform: scale(1.05);
+}
+
+@media (max-width: 767.98px) {
+    .product-image-container {
+        max-width: 12.5rem;
+        margin: 0 auto;
+    }
+    
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .product-image-container {
+        max-width: 16rem;
+    }
+    
+    .col-md-5 {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
 }
 </style>
 @stop

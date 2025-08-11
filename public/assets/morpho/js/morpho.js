@@ -302,25 +302,6 @@ class BootstrapInit {
   }
 }
 
-// GLightbox初始化
-class Lightbox {
-  constructor() {
-    if (typeof GLightbox === 'undefined') return;
-    
-    this.lightbox = GLightbox({
-      selector: '[data-glightbox]',
-      loop: true,
-      touchNavigation: true,
-      keyboardNavigation: true,
-      closeButton: true,
-      moreText: '查看更多',
-      descPosition: 'bottom',
-      openEffect: 'fade',
-      closeEffect: 'fade',
-      slideEffect: 'slide'
-    });
-  }
-}
 
 // Swiper初始化
 class SwiperInit {
@@ -404,7 +385,6 @@ class MorphoApp {
         new ScrollToTop(),
         new CopyHandler(),
         new BootstrapInit(),
-        new Lightbox(),
         new SwiperInit(),
         new ThemeSwitcher(),
         new PaymentIcons()

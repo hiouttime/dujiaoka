@@ -56,7 +56,6 @@
     {{-- 样式表 --}}
     <link rel="stylesheet" href="{{ theme_asset('icons/cartzilla-icons.min.css') }}" />
     <link rel="stylesheet" href="{{ theme_asset('css/swiper-bundle.min.css') }}" />
-    <link rel="stylesheet" href="{{ theme_asset('css/glightbox.min.css') }}" />
     <link rel="stylesheet" href="{{ theme_asset('css/simplebar.min.css') }}" />
     <link rel="preload" href="{{ theme_asset('css/theme.min.css') }}" as="style" />
     <link rel="stylesheet" href="{{ theme_asset('css/theme.min.css') }}" id="theme-styles" />
