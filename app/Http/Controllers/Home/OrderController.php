@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Home;
 use App\Exceptions\RuleValidationException;
 use App\Http\Controllers\BaseController;
 use App\Models\Order;
+use App\Models\Goods;
 use App\Models\Carmis;
 use App\Models\Pay;
 use App\Services\OrderProcess;
@@ -96,6 +97,18 @@ class OrderController extends BaseController
                 $subtotal = $sub->price * $item['quantity'];
                 $totalPrice += $subtotal;
 
+                // 处理自定义字段
+                $customFields = $item['custom_fields'] ?? [];
+                $infoHtml = '';
+                if (!empty($customFields)) {
+                    $infoItems = [];
+                    foreach ($customFields as $key => $value) {
+                        $displayValue = in_array($value, ['0', '1', 0, 1]) ? ($value == 1 ? '是' : '否') : $value;
+                        $infoItems[] = "{$key}: {$displayValue}";
+                    }
+                    $infoHtml = implode('<br>', $infoItems);
+                }
+
                 $orderItems[] = [
                     'goods_id' => $goods->id,
                     'sub_id' => $sub->id,
@@ -103,7 +116,8 @@ class OrderController extends BaseController
                     'unit_price' => $sub->price,
                     'quantity' => $item['quantity'],
                     'subtotal' => $subtotal,
-                    'type' => $goods->type
+                    'type' => $goods->type,
+                    'info' => $infoHtml
                 ];
             }
 
@@ -190,7 +204,31 @@ class OrderController extends BaseController
             return $this->err(__('dujiaoka.prompt.order_is_expired'));
         }
         
-        return $this->render('static_pages/bill', $order, __('dujiaoka.page-title.bill'));
+        // 准备视图数据，保持兼容原有的变量结构
+        $data = [
+            // 订单商品项
+            'orderItems' => $order->orderItems,
+            
+            // 订单基本信息
+            'order_sn' => $order->order_sn,
+            'email' => $order->email,
+            'actual_price' => $order->actual_price,
+            'total_price' => $order->total_price,
+            'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+            
+            // 支付信息
+            'pay' => $order->pay,
+            
+            // 商品类型（从第一个商品项获取）
+            'type' => $order->orderItems->first()->type ?? 1,
+            
+            // 优惠券和折扣信息（当前订单结构中暂无，设为默认值）
+            'coupon_discount_price' => $order->coupon_discount_price ?? 0,
+            'wholesale_discount_price' => 0,
+            'coupon' => null
+        ];
+        
+        return $this->render('static_pages/bill', $data, __('dujiaoka.page-title.bill'));
     }
 
 

@@ -24,68 +24,65 @@
             <thead>
               <tr>
                 <th scope="col" class="fs-sm fw-normal py-3 ps-0"><span class="text-body">商品</span></th>
-                <th scope="col" class="text-body fs-sm fw-normal py-3 d-xl-table-cell"><span class="text-body">价格</span></th>
+                <th scope="col" class="text-body fs-sm fw-normal py-3 d-none d-sm-table-cell"><span class="text-body">单价</span></th>
                 <th scope="col" class="text-body fs-sm fw-normal py-3 d-none d-md-table-cell"><span class="text-body">数量</span></th>
-                <th scope="col" class="text-body fs-sm fw-normal py-3 d-none d-md-table-cell"><span class="text-body">订单号</span></th>
+                <th scope="col" class="text-body fs-sm fw-normal py-3 d-none d-lg-table-cell"><span class="text-body">类型</span></th>
+                <th scope="col" class="text-body fs-sm fw-normal py-3 d-none d-sm-table-cell"><span class="text-body">小计</span></th>
               </tr>
             </thead>
             <tbody class="align-middle">
-
-
+              @forelse($orderItems as $item)
               <tr>
-                <td class="py-0 ps-0">
-                  <div class="d-flex align-items-center">
+                <td class="py-3 ps-0">
+                  <div class="d-flex align-items-start">
                     <div class="w-100 min-w-0 ps-2 ps-xl-3">
-                      <h5 class="d-flex animate-underline mb-2">
-                        <a class="d-block fs-sm fw-medium text-truncate animate-target">
-                          {{ $title }} x {{ $buy_amount }}
-                        </a>
-                      </h5>
-
-                      <ul class="list-unstyled gap-1 fs-xs mb-0">
-                        @if(!empty($coupon))
-                          <li>
-                            <span class="text-body-secondary">{{ __('order.fields.coupon_id') }}:</span>
-                            <span class="text-dark-emphasis fw-medium">
-                              {{ $coupon['coupon'] }}
-                            </span>
-                          </li>
-                        @endif
-                        @if($wholesale_discount_price > 0)
-                          <li>
-                            <span class="text-body-secondary">{{ __('order.fields.wholesale_discount_price') }}:</span>
-                            <span class="text-dark-emphasis fw-medium">
-                              {{ __('dujiaoka.money_symbol') }}{{ $wholesale_discount_price }}
-                            </span>
-                          </li>
-                        @endif
-                        @if(!empty($info))
-                          <li>
-                            <span class="text-body-secondary">{{ __('dujiaoka.order_information') }}:</span>
-                            <span class="text-dark-emphasis fw-medium">
-                              {!! $info !!}
-                            </span>
-                          </li>
-                        @endif
-                      </ul>
+                      <h6 class="mb-1">
+                        {{ $item->goods_name }}
+                      </h6>
+                      
+                      @if(!empty($item->info))
+                        <div class="mt-2 p-2 bg-light rounded">
+                          <small class="text-body-secondary d-block mb-1">订单信息:</small>
+                          <small class="text-dark-emphasis">
+                            {!! $item->info !!}
+                          </small>
+                        </div>
+                      @endif
                     </div>
                   </div>
                 </td>
 
-                <td class="h6 py-3 d-xl-table-cell">
-                  {{ $goods_price }}
+                <!-- 单价 -->
+                <td class="h6 py-3 d-none d-sm-table-cell">
+                  {{ __('dujiaoka.money_symbol') }}{{ $item->unit_price }}
                 </td>
 
                 <!-- 数量 -->
-                <td class="py-2 d-none d-md-table-cell">
-                  {{ $buy_amount }}
+                <td class="py-3 d-none d-md-table-cell">
+                  <span class="badge bg-secondary">{{ $item->quantity }}</span>
                 </td>
 
-                <!-- 订单号 -->
-                <td class="h6 py-3 d-none d-md-table-cell">
-                  {{ $order_sn }}
+                <!-- 商品类型 -->
+                <td class="py-3 d-none d-lg-table-cell">
+                  @if($item->type == \App\Models\Order::AUTOMATIC_DELIVERY)
+                    <span class="badge bg-success">{{ __('goods.fields.automatic_delivery') }}</span>
+                  @else
+                    <span class="badge bg-warning">{{ __('goods.fields.manual_processing') }}</span>
+                  @endif
+                </td>
+
+                <!-- 小计 -->
+                <td class="h6 py-3 d-none d-sm-table-cell text-end">
+                  {{ __('dujiaoka.money_symbol') }}{{ $item->subtotal }}
                 </td>
               </tr>
+              @empty
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <span class="text-muted">没有订单商品</span>
+                </td>
+              </tr>
+              @endforelse
 
             </tbody>
           </table>
@@ -100,42 +97,47 @@
             <div class="p-sm-2 p-lg-0 p-xl-2">
               <h5 class="border-bottom pb-4 mb-4">订单汇总</h5>
 
-              <ul class="list-unstyled fs-sm gap-3 mb-0">
-                <!-- 支付方式 -->
-                <li class="d-flex justify-content-between">
-                  {{ __('dujiaoka.payment_method') }}:
-                  <span class="text-dark-emphasis fw-medium">
-                    {{ $pay['pay_name'] ?? '--' }}
-                  </span>
-                </li>
+              <div class="text-center mb-4 pb-3 border-bottom">
+                <div class="fs-6 text-muted mb-1">订单号</div>
+                <div class="fs-4 fw-bold font-monospace text-dark">
+                  {{ $order_sn }}
+                </div>
+              </div>
 
-                <!-- 下单邮箱 -->
+              <ul class="list-unstyled fs-sm gap-3 mb-0">
                 <li class="d-flex justify-content-between">
-                  {{ __('order.fields.email') }}:
+                  <span>{{ __('order.fields.email') }}:</span>
                   <span class="text-dark-emphasis fw-medium">
                     {{ $email }}
                   </span>
                 </li>
 
-                <!-- 发货类型(自动/人工) -->
+                <!-- 支付方式 -->
                 <li class="d-flex justify-content-between">
-                  {{ __('order.fields.type') }}:
-                  @if($type == \App\Models\Order::AUTOMATIC_DELIVERY)
-                    <span class="badge bg-success">{{ __('goods.fields.automatic_delivery') }}</span>
-                  @else
-                    <span class="badge bg-warning">{{ __('goods.fields.manual_processing') }}</span>
-                  @endif
+                  <span>{{ __('dujiaoka.payment_method') }}:</span>
+                  <span class="text-dark-emphasis fw-medium">
+                    {{ $pay['pay_name'] ?? '--' }}
+                  </span>
                 </li>
+
+                <!-- 创建时间 -->
+                <li class="d-flex justify-content-between">
+                  <span>{{ __('order.fields.order_created') }}:</span>
+                  <span class="text-dark-emphasis fw-medium">
+                    {{ $created_at }}
+                  </span>
+                </li>
+
                 <!-- 如果有优惠券折扣 -->
                 @if(!empty($coupon))
                   <li class="d-flex justify-content-between">
-                    {{ __('order.fields.coupon_id') }}:
+                    <span>{{ __('order.fields.coupon_id') }}:</span>
                     <span class="text-dark-emphasis fw-medium">
                       {{ $coupon['coupon'] }}
                     </span>
                   </li>
                   <li class="d-flex justify-content-between">
-                    {{ __('order.fields.coupon_discount_price') }}:
+                    <span>{{ __('order.fields.coupon_discount_price') }}:</span>
                     <span class="text-dark-emphasis fw-medium">
                       {{ __('dujiaoka.money_symbol') }}{{ $coupon_discount_price }}
                     </span>
@@ -162,17 +164,6 @@
                   {{ __('dujiaoka.pay_immediately') }} {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
                 </a>
 
-                <!-- 订单创建时间 / 其他提示 -->
-                <div class="nav justify-content-center fs-sm mt-3">
-                  <span class="nav-link p-0 me-1 text-decoration-underline">
-                    {{ __('order.fields.order_created') }}: {{ $created_at }}
-                  </span>
-                  &nbsp;
-                  <span class="text-dark-emphasis fw-medium ms-1">
-                    <!-- 你可以写“订单有效期30分钟”之类 -->
-                    {{ __('dujiaoka.confirm_order') }}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
