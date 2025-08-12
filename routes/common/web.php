@@ -15,6 +15,17 @@ Route::middleware('dujiaoka.boot')->namespace('Home')->group(function () {
     Route::get('check-geetest', 'HomeController@geetest');
     Route::get('buy/{id}', 'HomeController@buy');
     
+    // 购物车
+    Route::prefix('cart')->controller('CartController')->group(function () {
+        Route::get('/', 'index');
+    });
+    Route::get('/cart', 'CartController@index');
+    
+    // API路由
+    Route::prefix('api')->group(function () {
+        Route::post('cart/validate', 'CartController@validateItem');
+    });
+    
     // 订单相关
     Route::prefix('order')->controller('OrderController')->group(function () {
         Route::post('create', 'createOrder');

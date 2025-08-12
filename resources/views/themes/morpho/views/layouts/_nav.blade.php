@@ -159,6 +159,40 @@
           <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale me-2" href="/order-search">
             <i class="ci-search animate-target"></i>
           </a>
+
+          <!-- Cart -->
+          <div class="dropdown position-relative">
+            <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale cart-icon position-relative" 
+               href="/cart">
+              <i class="ci-shopping-cart animate-target"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end cart-dropdown" style="--cz-dropdown-min-width: 320px; --cz-dropdown-spacer: 1rem">
+              <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="mb-0">购物车</h6>
+                  <span class="text-muted small" id="cartDropdownCount">0 件商品</span>
+                </div>
+                
+                <div id="cartDropdownItems">
+                  <div class="text-center text-muted py-4" id="cartDropdownEmpty">
+                    <i class="ci-shopping-cart fs-2 mb-2 d-block"></i>
+                    <small>购物车是空的</small>
+                  </div>
+                </div>
+                
+                <div id="cartDropdownFooter" style="display: none;">
+                  <hr class="my-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-medium">总计:</span>
+                    <span class="fw-bold" id="cartDropdownTotal">$0.00</span>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <a href="/cart" class="btn btn-dark btn-sm">查看购物车</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

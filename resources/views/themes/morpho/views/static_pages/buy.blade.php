@@ -118,29 +118,66 @@
                     </h6>
                   @endif
   
-                  <div class="mb-3">
-                    <label for="email" class="form-label">
-                      {{ __('dujiaoka.email') }}
-                      <span class="text-danger">*</span>
-                    </label>
-                    <input type="hidden" name="gid" value="{{ $id }}">
-                    <input type="email" class="form-control" name="email" id="email"
-                           required placeholder="查询订单或发送卡密会用到">
-                    <div class="invalid-feedback">请输入您的电子邮箱!</div>
-                  </div>
+                  <input type="hidden" name="gid" value="{{ $id }}">
   
-                  @if(cfg('is_open_search_pwd') == \App\Models\Goods::STATUS_OPEN)
-                    <div class="mb-3">
-                      <label for="search_pwd" class="form-label">
-                        {{ __('dujiaoka.search_password') }}
-                        <span class="text-danger">*</span>
-                      </label>
-                      <input type="text" class="form-control" id="search_pwd" name="search_pwd"
-                             required placeholder="查询订单时会用到">
-                      <div class="invalid-feedback">请输入您的查询密码!</div>
-                    </div>
+  
+                  {{-- 自定义表单字段 --}}
+                  @if(isset($customer_form_fields) && is_array($customer_form_fields) && count($customer_form_fields) > 0)
+                    @foreach($customer_form_fields as $field)
+                      <div class="mb-3">
+                        <label for="{{ $field['field_key'] }}" class="form-label">
+                          {{ $field['field_description'] }}:
+                          @if($field['field_type'] !== 'switch')
+                            <span class="text-danger">*</span>
+                          @endif
+                        </label>
+                        @if($field['field_type'] === 'input')
+                          <input type="text"
+                                 class="form-control"
+                                 id="{{ $field['field_key'] }}"
+                                 name="custom_fields[{{ $field['field_key'] }}]"
+                                 required
+                                 placeholder="请输入{{ $field['field_description'] }}">
+                        @elseif($field['field_type'] === 'textarea')
+                          <textarea class="form-control"
+                                    id="{{ $field['field_key'] }}"
+                                    name="custom_fields[{{ $field['field_key'] }}]"
+                                    rows="3"
+                                    required
+                                    placeholder="请输入{{ $field['field_description'] }}"></textarea>
+                        @elseif($field['field_type'] === 'select')
+                          <select class="form-control"
+                                  id="{{ $field['field_key'] }}"
+                                  name="custom_fields[{{ $field['field_key'] }}]"
+                                  required>
+                            <option value="">请选择{{ $field['field_description'] }}</option>
+                            @if(isset($field['field_options']) && is_array($field['field_options']))
+                              @foreach($field['field_options'] as $option)
+                                <option value="{{ $option }}">{{ $option }}</option>
+                              @endforeach
+                            @endif
+                          </select>
+                        @elseif($field['field_type'] === 'switch')
+                          <div class="form-check form-switch">
+                            <input type="hidden" name="custom_fields[{{ $field['field_key'] }}]" value="0">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="{{ $field['field_key'] }}"
+                                   name="custom_fields[{{ $field['field_key'] }}]"
+                                   value="1">
+                            <label class="form-check-label" for="{{ $field['field_key'] }}">
+                              {{ $field['field_description'] }}
+                            </label>
+                          </div>
+                        @endif
+                        @if($field['field_type'] !== 'switch')
+                          <div class="invalid-feedback">请填写 {{ $field['field_description'] }}！</div>
+                        @endif
+                      </div>
+                    @endforeach
                   @endif
-  
+
+                  {{-- 兼容旧版本的其他输入项配置 --}}
                   @if($type == \App\Models\Goods::MANUAL_PROCESSING && is_array($other_ipu))
                     @foreach($other_ipu as $ipu)
                       <div class="mb-3">
@@ -193,26 +230,6 @@
                     </script>
                   @endif
   
-                  <div class="mb-4">
-                    <label class="form-label fw-semibold pb-1 mb-2">
-                      {{ __('dujiaoka.payment_method') }}
-                      <span class="text-danger">*</span>:
-                    </label>
-                    <div class="d-flex flex-wrap gap-2" id="paymentGroup">
-                      @foreach($payways as $index => $way)
-                        <label class="payments" data-type="{{ $way['pay_check'] }}" data-id="{{ $way['id'] }}">
-                          <input type="radio" class="btn-check"
-                                 name="payway" value="{{ $way['id'] }}"
-                                 id="payway-{{ $way['id'] }}"
-                                 @if($index == 0) checked @endif>
-                          <span class="btn btn-image p-0 paymentsvg">
-                            {{ $way['pay_name'] }}
-                          </span>
-                          <span>{{ $way['pay_name'] }}</span>
-                        </label>
-                      @endforeach
-                    </div>
-                  </div>
   
                   <div class="d-flex gap-3 pb-3 pb-lg-4 mb-3">
                     <div class="count-input flex-shrink-0 w-50 d-flex justify-content-center align-items-center">
@@ -232,9 +249,14 @@
                     </div>
                     <input type="hidden" name="aff" value="">
   
-                    <button type="submit" id="submit" class="btn btn-lg btn-dark w-100">
-                      {{ __('dujiaoka.order_now') }}
-                    </button>
+                    <div class="d-flex gap-2 w-100">
+                      <button type="button" id="addToCart" class="btn btn-lg btn-outline-dark">
+                        <i class="ci-shopping-cart me-2"></i>加入购物车
+                      </button>
+                      <button type="button" id="buyNow" class="btn btn-lg btn-dark">
+                        立即购买
+                      </button>
+                    </div>
                   </div>
   
                   <ul class="list-unstyled gap-3 pb-3 pb-lg-4 mb-3 fs-sm">
@@ -440,7 +462,25 @@
             });
             @endif
             const amountInput = $('input[name="by_amount"]');
-            const submitBtns = $('#submit, button[form="buy-form"]');
+            const addToCartBtn = $('#addToCart');
+            const buyNowBtn = $('#buyNow');
+            
+            function getSelectedSpec() {
+                @if(count($goods_sub) > 1)
+                    const selectedSpec = $('.spec-option input:checked').closest('.spec-option');
+                    return {
+                        goods_id: {{ $id }},
+                        sub_id: +selectedSpec.data('sub-id'),
+                        stock: +selectedSpec.data('stock')
+                    };
+                @else
+                    return {
+                        goods_id: {{ $id }},
+                        sub_id: {{ $goods_sub[0]['id'] }},
+                        stock: {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }}
+                    };
+                @endif
+            }
             
             $(document).on('click', 'button[data-increment]', function() {
                 const max = +amountInput.attr('max') || 999;
@@ -454,13 +494,11 @@
                 if (val > min) amountInput.val(val - 1);
             });
             
-            // 初始化按钮状态
-            $('button[data-increment], button[data-decrement]').prop('disabled', false).removeClass('disabled');
-            
             @if(count($goods_sub) > 1)
                 const initStock = {{ $type == 1 ? \App\Models\Carmis::where('sub_id', $goods_sub[0]['id'])->where('status', 1)->count() : $goods_sub[0]['stock'] }};
                 if (initStock <= 0) {
-                    submitBtns.prop('disabled', true).text('缺货');
+                    addToCartBtn.prop('disabled', true);
+                    buyNowBtn.prop('disabled', true).text('缺货');
                     $('button[data-increment], button[data-decrement]').prop('disabled', true);
                 }
             @endif
@@ -475,44 +513,103 @@
                 $('#currentStock').text(stock);
                 
                 const currentVal = +amountInput.val();
-                const oldMax = +amountInput.attr('max');
                 amountInput.attr('max', stock);
                 
                 if (currentVal > stock) {
                     amountInput.val(Math.min(stock, 1));
                 }
                 
-                // 强制重新激活增减按钮
-                $('button[data-increment], button[data-decrement]').prop('disabled', false).removeClass('disabled');
+                $('button[data-increment], button[data-decrement]').prop('disabled', false);
                 
                 if (stock <= 0) {
-                    submitBtns.prop('disabled', true).text('缺货');
+                    addToCartBtn.prop('disabled', true);
+                    buyNowBtn.prop('disabled', true).text('缺货');
                     $('button[data-increment], button[data-decrement]').prop('disabled', true);
                 } else {
-                    submitBtns.prop('disabled', false).text('立即购买');
+                    addToCartBtn.prop('disabled', false);
+                    buyNowBtn.prop('disabled', false).text('立即购买');
                 }
             });
             
-            $('#submit').click(function(){
-                @if(count($goods_sub) > 1)
-                    const stock = +$('.spec-option input:checked').closest('.spec-option').data('stock');
-                @else
-                    const stock = {{ $type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock') }};
-                @endif
-                const amount = +amountInput.val();
+            addToCartBtn.click(async function() {
+                const spec = getSelectedSpec();
+                const quantity = +amountInput.val();
                 
-                if(amount > stock){
-                    $(".modal-body").html("{{ __('dujiaoka.prompt.inventory_shortage') }}")
-                    myModal.show()
-                    return false;
+                if (quantity > spec.stock) {
+                    cart.showMessage('库存不足', 'error');
+                    return;
                 }
+                
                 @if($buy_limit_num > 0)
-                if(amount > {{ $buy_limit_num }}){
-                    $(".modal-body").html("{{ __('dujiaoka.prompt.purchase_limit_exceeded') }}")
-                    myModal.show()
-                    return false;
+                if (quantity > {{ $buy_limit_num }}) {
+                    cart.showMessage('超出限购数量', 'error');
+                    return;
                 }
                 @endif
+                
+                // 收集自定义字段数据
+                const customFieldsData = {};
+                document.querySelectorAll('[name^="custom_fields["]').forEach(field => {
+                    const fieldName = field.name.match(/custom_fields\[([^\]]+)\]/)?.[1];
+                    if (fieldName) {
+                        if (field.type === 'checkbox') {
+                            customFieldsData[fieldName] = field.checked ? field.value : '0';
+                        } else {
+                            customFieldsData[fieldName] = field.value;
+                        }
+                    }
+                });
+                
+                await cart.validateAndAdd(spec.goods_id, spec.sub_id, quantity, customFieldsData);
+            });
+            
+            buyNowBtn.click(async function() {
+                const spec = getSelectedSpec();
+                const quantity = +amountInput.val();
+                
+                if (quantity > spec.stock) {
+                    cart.showMessage('库存不足', 'error');
+                    return;
+                }
+                
+                @if($buy_limit_num > 0)
+                if (quantity > {{ $buy_limit_num }}) {
+                    cart.showMessage('超出限购数量', 'error');
+                    return;
+                }
+                @endif
+                
+                // 收集自定义字段数据
+                const customFieldsData = {};
+                document.querySelectorAll('[name^="custom_fields["]').forEach(field => {
+                    const fieldName = field.name.match(/custom_fields\[([^\]]+)\]/)?.[1];
+                    if (fieldName) {
+                        if (field.type === 'checkbox') {
+                            customFieldsData[fieldName] = field.checked ? field.value : '0';
+                        } else {
+                            customFieldsData[fieldName] = field.value;
+                        }
+                    }
+                });
+                
+                // 立即购买：创建单品订单数据并直接跳转到购物车页面
+                const orderData = {
+                    goods_id: spec.goods_id,
+                    sub_id: spec.sub_id,
+                    quantity: quantity,
+                    name: spec.name,
+                    price: spec.price,
+                    image: '{{ pictureUrl($picture) }}',
+                    stock: spec.stock,
+                    custom_fields: customFieldsData,
+                    buy_now: true
+                };
+                
+                // 存储单品购买数据到sessionStorage
+                sessionStorage.setItem('buyNowItem', JSON.stringify(orderData));
+                
+                // 直接跳转到购物车
+                window.location.href = '/cart?buy_now=1';
             });
 </script>
 

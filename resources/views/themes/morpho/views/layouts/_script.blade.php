@@ -2,3 +2,4 @@
 <script src="{{ theme_asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ theme_asset('js/swiper-bundle.min.js') }}"></script>
 <script src="{{ theme_asset('js/morpho.js') }}"></script>
+<script src="{{ theme_asset('js/cart.js') }}"></script>

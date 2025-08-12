@@ -92,13 +92,11 @@ class HomeController extends BaseController
                 $client = Pay::PAY_CLIENT_MOBILE;
             }
             $formatGoods->payways = $this->payService->pays($client);
-            if ($formatGoods->payment_limit) {
-                $formatGoods->payment_limit = json_decode($formatGoods->payment_limit,true);
-                if(count($formatGoods->payment_limit))
-                    $formatGoods->payways = array_filter($formatGoods->payways, function($way) use ($formatGoods) {
-                        return in_array($way['id'], $formatGoods->payment_limit);
-                    });
-             }
+            if (!empty($formatGoods->payment_limit)) {
+                $formatGoods->payways = array_filter($formatGoods->payways, function($way) use ($formatGoods) {
+                    return in_array($way['id'], $formatGoods->payment_limit);
+                });
+            }
              if($goods->preselection > 0)
                 $formatGoods->selectable = $this->goodsService->getSelectableCarmis($id);
             return $this->render('static_pages/buy', $formatGoods, $formatGoods->gd_name);

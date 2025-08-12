@@ -2,6 +2,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($page_title) ? $page_title : '' }} | {{ theme_config('site_name', shop_cfg('title')) }}</title>
     <style>
       html,

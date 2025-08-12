@@ -23,6 +23,7 @@ class PaymentIcons {
   }
 
   init() {
+    // 处理商品页面的支付方式
     const payments = document.querySelectorAll('.payments');
     payments.forEach(payment => {
       const type = payment.dataset.type;
@@ -40,6 +41,24 @@ class PaymentIcons {
       }
 
       svgContainer.innerHTML = icon;
+    });
+
+    // 处理购物车页面的支付方式
+    const cartPayments = document.querySelectorAll('.paymentsvg[data-type]');
+    cartPayments.forEach(container => {
+      const type = container.dataset.type;
+      if (!type) return;
+
+      let icon = this.icons.other;
+      
+      for (const [key, svg] of Object.entries(this.icons)) {
+        if (type.toLowerCase().includes(key)) {
+          icon = svg;
+          break;
+        }
+      }
+
+      container.innerHTML = icon;
     });
   }
 }

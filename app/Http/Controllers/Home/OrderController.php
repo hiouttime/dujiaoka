@@ -47,70 +47,115 @@ class OrderController extends BaseController
 
     /**
      * 创建订单
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Illuminate\Validation\ValidationException
-     *
      */
     public function createOrder(Request $request)
     {
         DB::beginTransaction();
         try {
-            $this->orderService->validatorCreateOrder($request);
-            $goods = $this->orderService->validatorGoods($request);
-            $subid = $request->input('sub_id');
-            if(!$subid)
-                throw new RuleValidationException(__('dujiaoka.prompt.need_sub_id'));
-            $goods_sub = $goods->goods_sub()->where('id', $subid);
-            if(!$goods_sub->exists())
-                throw new RuleValidationException(__('dujiaoka.prompt.server_illegal_request'));
-            $goods_sub = $goods_sub->first();
-            $goods->price = $goods_sub->price;
-            $goods->gd_name = $goods->gd_name . " [$goods_sub->name]";
-            $this->orderService->validatorLoopCarmis($request);
-            // 设置商品
-            $this->orderProcessService->setGoods($goods);
-            // 优惠码
-            $coupon = $this->orderService->validatorCoupon($request);
-            // 设置优惠码
-            $this->orderProcessService->setCoupon($coupon);
-            $otherIpt = $this->orderService->validatorChargeInput($goods, $request);
-            $this->orderProcessService->setOtherIpt($otherIpt);
-            //设置预选卡密
-            $carmi_id = intval($request->input('carmi_id'));
-            $this->orderProcessService->setCarmi($carmi_id);
-            // 数量，如果预选了卡密，则数量只能是1
-            $this->orderProcessService->setBuyAmount($carmi_id ? 1 : $request->input('by_amount'));
-            // 支付方式
-            $payment_limit = json_decode($goods->payment_limit,true);
-            if(is_array($payment_limit) && count($payment_limit) && !in_array($request->input('payway'),$payment_limit))
-                return $this->err(__('dujiaoka.prompt.payment_limit'));
-            // 支付方式适用检查
-            $payway = Pay::find($request->input('payway'));
+            $cartItems = $request->input('cart_items', []);
+            if (empty($cartItems)) {
+                throw new RuleValidationException('购物车为空');
+            }
+
+            $validated = $request->validate([
+                'email' => 'required|email',
+                'payway' => 'required|integer',
+                'search_pwd' => 'nullable|string',
+                'cart_items' => 'required|array',
+                'cart_items.*.goods_id' => 'required|integer',
+                'cart_items.*.sub_id' => 'required|integer', 
+                'cart_items.*.quantity' => 'required|integer|min:1'
+            ]);
+
+            $totalPrice = 0;
+            $orderItems = [];
+
+            foreach ($cartItems as $item) {
+                $goods = Goods::with('goods_sub')->find($item['goods_id']);
+                if (!$goods || !$goods->is_open) {
+                    throw new RuleValidationException("商品不存在或已下架");
+                }
+
+                $sub = $goods->goods_sub()->find($item['sub_id']);
+                if (!$sub) {
+                    throw new RuleValidationException("商品规格不存在");
+                }
+
+                $stock = $goods->type == Goods::AUTOMATIC_DELIVERY 
+                    ? Carmis::where('sub_id', $item['sub_id'])->where('status', 1)->count()
+                    : $sub->stock;
+
+                if ($item['quantity'] > $stock) {
+                    throw new RuleValidationException("{$goods->gd_name} 库存不足");
+                }
+
+                if ($goods->buy_limit_num > 0 && $item['quantity'] > $goods->buy_limit_num) {
+                    throw new RuleValidationException("{$goods->gd_name} 超出限购数量");
+                }
+
+                $subtotal = $sub->price * $item['quantity'];
+                $totalPrice += $subtotal;
+
+                $orderItems[] = [
+                    'goods_id' => $goods->id,
+                    'sub_id' => $sub->id,
+                    'goods_name' => $goods->gd_name . ' [' . $sub->name . ']',
+                    'unit_price' => $sub->price,
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $subtotal,
+                    'type' => $goods->type
+                ];
+            }
+
+            $payway = Pay::find($validated['payway']);
+            if (!$payway || !$payway->is_open) {
+                throw new RuleValidationException('支付方式无效');
+            }
+
             if ($payway->china_only) {
                 $isoCode = get_ip_country($request->getClientIp());
-                if($isoCode != 'CN')
-                     return $this->err(__('dujiaoka.prompt.payment_china_only'));
+                if($isoCode != 'CN') {
+                    throw new RuleValidationException(__('dujiaoka.prompt.payment_china_only'));
+                }
             }
-            $this->orderProcessService->setPayID($request->input('payway'));
-            // 下单邮箱
-            $this->orderProcessService->setEmail($request->input('email'));
-            // ip地址
-            $this->orderProcessService->setBuyIP($request->getClientIp());
-            // 查询密码
-            $this->orderProcessService->setSearchPwd($request->input('search_pwd', ''));
-            // 商品规格ID
-            $this->orderProcessService->setSubID($request->input('sub_id', 0));
-            // 创建订单
-            $order = $this->orderProcessService->createOrder();
+
+            $orderSn = 'DJ' . date('YmdHis') . mt_rand(1000, 9999);
+
+            $order = Order::create([
+                'order_sn' => $orderSn,
+                'email' => $validated['email'],
+                'total_price' => $totalPrice,
+                'actual_price' => $totalPrice,
+                'status' => Order::STATUS_WAIT_PAY,
+                'pay_id' => $validated['payway'],
+                'search_pwd' => $validated['search_pwd'] ?? '',
+                'buy_ip' => $request->getClientIp(),
+            ]);
+
+            foreach ($orderItems as $itemData) {
+                $order->orderItems()->create($itemData);
+            }
+
             DB::commit();
-            // 设置订单cookie
             $this->queueCookie($order->order_sn);
-            return redirect(url('/bill', ['orderSN' => $order->order_sn]));
+            
+            return response()->json([
+                'success' => true,
+                'redirect' => url('/order/bill/' . $order->order_sn)
+            ]);
+
         } catch (RuleValidationException $exception) {
             DB::rollBack();
-            return $this->err($exception->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ]);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => '订单创建失败，请重试'
+            ]);
         }
     }
 
@@ -133,23 +178,18 @@ class OrderController extends BaseController
 
     /**
      * 结账
-     *
-     * @param string $orderSN
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     *
      */
     public function bill(string $orderSN)
     {
-        $order = $this->orderService->detailOrderSN($orderSN);
+        $order = Order::with(['orderItems', 'pay'])->where('order_sn', $orderSN)->first();
+        
         if (empty($order)) {
             return $this->err(__('dujiaoka.prompt.order_does_not_exist'));
         }
         if ($order->status == Order::STATUS_EXPIRED) {
             return $this->err(__('dujiaoka.prompt.order_is_expired'));
         }
-        if ($order->carmi_id){
-            $order->preselection = Carmis::find($order->carmi_id)->info;
-        }
+        
         return $this->render('static_pages/bill', $order, __('dujiaoka.page-title.bill'));
     }
 

@@ -4,10 +4,9 @@ namespace App\Admin\Resources;
 
 use App\Admin\Resources\Orders\Pages;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Goods;
-use App\Models\Coupon;
 use App\Models\Pay;
-use App\Models\GoodsSub;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -36,86 +35,81 @@ class Orders extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('order_sn')
-                    ->label('订单号')
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('title')
-                    ->label('订单标题')
-                    ->required()
-                    ->maxLength(255),
-                
-                Forms\Components\TextInput::make('email')
-                    ->label('邮箱')
-                    ->email()
-                    ->disabled(),
-                
-                Forms\Components\Select::make('goods_id')
-                    ->label('商品')
-                    ->options(Goods::pluck('gd_name', 'id'))
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('sub_id')
-                    ->label('子商品')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 0) {
-                            return '无子商品';
-                        }
-                        $goodsSub = GoodsSub::find($state);
-                        return $goodsSub ? $goodsSub->name : $state;
-                    })
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('goods_price')
-                    ->label('商品价格')
-                    ->numeric()
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('buy_amount')
-                    ->label('购买数量')
-                    ->numeric()
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('total_price')
-                    ->label('总价')
-                    ->numeric()
-                    ->disabled(),
-                
-                Forms\Components\TextInput::make('actual_price')
-                    ->label('实际价格')
-                    ->numeric()
-                    ->disabled(),
-                
-                Forms\Components\Textarea::make('info')
-                    ->label('订单信息')
-                    ->rows(5),
-                
-                Forms\Components\TextInput::make('buy_ip')
-                    ->label('购买IP')
-                    ->disabled(),
-                
-                Forms\Components\Select::make('pay_id')
-                    ->label('支付方式')
-                    ->options(Pay::pluck('pay_name', 'id'))
-                    ->disabled(),
-                
-                Forms\Components\Select::make('status')
-                    ->label('订单状态')
-                    ->options(Order::getStatusMap())
-                    ->required(),
-                
-                Forms\Components\TextInput::make('search_pwd')
-                    ->label('查询密码')
-                    ->maxLength(255),
-                
-                Forms\Components\TextInput::make('trade_no')
-                    ->label('交易号')
-                    ->maxLength(255),
-                
-                Forms\Components\Select::make('type')
-                    ->label('订单类型')
-                    ->options(Order::getTypeMap())
-                    ->disabled(),
+                Forms\Components\Section::make('订单基本信息')
+                    ->schema([
+                        Forms\Components\TextInput::make('order_sn')
+                            ->label('订单号')
+                            ->disabled(),
+                        
+                        Forms\Components\TextInput::make('email')
+                            ->label('邮箱')
+                            ->email()
+                            ->disabled(),
+                        
+                        Forms\Components\TextInput::make('total_price')
+                            ->label('总价')
+                            ->numeric()
+                            ->disabled(),
+                        
+                        Forms\Components\TextInput::make('actual_price')
+                            ->label('实际价格')
+                            ->numeric()
+                            ->disabled(),
+                        
+                        Forms\Components\TextInput::make('buy_ip')
+                            ->label('购买IP')
+                            ->disabled(),
+                        
+                        Forms\Components\Select::make('pay_id')
+                            ->label('支付方式')
+                            ->options(Pay::pluck('pay_name', 'id'))
+                            ->disabled(),
+                        
+                        Forms\Components\Select::make('status')
+                            ->label('订单状态')
+                            ->options(Order::getStatusMap())
+                            ->required(),
+                        
+                        Forms\Components\TextInput::make('search_pwd')
+                            ->label('查询密码')
+                            ->maxLength(255),
+                        
+                        Forms\Components\TextInput::make('trade_no')
+                            ->label('交易号')
+                            ->maxLength(255),
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make('订单商品')
+                    ->schema([
+                        Forms\Components\Repeater::make('orderItems')
+                            ->label('')
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\TextInput::make('goods_name')
+                                    ->label('商品名称')
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('unit_price')
+                                    ->label('单价')
+                                    ->numeric()
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label('数量')
+                                    ->numeric()
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('subtotal')
+                                    ->label('小计')
+                                    ->numeric()
+                                    ->disabled(),
+                                Forms\Components\Textarea::make('info')
+                                    ->label('商品信息/卡密')
+                                    ->rows(3),
+                            ])
+                            ->columns(2)
+                            ->addable(false)
+                            ->deletable(false)
+                            ->reorderable(false),
+                    ]),
             ]);
     }
 
@@ -132,64 +126,51 @@ class Orders extends Resource
                     ->searchable()
                     ->copyable(),
                 
-                Tables\Columns\TextColumn::make('title')
-                    ->label('标题')
+                Tables\Columns\TextColumn::make('goods_summary')
+                    ->label('商品摘要')
                     ->searchable()
-                    ->limit(30),
-                
-                Tables\Columns\TextColumn::make('type')
-                    ->label('类型')
-                    ->formatStateUsing(fn ($state) => Order::getTypeMap()[$state] ?? $state)
-                    ->badge()
-                    ->color(fn (string $state): string => match($state) {
-                        Order::AUTOMATIC_DELIVERY => 'success',
-                        Order::MANUAL_PROCESSING => 'warning',
-                        default => 'gray',
+                    ->limit(50)
+                    ->tooltip(function (Order $record): string {
+                        return $record->orderItems->map(function ($item) {
+                            return $item->goods_name . ' x' . $item->quantity;
+                        })->join("\n");
                     }),
+                
+                Tables\Columns\TextColumn::make('total_quantity')
+                    ->label('商品数量')
+                    ->alignCenter(),
                 
                 Tables\Columns\TextColumn::make('email')
                     ->label('邮箱')
                     ->searchable()
                     ->copyable(),
                 
-                Tables\Columns\TextColumn::make('goods.gd_name')
-                    ->label('商品')
-                    ->searchable(),
-                
-                Tables\Columns\TextColumn::make('sub_id')
-                    ->label('子商品')
-                    ->formatStateUsing(function ($state) {
-                        if ($state == 0) {
-                            return '无子商品';
-                        }
-                        $goodsSub = GoodsSub::find($state);
-                        return $goodsSub ? $goodsSub->name : $state;
-                    }),
-                
-                Tables\Columns\TextColumn::make('goods_price')
-                    ->label('商品价格')
-                    ->money('CNY'),
-                
-                Tables\Columns\TextColumn::make('buy_amount')
-                    ->label('数量'),
+                Tables\Columns\TextColumn::make('total_price')
+                    ->label('总价')
+                    ->money('USD')
+                    ->sortable(),
                 
                 Tables\Columns\TextColumn::make('actual_price')
                     ->label('实际价格')
-                    ->money('CNY'),
+                    ->money('USD')
+                    ->sortable(),
                 
                 Tables\Columns\TextColumn::make('pay.pay_name')
                     ->label('支付方式'),
                 
                 Tables\Columns\TextColumn::make('buy_ip')
-                    ->label('购买IP'),
+                    ->label('购买IP')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 
                 Tables\Columns\TextColumn::make('search_pwd')
                     ->label('查询密码')
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 
                 Tables\Columns\TextColumn::make('trade_no')
                     ->label('交易号')
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 
                 Tables\Columns\TextColumn::make('status')
                     ->label('状态')
@@ -212,20 +193,13 @@ class Orders extends Resource
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('更新时间')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->label('订单状态')
                     ->options(Order::getStatusMap()),
-                
-                Tables\Filters\SelectFilter::make('type')
-                    ->label('订单类型')
-                    ->options(Order::getTypeMap()),
-                
-                Tables\Filters\SelectFilter::make('goods_id')
-                    ->label('商品')
-                    ->options(Goods::pluck('gd_name', 'id')),
                 
                 Tables\Filters\SelectFilter::make('pay_id')
                     ->label('支付方式')
@@ -270,6 +244,7 @@ class Orders extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->with(['orderItems', 'pay'])
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
