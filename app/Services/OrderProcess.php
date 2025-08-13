@@ -440,7 +440,7 @@ class OrderProcess
                 throw new \Exception(__('dujiaoka.prompt.order_inconsistent_amounts'));
             }
             $order->actual_price = $actualPrice;
-            $order->trade_no = $tradeNo;
+            $order->trade_no = $tradeNo ?? '';
             // 区分订单类型
             // 自动发货
             if ($order->type == Order::AUTOMATIC_DELIVERY) {

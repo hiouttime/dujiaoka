@@ -67,10 +67,12 @@
                       <input type="email" class="form-control" id="email" name="email" required>
                     </div>
 
+                    @if(cfg('is_open_search_pwd', \App\Models\BaseModel::STATUS_CLOSE) == \App\Models\BaseModel::STATUS_OPEN)
                     <div class="mb-3">
                       <label for="search_pwd" class="form-label">查询密码</label>
                       <input type="text" class="form-control" id="search_pwd" name="search_pwd">
                     </div>
+                    @endif
 
                     <div class="mb-3">
                       <label class="form-label">

@@ -72,11 +72,14 @@ class Orders extends Resource
                         
                         Forms\Components\TextInput::make('search_pwd')
                             ->label('查询密码')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->default('')
+                            ->visible(fn () => cfg('is_open_search_pwd', 0) == 1),
                         
                         Forms\Components\TextInput::make('trade_no')
                             ->label('交易号')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->default(''),
                     ])
                     ->columns(2),
 
@@ -165,7 +168,8 @@ class Orders extends Resource
                 Tables\Columns\TextColumn::make('search_pwd')
                     ->label('查询密码')
                     ->copyable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visible(fn () => cfg('is_open_search_pwd', 0) == 1),
                 
                 Tables\Columns\TextColumn::make('trade_no')
                     ->label('交易号')
