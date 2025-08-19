@@ -38,11 +38,18 @@ class TopSellingGoodsWidget extends ChartWidget
             default => 30,
         };
         
-        // 获取热销商品数据
-        $topGoods = Order::where('orders.status', Order::STATUS_COMPLETED)
+        // 获取热销商品数据 - 通过order_items表关联
+        $topGoods = DB::table('orders')
+            ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->join('goods', 'order_items.goods_id', '=', 'goods.id')
+            ->where('orders.status', Order::STATUS_COMPLETED)
             ->where('orders.created_at', '>=', now()->subDays($days))
-            ->join('goods', 'orders.goods_id', '=', 'goods.id')
-            ->select('goods.gd_name', DB::raw('COUNT(*) as sales_count'), DB::raw('SUM(orders.actual_price) as revenue'))
+            ->whereNull('orders.deleted_at')
+            ->select(
+                'goods.gd_name',
+                DB::raw('SUM(order_items.quantity) as sales_count'),
+                DB::raw('SUM(order_items.subtotal) as revenue')
+            )
             ->groupBy('goods.id', 'goods.gd_name')
             ->orderByDesc('sales_count')
             ->limit(10)

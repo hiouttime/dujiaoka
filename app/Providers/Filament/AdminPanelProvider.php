@@ -70,15 +70,15 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             // 性能优化配置
-            ->spa()  // 启用 SPA 模式，提供更好的用户体验和 AJAX 支持
-            ->unsavedChangesAlerts()  // 启用未保存更改提醒
-            ->databaseNotifications()  // 启用数据库通知
-            ->databaseNotificationsPolling('30s')  // 设置通知轮询间隔
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])  // 全局搜索快捷键
-            ->brandName('独角卡管理系统')  // 品牌名称
-            ->favicon(asset('favicon.ico'))  // 网站图标
-            ->darkMode(false)  // 暂时禁用暗色模式，可根据需要调整
+            ->spa()
+            ->unsavedChangesAlerts()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->brandName('独角数卡 DUJIAOKA')
+            ->favicon(asset('favicon.ico'))
             ->navigationGroups([
+                '用户管理',
                 '商店管理',
                 '支付配置',
                 '邮件设置',

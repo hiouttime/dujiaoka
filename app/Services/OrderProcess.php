@@ -18,6 +18,7 @@ use App\Models\BaseModel;
 use App\Models\Coupon;
 use App\Models\Goods;
 use App\Models\Order;
+use App\Models\FrontUser;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -448,6 +449,9 @@ class OrderProcess
             } else {
                 $completedOrder = $this->processManual($order);
             }
+            // 处理用户相关逻辑
+            $this->processUserLogic($order);
+            
             // 销量加上
             $this->goodsService->salesVolumeIncr($order->goods_id, $order->buy_amount);
             DB::commit();
@@ -560,6 +564,40 @@ class OrderProcess
         // 邮件发送
         MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
         return $order;
+    }
+
+    /**
+     * 处理用户相关逻辑
+     * 
+     * @param Order $order
+     */
+    private function processUserLogic(Order $order)
+    {
+        if (!$order->user_id) {
+            return;
+        }
+
+        $user = FrontUser::find($order->user_id);
+        if (!$user) {
+            return;
+        }
+
+        // 检查是否为充值订单
+        $isRechargeOrder = $order->orderItems()->where('goods_id', 0)->exists();
+        
+        if ($isRechargeOrder) {
+            // 余额充值订单：增加用户余额
+            $user->addBalance(
+                $order->actual_price,
+                'recharge',
+                '余额充值',
+                $order->order_sn
+            );
+        } else {
+            // 普通订单：增加累计消费并检查等级升级
+            $totalSpent = $order->total_price; // 使用原价计算累计消费
+            $user->addTotalSpent($totalSpent);
+        }
     }
 
 }

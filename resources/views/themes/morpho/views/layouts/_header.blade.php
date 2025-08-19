@@ -60,5 +60,7 @@
     <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}" />
     <link rel="preload" href="{{ theme_asset('css/theme.min.css') }}" as="style" />
     <link rel="stylesheet" href="{{ theme_asset('css/theme.min.css') }}" id="theme-styles" />
+    
+    @yield('css')
 </head>
 

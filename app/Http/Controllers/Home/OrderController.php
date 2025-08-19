@@ -8,10 +8,12 @@ use App\Models\Order;
 use App\Models\Goods;
 use App\Models\Carmis;
 use App\Models\Pay;
+use App\Models\FrontUser;
 use App\Services\OrderProcess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 /**
@@ -65,8 +67,24 @@ class OrderController extends BaseController
                 'cart_items' => 'required|array',
                 'cart_items.*.goods_id' => 'required|integer',
                 'cart_items.*.sub_id' => 'required|integer', 
-                'cart_items.*.quantity' => 'required|integer|min:1'
+                'cart_items.*.quantity' => 'required|integer|min:1',
+                'use_balance' => 'boolean',
+                'balance_amount' => 'numeric|min:0'
             ]);
+
+            // 获取用户信息
+            $user = Auth::guard('web')->user();
+            $userDiscountRate = 1.00;
+            $userId = null;
+            
+            if ($user) {
+                $userId = $user->id;
+                $userDiscountRate = $user->discount_rate;
+                // 如果用户已登录但未提供邮箱，使用用户邮箱
+                if (empty($validated['email'])) {
+                    $validated['email'] = $user->email;
+                }
+            }
 
             $totalPrice = 0;
             $orderItems = [];
@@ -94,7 +112,10 @@ class OrderController extends BaseController
                     throw new RuleValidationException("{$goods->gd_name} 超出限购数量");
                 }
 
-                $subtotal = $sub->price * $item['quantity'];
+                // 应用用户等级折扣
+                $originalPrice = $sub->price;
+                $discountedPrice = $originalPrice * $userDiscountRate;
+                $subtotal = $discountedPrice * $item['quantity'];
                 $totalPrice += $subtotal;
 
                 // 处理自定义字段
@@ -113,9 +134,9 @@ class OrderController extends BaseController
                     'goods_id' => $goods->id,
                     'sub_id' => $sub->id,
                     'goods_name' => $goods->gd_name . ' [' . $sub->name . ']',
-                    'unit_price' => $sub->price,
+                    'goods_price' => $discountedPrice,
                     'quantity' => $item['quantity'],
-                    'subtotal' => $subtotal,
+                    'total_price' => $subtotal,
                     'type' => $goods->type,
                     'info' => $infoHtml
                 ];
@@ -133,18 +154,57 @@ class OrderController extends BaseController
                 }
             }
 
+            // 计算折扣金额
+            $originalTotalPrice = $totalPrice / $userDiscountRate;
+            $userDiscountAmount = $originalTotalPrice - $totalPrice;
+            
+            // 处理余额支付
+            $balanceUsed = 0;
+            $useBalance = $validated['use_balance'] ?? false;
+            $paymentMethod = Order::PAYMENT_ONLINE;
+            
+            if ($useBalance && $user && $user->balance > 0) {
+                $balanceAmount = min($user->balance, $totalPrice);
+                if (isset($validated['balance_amount']) && $validated['balance_amount'] > 0) {
+                    $balanceAmount = min($validated['balance_amount'], $user->balance, $totalPrice);
+                }
+                
+                if ($balanceAmount > 0) {
+                    $balanceUsed = $balanceAmount;
+                    $totalPrice -= $balanceAmount;
+                    
+                    if ($totalPrice <= 0) {
+                        $paymentMethod = Order::PAYMENT_BALANCE;
+                        $totalPrice = 0;
+                    } else {
+                        $paymentMethod = Order::PAYMENT_MIXED;
+                    }
+                }
+            }
+
             $orderSn = 'DJ' . date('YmdHis') . mt_rand(1000, 9999);
 
             $order = Order::create([
                 'order_sn' => $orderSn,
+                'user_id' => $userId,
                 'email' => $validated['email'],
-                'total_price' => $totalPrice,
+                'total_price' => $originalTotalPrice,
                 'actual_price' => $totalPrice,
-                'status' => Order::STATUS_WAIT_PAY,
+                'coupon_discount_price' => 0, // 暂时不支持优惠券
+                'user_discount_rate' => $userDiscountRate,
+                'user_discount_amount' => $userDiscountAmount,
+                'payment_method' => $paymentMethod,
+                'balance_used' => $balanceUsed,
+                'status' => $totalPrice <= 0 ? Order::STATUS_PENDING : Order::STATUS_WAIT_PAY,
                 'pay_id' => $validated['payway'],
                 'search_pwd' => $validated['search_pwd'] ?? '',
                 'buy_ip' => $request->getClientIp(),
             ]);
+            
+            // 如果使用了余额，扣除用户余额
+            if ($balanceUsed > 0 && $user) {
+                $user->deductBalance($balanceUsed, 'consume', '订单消费', $orderSn);
+            }
 
             foreach ($orderItems as $itemData) {
                 $order->orderItems()->create($itemData);

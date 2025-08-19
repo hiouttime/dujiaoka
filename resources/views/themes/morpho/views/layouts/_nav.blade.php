@@ -160,6 +160,51 @@
             <i class="ci-search animate-target"></i>
           </a>
 
+          <!-- User -->
+          @auth('web')
+          <div class="dropdown me-2">
+            <button type="button" class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale" 
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="ci-user animate-target"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="--cz-dropdown-min-width: 200px; --cz-dropdown-spacer: 1rem">
+              <li>
+                <h6 class="dropdown-header d-flex align-items-center">
+                  <span class="me-2">{{ auth('web')->user()->nickname ?: auth('web')->user()->email }}</span>
+                  <span class="badge text-bg-secondary">{{ auth('web')->user()->level_name }}</span>
+                </h6>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ route('user.center') }}">
+                <i class="ci-settings me-2"></i>用户中心
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.orders') }}">
+                <i class="ci-package me-2"></i>我的订单
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.balance') }}">
+                <i class="ci-wallet me-2"></i>余额管理
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.profile') }}">
+                <i class="ci-user me-2"></i>个人资料
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                  @csrf
+                  <button type="submit" class="dropdown-item text-danger">
+                    <i class="ci-sign-out me-2"></i>退出登录
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+          @else
+          <div class="d-flex gap-1 me-2">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ route('login') }}?tab=login">登录</a>
+            <a class="btn btn-sm btn-primary" href="{{ route('register') }}?tab=register">注册</a>
+          </div>
+          @endauth
+
           <!-- Cart -->
           <div class="dropdown position-relative">
             <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale cart-icon position-relative" 

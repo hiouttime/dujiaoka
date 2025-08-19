@@ -1,0 +1,259 @@
+/* 现代化登录注册界面样式 */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    background: #f8f9fa;
+    padding-top: 2rem;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 3rem;
+    border: 1px solid #e9ecef;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.brand-name {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #343a40;
+    margin: 0;
+}
+
+.brand-tagline {
+    color: #6c757d;
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+.auth-tabs {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 4px;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.auth-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.auth-tab.active {
+    background: white;
+    color: #0d6efd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-tab i {
+    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+.auth-body {
+    position: relative;
+}
+
+.auth-form {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+    margin-bottom: 1.75rem;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    color: #9ca3af;
+    z-index: 3;
+    font-size: 0.9rem;
+}
+
+.auth-form .form-control {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px 20px 14px 45px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.auth-form .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    background: white;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    color: #9ca3af;
+    cursor: pointer;
+    z-index: 3;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #0d6efd;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 8px;
+    accent-color: #0d6efd;
+}
+
+.forgot-password {
+    color: #0d6efd;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: #0b5ed7;
+}
+
+.btn-auth {
+    width: 100%;
+    background: #0d6efd;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    background: #0b5ed7;
+}
+
+.btn-text {
+    margin-right: 8px;
+}
+
+.form-hint {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.password-strength {
+    margin-top: 8px;
+}
+
+.strength-bar {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.password-match {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    min-height: 1.2rem;
+}
+
+.terms-link {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.terms-link:hover {
+    color: #0b5ed7;
+    text-decoration: underline;
+}
+
+.auth-container .alert {
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.auth-container .alert-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.auth-container .alert-success {
+    background: #198754;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        margin: 1rem;
+        padding: 2rem;
+    }
+    
+    .brand-name {
+        font-size: 1.5rem;
+    }
+    
+    .auth-tabs {
+        margin-top: 1.5rem;
+    }
+}

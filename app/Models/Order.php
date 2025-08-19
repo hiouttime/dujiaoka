@@ -16,10 +16,15 @@ class Order extends BaseModel
 
     protected $fillable = [
         'order_sn',
+        'user_id',
         'email',
         'total_price',
         'actual_price', 
         'coupon_discount_price',
+        'user_discount_rate',
+        'user_discount_amount',
+        'payment_method',
+        'balance_used',
         'status',
         'pay_id',
         'search_pwd',
@@ -31,6 +36,10 @@ class Order extends BaseModel
         'total_price' => 'decimal:2',
         'actual_price' => 'decimal:2',
         'coupon_discount_price' => 'decimal:2',
+        'user_discount_rate' => 'decimal:2',
+        'user_discount_amount' => 'decimal:2',
+        'balance_used' => 'decimal:2',
+        'payment_method' => 'integer',
         'status' => 'integer',
     ];
 
@@ -54,6 +63,10 @@ class Order extends BaseModel
     const STATUS_FAILURE = 5;
     const STATUS_ABNORMAL = 6;
     const STATUS_EXPIRED = -1;
+
+    const PAYMENT_ONLINE = 1;
+    const PAYMENT_BALANCE = 2;
+    const PAYMENT_MIXED = 3;
 
     protected $dispatchesEvents = [
         'updated' => OrderUpdated::class
@@ -80,6 +93,11 @@ class Order extends BaseModel
     public function pay(): BelongsTo
     {
         return $this->belongsTo(Pay::class, 'pay_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(FrontUser::class, 'user_id');
     }
 
     public function getTotalQuantityAttribute(): int
