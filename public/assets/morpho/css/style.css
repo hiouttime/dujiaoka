@@ -21,6 +21,32 @@
   width: 5rem;
 }
 
+/* 购物车角标样式 */
+.cart-count {
+  line-height: 0.5rem!important;
+  top: -0.8rem!important;
+  right: -1rem;
+}
+
+/* 购物车下拉菜单样式 */
+.cart-dropdown {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cart-dropdown .dropdown-menu {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: none;
+}
+
+.cart-dropdown-item:hover {
+  background-color: var(--bs-gray-100);
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
 .payment-method-option {
   cursor: pointer;
 }
@@ -47,13 +73,29 @@
   height: 2.75rem;
 }
 
-/* 购物车动画 */
+/* 购物车动画 - 统一并优化 */
 @keyframes cartBounce {
-  50% { transform: scale(1.15); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 .cart-bounce {
-  animation: cartBounce 0.5s ease-out;
+  animation: cartBounce 0.6s ease-in-out;
+}
+
+/* 下拉菜单优化 */
+.dropdown .dropdown-toggle::after {
+  display: none;
+}
+
+/* 图标统一 - 余额相关统一使用信用卡图标 */
+.ci-wallet {
+  font-family: inherit;
+}
+
+.ci-wallet::before {
+  content: '\ea84'; /* ci-credit-card的Unicode */
 }
 
 /* 移动端适配 */

@@ -19,11 +19,11 @@ class Payment
      * @return array|null
      *
      */
-    public function pays(string $payClient = Pay::PAY_CLIENT_PC): ?array
+    public function pays(string $payClient = Pay::CLIENT_PC): ?array
     {
         $payGateway = Pay::query()
-            ->whereIn('pay_client', [$payClient, Pay::PAY_CLIENT_ALL])
-            ->where('is_open', Pay::STATUS_OPEN)
+            ->whereIn('pay_client', [$payClient, Pay::CLIENT_ALL])
+            ->where('enable', Pay::ENABLED)
             ->get();
         return $payGateway ? $payGateway->toArray() : null;
     }
@@ -39,7 +39,7 @@ class Payment
     {
         $gateway = Pay::query()
             ->where('pay_check', $check)
-            ->where('is_open', Pay::STATUS_OPEN)
+            ->where('enable', Pay::ENABLED)
             ->first();
         return $gateway;
     }
@@ -55,7 +55,7 @@ class Payment
     {
         $gateway = Pay::query()
             ->where('id', $id)
-            ->where('is_open', Pay::STATUS_OPEN)
+            ->where('enable', Pay::ENABLED)
             ->first();
         return $gateway;
     }

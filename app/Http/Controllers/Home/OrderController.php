@@ -143,7 +143,7 @@ class OrderController extends BaseController
             }
 
             $payway = Pay::find($validated['payway']);
-            if (!$payway || !$payway->is_open) {
+            if (!$payway?->enable) {
                 throw new RuleValidationException('支付方式无效');
             }
 

@@ -9,9 +9,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center mb-3">
-                        <div class="avatar-placeholder bg-primary rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                            <i class="ci-user text-white" style="font-size: 2rem;"></i>
-                        </div>
+                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}?s=80&d=identicon" 
+                             alt="{{ $user->nickname ?: $user->email }}"
+                             class="rounded-circle mx-auto mb-2 d-block" 
+                             style="width: 80px; height: 80px;">
                         <h6 class="mb-1">{{ $user->nickname ?: $user->email }}</h6>
                         <span class="badge text-bg-{{ $user->level->color ?? 'secondary' }}">{{ $user->level_name }}</span>
                     </div>

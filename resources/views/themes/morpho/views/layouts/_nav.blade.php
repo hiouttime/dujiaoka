@@ -110,8 +110,92 @@
 
         <!-- Button group -->
         <div class="d-flex gap-sm-1 position-relative z-1">
+          <!-- User -->
+          @auth('web')
+          <div class="dropdown me-2">
+            <a href="{{ route('user.center') }}" class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale position-relative p-1 user-avatar-trigger" 
+               data-bs-toggle="dropdown" data-bs-trigger="hover" aria-expanded="false">
+              <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth('web')->user()->email))) }}?s=32&d=identicon" 
+                   alt="{{ auth('web')->user()->nickname ?: auth('web')->user()->email }}"
+                   class="rounded-circle animate-target"
+                   style="width: 32px; height: 32px;">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" style="--cz-dropdown-min-width: 200px; --cz-dropdown-spacer: 1rem">
+              <li>
+                <h6 class="dropdown-header d-flex align-items-center">
+                  <span class="me-2">{{ auth('web')->user()->nickname ?: auth('web')->user()->email }}</span>
+                  <span class="badge text-bg-secondary">{{ auth('web')->user()->level_name }}</span>
+                </h6>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ route('user.center') }}">
+                <i class="ci-settings me-2"></i>用户中心
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.orders') }}">
+                <i class="ci-package me-2"></i>我的订单
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.balance') }}">
+                <i class="ci-credit-card me-2"></i>余额管理
+              </a></li>
+              <li><a class="dropdown-item" href="{{ route('user.profile') }}">
+                <i class="ci-user me-2"></i>个人资料
+              </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                  @csrf
+                  <button type="submit" class="dropdown-item text-danger">
+                    <i class="ci-sign-out me-2"></i>退出登录
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+          @else
+          <div class="d-flex gap-1 me-2">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ route('login') }}?tab=login">登录</a>
+            <a class="btn btn-sm btn-primary" href="{{ route('register') }}?tab=register">注册</a>
+          </div>
+          @endauth
+
+          <!-- Cart -->
+          <div class="dropdown position-relative me-2">
+            <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale cart-icon position-relative" 
+               href="/cart">
+              <i class="ci-shopping-cart animate-target"></i>
+              <span class="cart-count badge bg-danger position-absolute" 
+                    id="cartCount" style="display: none;">0</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end cart-dropdown" style="--cz-dropdown-min-width: 320px; --cz-dropdown-spacer: 1rem">
+              <div class="p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h6 class="mb-0">购物车</h6>
+                  <span class="text-muted small" id="cartDropdownCount">0 件商品</span>
+                </div>
+                
+                <div id="cartDropdownItems">
+                  <div class="text-center text-muted py-4" id="cartDropdownEmpty">
+                    <i class="ci-shopping-cart fs-2 mb-2 d-block"></i>
+                    <small>购物车是空的</small>
+                  </div>
+                </div>
+                
+                <div id="cartDropdownFooter" style="display: none;">
+                  <hr class="my-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-medium">总计:</span>
+                    <span class="fw-bold" id="cartDropdownTotal">$0.00</span>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <a href="/cart" class="btn btn-dark btn-sm">查看购物车</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Theme switcher (light/dark/auto) -->
-          <div class="dropdown">
+          <div class="dropdown me-2">
             <button
               type="button"
               class="theme-switcher btn btn-icon btn-outline-secondary fs-lg border-0 rounded-circle animate-scale"
@@ -156,88 +240,9 @@
           </div>
 
           <!-- Search -->
-          <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale me-2" href="/order-search">
+          <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale" href="/order-search">
             <i class="ci-search animate-target"></i>
           </a>
-
-          <!-- User -->
-          @auth('web')
-          <div class="dropdown me-2">
-            <button type="button" class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale" 
-                    data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="ci-user animate-target"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end" style="--cz-dropdown-min-width: 200px; --cz-dropdown-spacer: 1rem">
-              <li>
-                <h6 class="dropdown-header d-flex align-items-center">
-                  <span class="me-2">{{ auth('web')->user()->nickname ?: auth('web')->user()->email }}</span>
-                  <span class="badge text-bg-secondary">{{ auth('web')->user()->level_name }}</span>
-                </h6>
-              </li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{{ route('user.center') }}">
-                <i class="ci-settings me-2"></i>用户中心
-              </a></li>
-              <li><a class="dropdown-item" href="{{ route('user.orders') }}">
-                <i class="ci-package me-2"></i>我的订单
-              </a></li>
-              <li><a class="dropdown-item" href="{{ route('user.balance') }}">
-                <i class="ci-wallet me-2"></i>余额管理
-              </a></li>
-              <li><a class="dropdown-item" href="{{ route('user.profile') }}">
-                <i class="ci-user me-2"></i>个人资料
-              </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                  @csrf
-                  <button type="submit" class="dropdown-item text-danger">
-                    <i class="ci-sign-out me-2"></i>退出登录
-                  </button>
-                </form>
-              </li>
-            </ul>
-          </div>
-          @else
-          <div class="d-flex gap-1 me-2">
-            <a class="btn btn-sm btn-outline-secondary" href="{{ route('login') }}?tab=login">登录</a>
-            <a class="btn btn-sm btn-primary" href="{{ route('register') }}?tab=register">注册</a>
-          </div>
-          @endauth
-
-          <!-- Cart -->
-          <div class="dropdown position-relative">
-            <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale cart-icon position-relative" 
-               href="/cart">
-              <i class="ci-shopping-cart animate-target"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-end cart-dropdown" style="--cz-dropdown-min-width: 320px; --cz-dropdown-spacer: 1rem">
-              <div class="p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h6 class="mb-0">购物车</h6>
-                  <span class="text-muted small" id="cartDropdownCount">0 件商品</span>
-                </div>
-                
-                <div id="cartDropdownItems">
-                  <div class="text-center text-muted py-4" id="cartDropdownEmpty">
-                    <i class="ci-shopping-cart fs-2 mb-2 d-block"></i>
-                    <small>购物车是空的</small>
-                  </div>
-                </div>
-                
-                <div id="cartDropdownFooter" style="display: none;">
-                  <hr class="my-3">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="fw-medium">总计:</span>
-                    <span class="fw-bold" id="cartDropdownTotal">$0.00</span>
-                  </div>
-                  <div class="d-grid gap-2">
-                    <a href="/cart" class="btn btn-dark btn-sm">查看购物车</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </header>
@@ -254,3 +259,4 @@
         </svg>
       </a>
     </div>
+

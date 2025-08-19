@@ -72,8 +72,8 @@ class Payments extends Resource
                     ->label(__('pay.fields.china_only'))
                     ->default(false),
 
-                Forms\Components\Toggle::make('is_open')
-                    ->label(__('pay.fields.is_open'))
+                Forms\Components\Toggle::make('enable')
+                    ->label(__('pay.fields.enable'))
                     ->default(true),
 
                 Forms\Components\Textarea::make('merchant_key')
@@ -128,8 +128,8 @@ class Payments extends Resource
                 Tables\Columns\ToggleColumn::make('china_only')
                     ->label(__('pay.fields.china_only')),
 
-                Tables\Columns\ToggleColumn::make('is_open')
-                    ->label(__('pay.fields.is_open')),
+                Tables\Columns\ToggleColumn::make('enable')
+                    ->label(__('pay.fields.enable')),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('pay_method')
@@ -143,8 +143,8 @@ class Payments extends Resource
                 Tables\Filters\TernaryFilter::make('china_only')
                     ->label(__('pay.fields.china_only')),
 
-                Tables\Filters\TernaryFilter::make('is_open')
-                    ->label(__('pay.fields.is_open')),
+                Tables\Filters\TernaryFilter::make('enable')
+                    ->label(__('pay.fields.enable')),
 
                 Tables\Filters\TrashedFilter::make(),
             ])

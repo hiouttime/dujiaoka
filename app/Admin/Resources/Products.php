@@ -144,7 +144,7 @@ class Products extends Resource
                         Forms\Components\Select::make('payment_limit')
                             ->label('支付方式限制')
                             ->multiple()
-                            ->options(Pay::where('is_open', Pay::STATUS_OPEN)->pluck('pay_name', 'id'))
+                            ->options(Pay::where('enable', Pay::ENABLED)->pluck('pay_name', 'id'))
                             ->placeholder('选择允许的支付方式')
                             ->helperText('留空则不限制')
                             ->columnSpanFull(),

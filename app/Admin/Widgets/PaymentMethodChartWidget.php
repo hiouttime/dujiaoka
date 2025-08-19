@@ -29,7 +29,7 @@ class PaymentMethodChartWidget extends ChartWidget
 
         // 如果没有已完成的订单数据，显示所有可用的支付方式
         if ($paymentStats->isEmpty()) {
-            $paymentStats = \App\Models\Pay::where('is_open', true)
+            $paymentStats = \App\Models\Pay::where('enable', Pay::ENABLED)
                 ->select('pay_name')
                 ->selectRaw('0 as count, 0 as revenue')
                 ->limit(8)
