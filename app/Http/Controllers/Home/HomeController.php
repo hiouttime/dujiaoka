@@ -87,9 +87,9 @@ class HomeController extends BaseController
             }
             $formatGoods = $this->goodsService->format($goods);
             // 加载支付方式.
-            $client = Pay::PAY_CLIENT_PC;
+            $client = Pay::CLIENT_PC;
             if (app('Jenssegers\Agent')->isMobile()) {
-                $client = Pay::PAY_CLIENT_MOBILE;
+                $client = Pay::CLIENT_MOBILE;
             }
             $formatGoods->payways = $this->payService->pays($client);
             if (!empty($formatGoods->payment_limit)) {

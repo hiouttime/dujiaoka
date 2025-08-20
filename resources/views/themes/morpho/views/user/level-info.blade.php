@@ -24,7 +24,7 @@
                             <i class="ci-package me-2"></i>我的订单
                         </a>
                         <a href="{{ route('user.balance') }}" class="nav-link">
-                            <i class="ci-wallet me-2"></i>余额管理
+                            <i class="ci-credit-card me-2"></i>余额管理
                         </a>
                         <a href="{{ route('user.recharge') }}" class="nav-link">
                             <i class="ci-credit-card me-2"></i>余额充值

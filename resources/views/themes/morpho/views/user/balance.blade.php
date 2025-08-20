@@ -24,7 +24,7 @@
                             <i class="ci-package me-2"></i>我的订单
                         </a>
                         <a href="{{ route('user.balance') }}" class="nav-link active">
-                            <i class="ci-wallet me-2"></i>余额管理
+                            <i class="ci-credit-card me-2"></i>余额管理
                         </a>
                         <a href="{{ route('user.recharge') }}" class="nav-link">
                             <i class="ci-credit-card me-2"></i>余额充值
@@ -50,7 +50,7 @@
                 <div class="col-sm-6 col-lg-3 mb-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <i class="ci-wallet text-primary mb-2" style="font-size: 2rem;"></i>
+                            <i class="ci-credit-card text-primary mb-2" style="font-size: 2rem;"></i>
                             <h4 class="text-primary">¥{{ number_format($stats['current_balance'], 2) }}</h4>
                             <p class="text-muted mb-0">当前余额</p>
                             <a href="{{ route('user.recharge') }}" class="btn btn-sm btn-outline-primary mt-2">立即充值</a>

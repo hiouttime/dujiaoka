@@ -25,7 +25,7 @@
                             <i class="ci-package me-2"></i>我的订单
                         </a>
                         <a href="{{ route('user.balance') }}" class="nav-link">
-                            <i class="ci-wallet me-2"></i>余额管理
+                            <i class="ci-credit-card me-2"></i>余额管理
                         </a>
                         <a href="{{ route('user.level') }}" class="nav-link">
                             <i class="ci-star me-2"></i>等级信息
@@ -82,7 +82,7 @@
                 <div class="col-sm-6 col-lg-3 mb-3">
                     <div class="card h-100">
                         <div class="card-body text-center">
-                            <i class="ci-wallet text-info mb-2" style="font-size: 2rem;"></i>
+                            <i class="ci-credit-card text-info mb-2" style="font-size: 2rem;"></i>
                             <h4 class="mb-1">¥{{ number_format($stats['current_balance'], 2) }}</h4>
                             <p class="text-muted mb-0">账户余额</p>
                             <a href="{{ route('user.recharge') }}" class="btn btn-sm btn-outline-primary mt-2">充值</a>
@@ -161,7 +161,7 @@
                     </div>
                     @empty
                     <div class="text-center text-muted py-4">
-                        <i class="ci-wallet fs-1 mb-2 d-block"></i>
+                        <i class="ci-credit-card fs-1 mb-2 d-block"></i>
                         <p>暂无余额记录</p>
                     </div>
                     @endforelse

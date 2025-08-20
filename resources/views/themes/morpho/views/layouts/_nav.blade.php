@@ -113,7 +113,7 @@
           <!-- User -->
           @auth('web')
           <div class="dropdown me-2">
-            <a href="{{ route('user.center') }}" class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale position-relative p-1 user-avatar-trigger" 
+            <a href="{{ route('user.center') }}" class="btn btn-icon fs-lg border-0 rounded-circle animate-scale position-relative p-1 user-avatar-trigger" 
                data-bs-toggle="dropdown" data-bs-trigger="hover" aria-expanded="false">
               <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim(auth('web')->user()->email))) }}?s=32&d=identicon" 
                    alt="{{ auth('web')->user()->nickname ?: auth('web')->user()->email }}"
