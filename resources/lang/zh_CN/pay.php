@@ -18,6 +18,7 @@ return [
         'pay_name' => '支付名称',
         'china_only' => '仅允许中国大陆下单',
         'is_open' => '是否启用',
+        'enable' => '是否启用',
         'method_jump' => '跳转',
         'method_scan' => '扫码',
         'pay_client_pc' => '电脑PC',
