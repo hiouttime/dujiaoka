@@ -45,8 +45,8 @@ Route::middleware('dujiaoka.boot')->namespace('Home')->group(function () {
     
     // 文章
     Route::prefix('article')->controller('ArticleController')->group(function () {
-        Route::get('/', 'listAll');
-        Route::get('{link}', 'show');
+        Route::get('/', 'listAll')->name('article.list');
+        Route::get('{link}', 'show')->name('article.show');
     });
 });
 

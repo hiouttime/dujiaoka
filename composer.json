@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.8",
         "mews/captcha": "^3.0",
         "mgcodeur/laravel-currency-converter": "^1.0",
+        "overtrue/pinyin": "^5.3",
         "paypal/paypal-server-sdk": "^0.6",
         "simplesoftwareio/simple-qrcode": "^4.0",
         "stripe/stripe-php": "^7.84",

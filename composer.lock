@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "766a7574893af7ac06893c58aca4fda2",
+    "content-hash": "d83ab0a2c547a001291f146c0d3f4fd3",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4911,6 +4911,81 @@
                 }
             ],
             "time": "2025-07-07T06:15:55+00:00"
+        },
+        {
+            "name": "overtrue/pinyin",
+            "version": "5.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/pinyin.git",
+                "reference": "03d8697763c32595f54c855911bc77abf00fea14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/pinyin/zipball/03d8697763c32595f54c855911bc77abf00fea14",
+                "reference": "03d8697763c32595f54c855911bc77abf00fea14",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.2"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "^3.0",
+                "friendsofphp/php-cs-fixer": "^3.2",
+                "laravel/pint": "^1.10",
+                "nunomaduro/termwind": "^1.0|^2.0",
+                "phpunit/phpunit": "^10.0|^11.2"
+            },
+            "bin": [
+                "bin/pinyin"
+            ],
+            "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-push": [
+                        "composer pint",
+                        "composer test"
+                    ],
+                    "pre-commit": [
+                        "composer pint",
+                        "composer test"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\Pinyin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "anzhengchao@gmail.com",
+                    "homepage": "http://github.com/overtrue"
+                }
+            ],
+            "description": "Chinese to pinyin translator.",
+            "homepage": "https://github.com/overtrue/pinyin",
+            "keywords": [
+                "Chinese",
+                "Pinyin",
+                "cn2pinyin"
+            ],
+            "support": {
+                "issues": "https://github.com/overtrue/pinyin/issues",
+                "source": "https://github.com/overtrue/pinyin/tree/5.3.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/overtrue",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-03-16T02:16:27+00:00"
         },
         {
             "name": "paypal/paypal-server-sdk",

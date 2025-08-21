@@ -124,7 +124,7 @@
                     </div>
                     <div id="usage-{{ $index }}-{{ $itemIndex }}" class="collapse">
                       <div class="small text-muted mt-3">
-                        {!! nl2br(e($item->goods->usage_instructions)) !!}
+                        {!! $item->goods->usage_instructions !!}
                       </div>
                     </div>
                   </div>
@@ -176,7 +176,6 @@
 
 @section('js')
 <script>
-// 复制功能 - 使用ClipboardJS
 document.querySelectorAll('.kami-btn').forEach(function(btn) {
   let targetSelector = btn.getAttribute('data-copy-text-from');
   let clipboard = new ClipboardJS(btn, {

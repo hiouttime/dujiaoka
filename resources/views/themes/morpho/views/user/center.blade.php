@@ -1,6 +1,16 @@
 @extends('morpho::layouts.default')
 
 @section('content')
+<style>
+.order-item {
+    margin: 4px;
+    padding: 12px;
+    border-radius: 8px;
+}
+.order-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
 <main class="content-wrapper">
     <section class="container pt-4 pb-5">
         <div class="row">
@@ -118,18 +128,28 @@
                 </div>
                 <div class="card-body">
                     @forelse($recentOrders as $order)
-                    <div class="d-flex justify-content-between align-items-center py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
+                    <a href="{{ route('user.order.detail', $order->order_sn) }}" 
+                       class="d-flex justify-content-between align-items-center text-decoration-none text-dark order-item">
                         <div>
-                            <div class="fw-medium">{{ $order->order_sn }}</div>
-                            <small class="text-muted">{{ $order->goods_summary }}</small>
+                            <div class="fw-medium text-primary">{{ $order->order_sn }}</div>
+                            <small class="text-muted">{{ $order->goods_summary ?? $order->orderItems->pluck('goods_name')->implode('、') }}</small>
                         </div>
                         <div class="text-end">
                             <div class="fw-medium">¥{{ number_format($order->actual_price, 2) }}</div>
-                            <small class="badge text-bg-{{ $order->status == 4 ? 'success' : 'warning' }}">
+                            @php
+                                $statusClass = match($order->status) {
+                                    1 => 'warning',
+                                    2, 3 => 'info', 
+                                    4 => 'success',
+                                    5, 6, -1 => 'danger',
+                                    default => 'secondary'
+                                };
+                            @endphp
+                            <small class="badge text-bg-{{ $statusClass }}">
                                 {{ \App\Models\Order::getStatusMap()[$order->status] ?? '未知' }}
                             </small>
                         </div>
-                    </div>
+                    </a>
                     @empty
                     <div class="text-center text-muted py-4">
                         <i class="ci-package fs-1 mb-2 d-block"></i>

@@ -134,7 +134,7 @@ class UserCenterController extends Controller
             ->with(['orderItems.goods', 'pay'])
             ->firstOrFail();
 
-        return view('themes.morpho.views.user.order-detail', compact('order'));
+        return view('themes.morpho.views.static_pages.orderinfo', ['orders' => [$order]]);
     }
 
     public function balance()
