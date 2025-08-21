@@ -15,7 +15,12 @@ return new class extends Migration
         // 使用Laravel Settings包的方式添加默认值
         DB::table('settings')->updateOrInsert(
             ['group' => 'system', 'name' => 'contact_required'],
-            ['payload' => '"email"', 'locked' => false]
+            [
+                'payload' => '"email"', 
+                'locked' => false,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
         );
     }
 

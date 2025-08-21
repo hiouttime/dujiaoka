@@ -144,9 +144,9 @@ class OrderController extends BaseController
                     'goods_id' => $goods->id,
                     'sub_id' => $sub->id,
                     'goods_name' => $goods->gd_name . ' [' . $sub->name . ']',
-                    'goods_price' => $discountedPrice,
+                    'unit_price' => $discountedPrice,
                     'quantity' => $item['quantity'],
-                    'total_price' => $subtotal,
+                    'subtotal' => $subtotal,
                     'type' => $goods->type,
                     'info' => $infoHtml
                 ];
@@ -194,7 +194,7 @@ class OrderController extends BaseController
                 }
             }
 
-            $orderSn = 'DJ' . date('YmdHis') . mt_rand(1000, 9999);
+            $orderSn = strtoupper(\Illuminate\Support\Str::random(16));
 
             $order = Order::create([
                 'order_sn' => $orderSn,
@@ -237,10 +237,14 @@ class OrderController extends BaseController
                 'message' => $exception->getMessage()
             ]);
         } catch (\Exception $exception) {
-            DB::rollBack();
+            DB::rollBack();         
             return response()->json([
                 'success' => false,
-                'message' => '订单创建失败，请重试'
+                'message' => '订单创建失败，请重试',
+                'debug' => config('app.debug') ? [
+                    'trace' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ] : null
             ]);
         }
     }

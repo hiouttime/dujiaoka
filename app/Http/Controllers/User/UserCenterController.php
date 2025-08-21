@@ -172,7 +172,7 @@ class UserCenterController extends Controller
         
         // 创建充值订单
         $order = Order::create([
-            'order_sn' => 'R' . date('YmdHis') . rand(1000, 9999),
+            'order_sn' => strtoupper(\Illuminate\Support\Str::random(16)),
             'user_id' => $user->id,
             'email' => $user->email,
             'total_price' => $request->amount,
