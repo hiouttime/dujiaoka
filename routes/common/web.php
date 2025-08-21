@@ -13,7 +13,7 @@ Route::middleware('dujiaoka.boot')->namespace('Home')->group(function () {
     // 首页和商品
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('check-geetest', 'HomeController@geetest');
-    Route::get('buy/{id}', 'HomeController@buy');
+    Route::get('buy/{id}', 'HomeController@buy')->name('goods.show');
     
     // 购物车
     Route::prefix('cart')->controller('CartController')->group(function () {

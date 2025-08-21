@@ -81,6 +81,9 @@ class HomeController extends BaseController
             if(empty($goods))
                 return $this->err(__('dujiaoka.prompt.the_goods_is_not_on_the_shelves'));
             $this->goodsService->validatorGoodsStatus($goods);
+            
+            // 加载关联文章
+            $goods->relatedArticles = $goods->articles()->select('articles.id', 'articles.title', 'articles.link', 'articles.content')->get();
             // 有没有优惠码可以展示
             if (count($goods->coupon)) {
                 $goods->open_coupon = 1;

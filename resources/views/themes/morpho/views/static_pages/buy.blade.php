@@ -321,45 +321,43 @@
           </div>
         </section>
   
-        <section class="container pt-5 mt-2 mt-sm-3 mt-lg-4 mt-xl-5" >
-          <ul class="nav nav-underline flex-nowrap border-bottom" role="tablist">
-            <li class="nav-item me-md-1" role="presentation">
-              <button type="button" class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                      data-bs-target="#description-tab-pane" role="tab"
-                      aria-controls="description-tab-pane" aria-selected="true">
-                {{ __('goods.fields.description') }}
-              </button>
-            </li>
-            <li class="nav-item me-md-1" role="presentation">
-              <button type="button" class="nav-link" id="washing-tab" data-bs-toggle="tab"
-                      data-bs-target="#washing-tab-pane" role="tab"
-                      aria-controls="washing-tab-pane" aria-selected="false">
-                商品提示
-              </button>
-            </li>
-            <li class="nav-item me-md-1" role="presentation">
-              <button type="button" class="nav-link" id="delivery-tab" data-bs-toggle="tab"
-                      data-bs-target="#delivery-tab-pane" role="tab"
-                      aria-controls="delivery-tab-pane" aria-selected="false">
-                相关教程
-              </button>
-            </li>
-          </ul>
-  
-          <div class="tab-content pt-4 mt-sm-1 mt-md-3">
-            <div class="tab-pane fade active show" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab">
-              <div class="row">
-                {!! $description !!}
+        <section class="container pt-5 mt-2 mt-sm-3 mt-lg-4 mt-xl-5">
+          {{-- 关联文章横排列表 --}}
+          @if(isset($relatedArticles) && $relatedArticles->count() > 0)
+            <div class="related-articles mb-5">
+              <h4 class="mb-3 d-flex align-items-center">
+                <i class="ci-book me-2"></i>相关文章
+              </h4>
+              <div class="row g-3">
+                @foreach($relatedArticles as $article)
+                  <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card article-card h-100">
+                      <div class="card-body d-flex flex-column">
+                        <h6 class="card-title mb-2">
+                          <a href="{{ route('article.show', $article->link) }}" class="text-decoration-none stretched-link article-title-link">
+                            {{ $article->title }}
+                          </a>
+                        </h6>
+                        <p class="card-text small flex-grow-1 article-desc-text">
+                          {{ Str::limit(strip_tags($article->content), 80) }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
               </div>
             </div>
-  
-            <div class="tab-pane fade fs-sm" id="washing-tab-pane" role="tabpanel" aria-labelledby="washing-tab">
-              <p>这里放一些商品提示/使用须知...</p>
-            </div>
-  
-            <div class="tab-pane fade fs-sm" id="delivery-tab-pane" role="tabpanel" aria-labelledby="delivery-tab">
-              <p>在这里放一些使用教程 / 文章 等...</p>
-            </div>
+            <hr class="my-4">
+          @endif
+
+          <div class="mb-4">
+            <h4 class="mb-3 d-flex align-items-center">
+              <i class="ci-file-text me-2"></i>{{ __('goods.fields.description') }}
+            </h4>
+          </div>
+
+          <div class="row">
+            {!! $description !!}
           </div>
         </section>
   
@@ -449,6 +447,41 @@
         align-items: flex-start;
         justify-content: center;
     }
+}
+
+.related-articles .article-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.related-articles .article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.related-articles .article-card .stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+
+/* 深色模式适配 */
+.article-title-link {
+    color: var(--bs-body-color) !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.article-title-link:hover {
+    color: var(--bs-primary) !important;
+}
+
+.article-desc-text {
+    color: var(--bs-secondary-color) !important;
 }
 </style>
 @stop

@@ -108,5 +108,16 @@ class Goods extends BaseModel
         return $this->hasMany(GoodsSub::class);
     }
     
+    /**
+     * 关联文章
+     */
+    public function articles()
+    {
+        return $this->belongsToMany(Articles::class, 'article_goods', 'goods_id', 'article_id')
+                    ->withTimestamps()
+                    ->withPivot('sort')
+                    ->orderBy('pivot_sort', 'desc');
+    }
+    
     
 }

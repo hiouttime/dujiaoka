@@ -26,7 +26,9 @@ class ArticleController extends BaseController {
     public function show($link) {
         
         // 根据 $link 查询文章内容
-        $article = Articles::where('link', $link)->first();
+        $article = Articles::with(['goods' => function($query) {
+            $query->where('is_open', true)->select('goods.id', 'goods.gd_name', 'goods.gd_description', 'goods.picture');
+        }])->where('link', $link)->first();
 
         if (!$article) {
             abort(404);
@@ -34,10 +36,12 @@ class ArticleController extends BaseController {
 
         $title = $article->title;
         $content = $article->content;
+        $relatedGoods = $article->goods;
         
         return $this->render('static_pages/article', [
         'title' => $title,
-        'content' => $content
+        'content' => $content,
+        'relatedGoods' => $relatedGoods
         ],
         $title." | ". __('dujiaoka.page-title.article'));
     }

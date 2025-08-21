@@ -11,6 +11,7 @@ class Articles extends BaseModel
     protected $table = 'articles';
     
     protected $fillable = [
+        'category_id',
         'title',
         'content',
         'is_open',
@@ -58,6 +59,25 @@ class Articles extends BaseModel
         }
         
         return $slug;
+    }
+    
+    /**
+     * 关联分类
+     */
+    public function category()
+    {
+        return $this->belongsTo(ArticleCategory::class, 'category_id');
+    }
+    
+    /**
+     * 关联商品
+     */
+    public function goods()
+    {
+        return $this->belongsToMany(Goods::class, 'article_goods', 'article_id', 'goods_id')
+                    ->withTimestamps()
+                    ->withPivot('sort')
+                    ->orderBy('pivot_sort', 'desc');
     }
     
     public function getSummary()
