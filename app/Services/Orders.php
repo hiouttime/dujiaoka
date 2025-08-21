@@ -211,7 +211,7 @@ class Orders
     public function detailOrderSN(string $orderSN):? Order
     {
         return CacheManager::rememberOrder($orderSN, function () use ($orderSN) {
-            return Order::query()->with(['coupon', 'pay', 'goods'])->where('order_sn', $orderSN)->first();
+            return Order::query()->with(['orderItems.goods', 'pay', 'user'])->where('order_sn', $orderSN)->first();
         });
     }
 
@@ -239,6 +239,7 @@ class Orders
     public function withEmailAndPassword(string $email, string $searchPwd = '')
     {
         return Order::query()
+            ->with(['orderItems.goods', 'pay', 'user'])
             ->where('email', $email)
             ->when(!empty($searchPwd), function ($query) use ($searchPwd) {
                 $query->where('search_pwd', $searchPwd);
@@ -258,6 +259,7 @@ class Orders
     public function byOrderSNS(array $orderSNS)
     {
         return Order::query()
+            ->with(['orderItems.goods', 'pay', 'user'])
             ->whereIn('order_sn', $orderSNS)
             ->orderBy('created_at', 'DESC')
             ->take(5)

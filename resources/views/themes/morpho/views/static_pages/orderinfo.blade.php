@@ -11,136 +11,161 @@
   </nav>
 
   <div class="container">
-    <!-- row-cols-1 row-cols-lg-2 表示：在小屏 1 列，大屏 2 列，可按需修改 -->
-    <div class="row row-cols-1 row-cols-lg-2 g-0 mx-auto" style="max-width: 1920px">
+    <!-- 宽屏幕双列布局：左侧订单信息，右侧商品详细 -->
+    <div class="row g-4 mx-auto" style="max-width: 1920px">
       @foreach($orders as $index => $order)
-        <div class="col d-flex flex-column justify-content-center py-2">
-          <div class="w-100 pt-sm-2 pt-md-3 pt-lg-4 pb-lg-4 pb-xl-5 px-3 px-sm-4 pe-lg-0 ps-lg-4 mx-auto ms-lg-auto me-lg-4"
-               style="max-width: 740px">
-            <!-- 顶部标题区，显示订单号和状态 -->
-            <div class="d-flex align-items-sm-center border-bottom">
-              <div class="d-flex align-items-center justify-content-center bg-success text-white rounded-circle flex-shrink-0"
-                   style="width: 3rem; height: 3rem; margin-top: -.125rem">
-                <i class="ci-check fs-4"></i>
-              </div>
-              <div class="w-100 ps-3">
-                <div class="fs-sm mb-1">
-                  订单号：{{ $order['order_sn'] }}
+        <!-- 左侧：订单基本信息 -->
+        <div class="col-12 col-lg-5">
+          <div class="w-100 pt-sm-2 pt-md-3 pt-lg-4 pb-lg-4 pb-xl-5 px-3 px-sm-4">
+            <!-- 订单号和状态 -->
+            <div class="border-bottom mb-4 pb-3">
+              <div class="mb-3">
+                <h2 class="h4 fw-bold mb-1">订单号：{{ $order->order_sn }}</h2>
+                <div class="h6 mb-0">
+                  订单状态：
+                  @switch($order->status)
+                    @case(\App\Models\Order::STATUS_EXPIRED)
+                      <span class="text-muted">已过期</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_WAIT_PAY)
+                      <span class="text-warning">待支付</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_PENDING)
+                      <span class="text-info">待处理</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_PROCESSING)
+                      <span class="text-primary">处理中</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_COMPLETED)
+                      <span class="text-success">已完成</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_FAILURE)
+                      <span class="text-danger">已失败</span>
+                      @break
+                    @case(\App\Models\Order::STATUS_ABNORMAL)
+                      <span class="text-danger">状态异常</span>
+                      @break
+                    @default
+                      <span class="text-muted">未知状态</span>
+                  @endswitch
                 </div>
-                <div class="d-sm-flex align-items-center">
-                  <div class="h5 mb-0 me-3">
-                    订单状态：
-                    <div class="nav mt-2 mt-sm-0 ms-auto d-inline">
-                      <span class="fs-lg mb-0 d-inline">
-                        {{-- 根据 $order['status'] 输出中文或翻译 --}}
-                        @switch($order['status'])
-                          @case(\App\Models\Order::STATUS_EXPIRED)
-                            已过期
-                            @break
-                          @case(\App\Models\Order::STATUS_WAIT_PAY)
-                            待支付
-                            @break
-                          @case(\App\Models\Order::STATUS_PENDING)
-                            待处理
-                            @break
-                          @case(\App\Models\Order::STATUS_PROCESSING)
-                            已处理
-                            @break
-                          @case(\App\Models\Order::STATUS_COMPLETED)
-                            已完成
-                            @break
-                          @case(\App\Models\Order::STATUS_FAILURE)
-                            已失败
-                            @break
-                          @case(\App\Models\Order::STATUS_ABNORMAL)
-                            状态异常
-                            @break
-                          @default
-                            未知状态
-                        @endswitch
-                      </span>
-                      <!-- 如果是待支付，可以显示“重新支付”按钮 -->
-                      @if($order['status'] == \App\Models\Order::STATUS_WAIT_PAY)
-                        <button class="btn btn-dark btn-sm ms-3"
-                          onclick="window.location.href='{{ url('/bill/'.$order['order_sn']) }}'">
-                          重新支付
-                        </button>
-                      @endif
-                    </div>
+              </div>
+              
+              <!-- 如果是待支付，显示重新支付按钮 -->
+              @if($order->status == \App\Models\Order::STATUS_WAIT_PAY)
+                <button class="btn btn-primary btn-sm"
+                  onclick="window.location.href='{{ url('/bill/'.$order->order_sn) }}'">
+                  重新支付
+                </button>
+              @endif
+            </div>
+
+            <!-- 订单基本信息 -->
+            <div class="mb-4">
+              <h3 class="h6 mb-3">订单信息</h3>
+              <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">下单时间：</span>
+                  <span>{{ $order->created_at->format('Y-m-d H:i:s') }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">下单邮箱：</span>
+                  <span>{{ $order->email }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">订单总价：</span>
+                  <span class="fw-bold text-success">¥{{ $order->actual_price }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">支付方式：</span>
+                  <span>{{ $order->pay->pay_name ?? '' }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="text-muted">商品数量：</span>
+                  <span>{{ $order->orderItems->count() }} 种商品</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧：商品详细信息 -->
+        <div class="col-12 col-lg-7">
+          <div class="w-100 pt-sm-2 pt-md-3 pt-lg-4 pb-lg-4 pb-xl-5 px-3 px-sm-4">
+            <h3 class="h6 mb-3">商品列表</h3>
+            
+            @foreach($order->orderItems as $itemIndex => $item)
+              <div class="border rounded p-3 mb-4">
+                <!-- 商品基本信息 -->
+                <div class="mb-3">
+                  <h4 class="h6 mb-2">{{ $item->goods_name }}</h4>
+                  <div class="small text-muted mb-2">
+                    单价：¥{{ $item->unit_price }} × {{ $item->quantity }} = ¥{{ $item->subtotal }}
+                  </div>
+                  <div class="small">
+                    <span class="badge bg-{{ $item->type == 1 ? 'success' : 'warning' }}">
+                      {{ $item->type == 1 ? '自动发货' : '人工发货' }}
+                    </span>
                   </div>
                 </div>
-              </div>
-            </div>
+                
+                @if($item->goods->usage_instructions)
+                  <!-- 使用说明 -->
+                  <div class="bg-light rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="h6 mb-0">📋 使用说明</h5>
+                      <button class="btn btn-sm btn-outline-secondary" 
+                              type="button" 
+                              data-bs-toggle="collapse" 
+                              data-bs-target="#usage-{{ $index }}-{{ $itemIndex }}" 
+                              aria-expanded="false">
+                        <i class="ci-chevron-down" style="transition: transform 0.2s ease;"></i>
+                      </button>
+                    </div>
+                    <div id="usage-{{ $index }}-{{ $itemIndex }}" class="collapse">
+                      <div class="small text-muted mt-3">
+                        {!! nl2br(e($item->goods->usage_instructions)) !!}
+                      </div>
+                    </div>
+                  </div>
+                @endif
 
-            <!-- 中部：显示订单的其他信息 (名称、时间、邮箱、类型、总价、支付方式等) -->
-            <div class="d-flex flex-column gap-2 pt-3">
-              <div>
-                <h3 class="h6 mb-2 d-inline">订单名称：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  {{ $order['title'] }} x {{ $order['buy_amount'] }}
-                </span>
+                @if($item->info)
+                  <!-- 商品详情/卡密信息 -->
+                  <div class="border rounded p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="h6 mb-0">商品信息</h5>
+                      <button class="btn btn-sm btn-outline-secondary" 
+                              type="button" 
+                              data-bs-toggle="collapse" 
+                              data-bs-target="#info-{{ $index }}-{{ $itemIndex }}" 
+                              aria-expanded="false">
+                        <i class="ci-chevron-down" style="transition: transform 0.2s ease;"></i>
+                      </button>
+                    </div>
+                    <div id="info-{{ $index }}-{{ $itemIndex }}" class="collapse">
+                      @php
+                        $textareaID = "kami-textarea-{$index}-{$itemIndex}";
+                      @endphp
+                      <div class="mt-3">
+                        <textarea class="form-control mb-3" id="{{ $textareaID }}" rows="6" readonly>{{ $item->info }}</textarea>
+                        <div class="d-flex gap-2">
+                          <button type="button" class="btn btn-dark btn-sm kami-btn flex-grow-1"
+                                  data-copy-text-from="#{{ $textareaID }}">
+                            复制信息
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @else
+                  <!-- 没有卡密信息时的提示 -->
+                  <div class="text-center text-muted py-3 bg-light rounded">
+                    <small>商品未发货或暂无卡密信息</small>
+                  </div>
+                @endif
               </div>
-              <div>
-                <h3 class="h6 mb-2 d-inline">下单时间：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  {{ $order['created_at'] }}
-                </span>
-              </div>
-              <div>
-                <h3 class="h6 mb-2 d-inline">下单邮箱：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  {{ $order['email'] }}
-                </span>
-              </div>
-              <div>
-                <h3 class="h6 mb-2 d-inline">订单类型：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  @if($order['type'] == \App\Models\Order::AUTOMATIC_DELIVERY)
-                    自动发货
-                  @else
-                    人工发货
-                  @endif
-                </span>
-              </div>
-              <div>
-                <h3 class="h6 mb-2 d-inline">订单总价：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  {{ $order['actual_price'] }}
-                </span>
-              </div>
-              <div>
-                <h3 class="h6 mb-2 d-inline">支付方式：</h3>
-                <span class="fs-sm mb-0 d-inline">
-                  {{ $order['pay']['pay_name'] ?? '' }}
-                </span>
-              </div>
-            </div>
-
-            <!-- 卡密信息区 -->
-            <div class="bg-success rounded px-2 py-2" style="--cz-bg-opacity: .2">
-              <div class="py-3">
-                <h2 class="h6 text-center pb-2 mb-1">🎉 您的卡密信息 🎉</h2>
-                <!-- 注意：需要给每个订单的 textarea 独立 ID，否则复制功能只会对第一个有效 -->
-                @php
-                  $textareaID = "kami-textarea-{$index}";
-                  $btnID = "kami-btn-{$index}";
-                @endphp
-                <textarea class="form-control mb-4" id="{{ $textareaID }}" rows="5">{{ $order['info'] }}</textarea>
-
-                <div class="d-flex gap-3 w-100">
-                  <!-- 复制按钮 data-copy-text-from 用来绑定到 textareaID -->
-                  <button type="button" class="btn btn-dark w-50 kami-btn"
-                          data-copy-text-from="#{{ $textareaID }}">
-                    复制卡密信息
-                  </button>
-                  <button type="button" class="btn btn-dark w-50 kami-btn"
-                          data-copy-text-from="#{{ $textareaID }}">
-                    再次复制卡密信息
-                  </button>
-                </div>
-              </div>
-            </div>
-
+            @endforeach
           </div>
         </div>
       @endforeach
@@ -151,6 +176,7 @@
 
 @section('js')
 <script>
+// 复制功能 - 使用ClipboardJS
 document.querySelectorAll('.kami-btn').forEach(function(btn) {
   let targetSelector = btn.getAttribute('data-copy-text-from');
   let clipboard = new ClipboardJS(btn, {
@@ -162,6 +188,28 @@ document.querySelectorAll('.kami-btn').forEach(function(btn) {
   });
   clipboard.on('error', function(e) {
     alert("{{ __('dujiaoka.prompt.copy_text_failed') }}");
+  });
+});
+
+// Bootstrap折叠动画完成后旋转图标
+document.addEventListener('DOMContentLoaded', function() {
+  const collapseElements = document.querySelectorAll('.collapse');
+  collapseElements.forEach(function(collapse) {
+    collapse.addEventListener('shown.bs.collapse', function() {
+      const button = document.querySelector('[data-bs-target="#' + collapse.id + '"]');
+      if (button) {
+        const icon = button.querySelector('i');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      }
+    });
+    
+    collapse.addEventListener('hidden.bs.collapse', function() {
+      const button = document.querySelector('[data-bs-target="#' + collapse.id + '"]');
+      if (button) {
+        const icon = button.querySelector('i');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+      }
+    });
   });
 });
 </script>

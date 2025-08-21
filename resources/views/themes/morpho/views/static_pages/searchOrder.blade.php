@@ -55,7 +55,7 @@
                         <div class="tab-pane active" id="order_search_by_sn">
                             <form
                                 class="needs-validation"
-                                action="{{ url('search-order-by-sn') }}"
+                                action="{{ url('order/search/sn') }}"
                                 method="post"
                             >
                                 {{ csrf_field() }}
@@ -89,7 +89,7 @@
                         <div class="tab-pane" id="order_search_by_email">
                             <form
                                 class="needs-validation"
-                                action="{{ url('search-order-by-email') }}"
+                                action="{{ url('order/search/email') }}"
                                 method="post"
                             >
                                 {{ csrf_field() }}
@@ -139,7 +139,7 @@
                         <div class="tab-pane" id="order_search_by_browser">
                             <form
                                 class="needs-validation"
-                                action="{{ url('search-order-by-browser') }}"
+                                action="{{ url('order/search/browser') }}"
                                 method="post"
                             >
                                 {{ csrf_field() }}
