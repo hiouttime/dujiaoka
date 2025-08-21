@@ -4,6 +4,7 @@
     @include('morpho::layouts._header')
 </head>
 <body>
+    <div id="top"></div>
     @include('morpho::layouts._nav')
     @yield('content')
     @include('morpho::layouts._footer')

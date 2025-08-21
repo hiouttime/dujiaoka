@@ -283,43 +283,6 @@
           </div>
         </section>
   
-        <section class="sticky-product-banner sticky-top" data-sticky-element>
-          <div class="sticky-product-banner-inner pt-5">
-            <div class="navbar container flex-nowrap align-items-center bg-body pt-4 pt-lg-5 mt-lg-n2">
-              <div class="d-flex align-items-center min-w-0 ms-lg-2 me-3">
-                <div class="ratio ratio-1x1 flex-shrink-0" style="width: 50px;">
-                  <img src="{{ pictureUrl($picture) }}" alt="{{ $gd_name }}">
-                </div>
-                <h4 class="h6 fw-medium d-none d-lg-block ps-3 mb-0">{{ $gd_name }}</h4>
-                <div class="w-100 min-w-0 d-lg-none ps-2">
-                  <h4 class="fs-sm fw-medium text-truncate mb-1">{{ $gd_name }}</h4>
-                  <div class="h6 mb-0">
-                    @if(count($goods_sub) > 1)
-                      $<span class="sticky-price">{{ number_format($goods_sub[0]['price'], 2) }}</span>
-                    @else
-                      ${{ number_format(collect($goods_sub)->min('price'), 2) }}
-                    @endif
-                  </div>
-                </div>
-              </div>
-              <div class="h4 d-none d-lg-block mb-0 ms-auto me-4">
-                @if(count($goods_sub) > 1)
-                  $<span class="sticky-price">{{ number_format($goods_sub[0]['price'], 2) }}</span>
-                @else
-                  ${{ number_format(collect($goods_sub)->min('price'), 2) }}
-                @endif
-              </div>
-              <div class="d-flex gap-2">
-                <button type="submit" form="buy-form" id="submit" class="btn btn-dark animate-pulse d-md-none">
-                  <i class="ci-shopping-cart fs-base animate-target me-2"></i> {{ __('dujiaoka.order_now') }}
-                </button>
-                <button type="submit" form="buy-form" id="submit" class="btn btn-dark ms-auto d-none d-md-inline-flex px-4">
-                  立即购买
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
   
         <section class="container pt-5 mt-2 mt-sm-3 mt-lg-4 mt-xl-5">
           {{-- 关联文章横排列表 --}}
@@ -360,6 +323,44 @@
             {!! $description !!}
           </div>
         </section>
+        
+        <!-- 底部浮动栏的最终停靠位置 -->
+        <div class="sticky-banner-container">
+          <div class="sticky-product-banner" id="stickyBanner">
+            <div class="container px-2">
+              <div class="navbar navbar-expand-lg flex-nowrap bg-body rounded-pill shadow ps-0 mx-1">
+                <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark rounded-pill z-0 d-none d-block-dark"></div>
+                
+                <div class="d-flex align-items-center position-relative z-1 ms-3 me-3">
+                  <img src="{{ pictureUrl($picture) }}" alt="{{ $gd_name }}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                  <div class="ms-3 min-w-0 flex-grow-1">
+                    <div class="fw-medium text-truncate">{{ $gd_name }}</div>
+                    @if(count($goods_sub) > 1)
+                      <div class="text-muted small d-flex align-items-center">
+                        <span class="sticky-spec-name me-1">{{ $goods_sub[0]['name'] }}</span>
+                        <span class="text-body-secondary">·</span>
+                        <span class="fw-medium text-success ms-1">$<span class="sticky-price">{{ number_format($goods_sub[0]['price'], 2) }}</span></span>
+                      </div>
+                    @else
+                      <div class="text-muted small">
+                        <span class="fw-medium text-success">${{ number_format(collect($goods_sub)->min('price'), 2) }}</span>
+                      </div>
+                    @endif
+                  </div>
+                </div>
+                
+                <div class="d-flex gap-2 position-relative z-1 ms-auto me-3">
+                  <button type="button" id="stickyAddToCart" class="btn btn-outline-dark btn-sm d-none d-md-inline-flex">
+                    <i class="ci-shopping-cart me-1"></i>加入购物车
+                  </button>
+                  <button type="button" id="stickyBuyNow" class="btn btn-dark btn-sm">
+                    立即购买
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
   
       </main>
     </div>
@@ -483,6 +484,40 @@
 .article-desc-text {
     color: var(--bs-secondary-color) !important;
 }
+
+/* 浮动购买栏容器 */
+.sticky-banner-container {
+    position: relative;
+    padding: 1rem 0 2rem 0;
+}
+
+/* 底部浮动购买栏 */
+.sticky-product-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 1020;
+}
+
+.sticky-product-banner.show {
+    transform: translateY(0);
+}
+
+/* 当浮动栏到达容器位置时，改为绝对定位但保持全宽 */
+.sticky-product-banner.docked {
+    position: absolute;
+    bottom: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(0);
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
 </style>
 @stop
 @section('js')
@@ -540,9 +575,11 @@
                 const opt = $(this).closest('.spec-option');
                 const price = +opt.data('price');
                 const stock = +opt.data('stock');
+                const specName = opt.find('.btn').text().trim().split(' ')[0]; // 获取规格名称，去除价格部分
                 
                 $('#currentPrice').text(price.toFixed(2));
                 $('.sticky-price').text(price.toFixed(2));
+                $('.sticky-spec-name').text(specName);
                 $('#currentStock').text(stock);
                 
                 const currentVal = +amountInput.val();
@@ -644,6 +681,84 @@
                 // 直接跳转到购物车
                 window.location.href = '/cart?buy_now=1';
             });
+            
+            // 底部浮动购买栏逻辑
+            const stickyBanner = document.getElementById('stickyBanner');
+            const originalBuyButtons = document.querySelector('.d-flex.gap-2.w-100');
+            const stickyAddToCartBtn = document.getElementById('stickyAddToCart');
+            const stickyBuyNowBtns = document.querySelectorAll('#stickyBuyNow');
+            const bannerContainer = document.querySelector('.sticky-banner-container');
+            
+            // 监听滚动事件
+            let ticking = false;
+            function updateStickyBanner() {
+                if (!originalBuyButtons || !bannerContainer) return;
+                
+                const originalRect = originalBuyButtons.getBoundingClientRect();
+                const containerRect = bannerContainer.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                const isOriginalVisible = originalRect.bottom > 0;
+                const containerReachBottom = containerRect.bottom <= windowHeight;
+                
+                if (!isOriginalVisible && !containerReachBottom) {
+                    // 原始按钮不可见，且容器还没到底部 - 显示固定浮动栏
+                    stickyBanner.classList.add('show');
+                    stickyBanner.classList.remove('docked');
+                } else if (!isOriginalVisible && containerReachBottom) {
+                    // 原始按钮不可见，但容器已到底部 - 停靠在容器中
+                    stickyBanner.classList.add('show', 'docked');
+                } else {
+                    // 原始按钮可见 - 隐藏浮动栏
+                    stickyBanner.classList.remove('show', 'docked');
+                }
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateStickyBanner);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick, { passive: true });
+            window.addEventListener('resize', requestTick, { passive: true });
+            
+            // 浮动栏按钮事件绑定
+            if (stickyAddToCartBtn) {
+                stickyAddToCartBtn.addEventListener('click', () => {
+                    addToCartBtn.click();
+                });
+            }
+            
+            stickyBuyNowBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buyNowBtn.click();
+                });
+            });
+            
+            // 同步按钮状态
+            function syncStickyButtonsState() {
+                const isDisabled = buyNowBtn.prop('disabled');
+                const buttonText = buyNowBtn.text();
+                
+                if (stickyAddToCartBtn) {
+                    stickyAddToCartBtn.disabled = addToCartBtn.prop('disabled');
+                }
+                
+                stickyBuyNowBtns.forEach(btn => {
+                    btn.disabled = isDisabled;
+                    if (btn.classList.contains('d-none', 'd-md-inline-flex')) {
+                        btn.textContent = buttonText;
+                    }
+                });
+            }
+            
+            // 监听规格变化，同步按钮状态
+            $('input[name="sub_id"]').on('change', syncStickyButtonsState);
+            syncStickyButtonsState();
 </script>
 
 @stop

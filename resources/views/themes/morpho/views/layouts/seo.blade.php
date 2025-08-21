@@ -13,6 +13,7 @@
     @endif
 </head>
 <body>
+    <div id="top"></div>
     @include('morpho::layouts._nav')
     @yield('content')
     @include('morpho::layouts._footer')
