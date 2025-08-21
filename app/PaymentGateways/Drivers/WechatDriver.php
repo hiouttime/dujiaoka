@@ -41,7 +41,7 @@ class WechatDriver extends AbstractPaymentDriver
             $payService = app('App\\Service\\PayService');
             $payGateway = $payService->detail($order->pay_id);
             
-            if (!$payGateway || $payGateway->pay_handleroute !== '/pay/wechat') {
+            if (!$payGateway || $payGateway->pay_handleroute !== 'wechat') {
                 return 'error';
             }
 

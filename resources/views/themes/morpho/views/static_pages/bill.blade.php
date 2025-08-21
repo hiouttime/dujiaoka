@@ -156,11 +156,7 @@
 
                 <!-- 支付按钮 (PC端) -->
                 <a class="btn btn-lg btn-dark w-100 d-none d-lg-flex"
-                   href="{{ url('pay-gateway', [
-                     'handle' => urlencode($pay['pay_handleroute']),
-                     'payway' => $pay['pay_check'],
-                     'orderSN' => $order_sn
-                   ]) }}">
+                   href="{{ url('pay/' . $pay['pay_handleroute'] . '/' . $pay['pay_check'] . '/' . $order_sn) }}">
                   {{ __('dujiaoka.pay_immediately') }} {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
                 </a>
 
@@ -176,11 +172,7 @@
 <!-- 底部固定“支付”按钮 (移动端) -->
 <div class="fixed-bottom z-sticky w-100 py-2 px-3 bg-body border-top shadow d-lg-none">
   <a class="btn btn-lg btn-dark w-100"
-     href="{{ url('pay-gateway', [
-       'handle' => urlencode($pay['pay_handleroute']),
-       'payway' => $pay['pay_check'],
-       'orderSN' => $order_sn
-     ]) }}">
+     href="{{ url('pay/' . $pay['pay_handleroute'] . '/' . $pay['pay_check'] . '/' . $order_sn) }}">
     {{ __('dujiaoka.pay_immediately') }} {{ $actual_price }} {{ __('dujiaoka.money_symbol') }}
   </a>
 </div>

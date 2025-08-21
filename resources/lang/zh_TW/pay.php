@@ -11,7 +11,7 @@ return [
         'merchant_pem' => '商戶金鑰',
         'pay_check' => '支付標識',
         'pay_client' => '支付場景',
-        'pay_handleroute' => '支付處理路由',
+        'pay_handleroute' => '支付處理模組',
         'pay_method' => '支付方式',
         'pay_name' => '支付名稱',
         'is_open' => '是否啟用',

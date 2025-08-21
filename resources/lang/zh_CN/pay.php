@@ -13,7 +13,7 @@ return [
         'pay_check' => '支付标识',
         'pay_client' => '支付场景',
         'pay_fee' => '通道费率',
-        'pay_handleroute' => '支付处理路由',
+        'pay_handleroute' => '支付处理模块',
         'pay_method' => '支付方式',
         'pay_name' => '支付名称',
         'china_only' => '仅允许中国大陆下单',

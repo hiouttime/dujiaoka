@@ -50,7 +50,7 @@ class AlipayDriver extends AbstractPaymentDriver
             $payService = app('App\\Service\\PayService');
             $payGateway = $payService->detail($order->pay_id);
             
-            if (!$payGateway || $payGateway->pay_handleroute !== '/pay/alipay') {
+            if (!$payGateway || $payGateway->pay_handleroute !== 'alipay') {
                 return 'error';
             }
 

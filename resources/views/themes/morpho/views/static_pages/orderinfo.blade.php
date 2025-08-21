@@ -41,7 +41,7 @@
               <!-- 如果是待支付，显示重新支付按钮 -->
               @if($order->status == \App\Models\Order::STATUS_WAIT_PAY)
                 <button class="btn btn-primary btn-sm"
-                  onclick="window.location.href='{{ url('/bill/'.$order->order_sn) }}'">
+                  onclick="window.location.href='{{ url('/order/bill/'.$order->order_sn) }}'">
                   重新支付
                 </button>
               @endif
@@ -83,14 +83,14 @@
               <div class="border rounded p-3 mb-4">
                 <!-- 商品基本信息 -->
                 <div class="mb-3">
-                  <h4 class="h6 mb-2">{{ $item->goods_name }}</h4>
-                  <div class="small text-muted mb-2">
-                    单价：¥{{ $item->unit_price }} × {{ $item->quantity }} = ¥{{ $item->subtotal }}
-                  </div>
-                  <div class="small">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h4 class="h6 mb-0">{{ $item->goods_name }}</h4>
                     <span class="badge bg-{{ $item->type == 1 ? 'success' : 'warning' }}">
                       {{ $item->type == 1 ? '自动发货' : '人工发货' }}
                     </span>
+                  </div>
+                  <div class="small text-muted">
+                    单价：¥{{ $item->unit_price }} × {{ $item->quantity }} = ¥{{ $item->subtotal }}
                   </div>
                 </div>
                 

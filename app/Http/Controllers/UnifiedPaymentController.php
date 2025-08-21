@@ -49,9 +49,17 @@ class UnifiedPaymentController extends Controller
             return $paymentDriver->gateway($payway, $orderSN, $order, $payGateway);
 
         } catch (RuleValidationException $exception) {
-            return view('common.error', ['message' => $exception->getMessage()]);
+            return view('morpho::errors.error', [
+                'title' => __('dujiaoka.prompt.payment_error'),
+                'content' => $exception->getMessage(),
+                'url' => null
+            ]);
         } catch (\Exception $exception) {
-            return view('common.error', ['message' => __('dujiaoka.prompt.system_error')]);
+            return view('morpho::errors.error', [
+                'title' => __('dujiaoka.prompt.payment_error'),
+                'content' => __('dujiaoka.prompt.system_error'),
+                'url' => null
+            ]);
         }
     }
 
