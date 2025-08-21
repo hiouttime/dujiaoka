@@ -11,6 +11,7 @@ class SystemSettings extends Settings
     public int $order_expire_time;
     public bool $is_open_img_code;
     public int $order_ip_limits;
+    public string $contact_required;
 
     // 推送设置
     public bool $is_open_server_jiang;

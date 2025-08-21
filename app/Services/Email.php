@@ -21,8 +21,9 @@ class Email
      */
     public function detailByToken(string $token): Emailtpl
     {
-        $tpl = Emailtpl::query()->where('tpl_token', $token)->first();
-        return $tpl;
+        return cache()->remember("email_template_{$token}", 86400, function () use ($token) {
+            return Emailtpl::query()->where('tpl_token', $token)->first();
+        });
     }
 
 }

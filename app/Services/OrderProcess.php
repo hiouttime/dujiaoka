@@ -561,8 +561,9 @@ class OrderProcess
         ];
         $tpl = $this->emailtplService->detailByToken('card_send_user_email');
         $mailBody = replaceMailTemplate($tpl, $mailData);
-        // 邮件发送
-        MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        if (filter_var($order->email, FILTER_VALIDATE_EMAIL)) {
+            MailSend::dispatch($order->email, $mailBody['tpl_name'], $mailBody['tpl_content']);
+        }
         return $order;
     }
 

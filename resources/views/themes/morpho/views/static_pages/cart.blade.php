@@ -62,10 +62,40 @@
                   </div>
 
                   <form id="checkoutForm" class="mb-3">
-                    <div class="mb-3">
-                      <label for="email" class="form-label">邮箱地址 <span class="text-danger">*</span></label>
-                      <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
+                    @php
+                      $contactRequired = cfg('contact_required', 'email');
+                      $user = Auth::guard('web')->user();
+                    @endphp
+                    
+                    @if($contactRequired === 'email')
+                      @guest('web')
+                      <div class="mb-3">
+                        <label for="email" class="form-label">邮箱地址 <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                      </div>
+                      @else
+                      <div class="mb-3">
+                        <label class="form-label">邮箱地址</label>
+                        <div class="form-control-plaintext">{{ $user->email }}</div>
+                        <input type="hidden" id="email" name="email" value="{{ $user->email }}">
+                      </div>
+                      @endguest
+                    @elseif($contactRequired === 'any')
+                      @guest('web')
+                      <div class="mb-3">
+                        <label for="email" class="form-label">联系方式 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="email" name="email" 
+                               placeholder="请输入至少6位字符" minlength="6" required>
+                        <small class="form-text text-muted">可以是邮箱、QQ号、微信号等任意联系方式</small>
+                      </div>
+                      @else
+                      <div class="mb-3">
+                        <label class="form-label">联系方式</label>
+                        <div class="form-control-plaintext">{{ $user->email }}</div>
+                        <input type="hidden" id="email" name="email" value="{{ $user->email }}">
+                      </div>
+                      @endguest
+                    @endif
 
                     @if(cfg('is_open_search_pwd', \App\Models\BaseModel::STATUS_CLOSE) == \App\Models\BaseModel::STATUS_OPEN)
                     <div class="mb-3">
@@ -148,7 +178,7 @@ function loadPaymentMethods(items) {
 
   if (!common || common.length === 0) {
     paymentMethods = [];
-    cart.showMessage('所选商品没有共同的支付方式，请重新选择商品', 'error');
+    cart.notify('所选商品没有共同的支付方式，请重新选择商品', 'error');
   } else {
     paymentMethods = common;
   }
@@ -300,25 +330,38 @@ document.getElementById('clearCart').addEventListener('click', function() {
 document.getElementById('proceedCheckout').addEventListener('click', async function() {
   const items = cart.getItems();
   if (items.length === 0) {
-    cart.showMessage('购物车为空', 'error');
+    cart.notify('购物车为空', 'error');
     return;
   }
   
   const form = document.getElementById('checkoutForm');
   const formData = new FormData(form);
   
-  if (!formData.get('email')) {
-    cart.showMessage('请输入邮箱地址', 'error');
+  // 检查联系信息字段
+  const emailInput = document.getElementById('email');
+  
+  if (emailInput && emailInput.type === 'email' && !formData.get('email')) {
+    cart.notify('请输入邮箱地址', 'error');
+    return;
+  }
+  
+  if (emailInput && emailInput.type === 'text' && emailInput.required && !formData.get('email')) {
+    cart.notify('请输入联系方式', 'error');
+    return;
+  }
+  
+  if (emailInput && emailInput.type === 'text' && formData.get('email') && formData.get('email').length < 6) {
+    cart.notify('联系方式至少需要6位字符', 'error');
     return;
   }
   
   if (!formData.get('payway')) {
-    cart.showMessage('请选择支付方式', 'error');
+    cart.notify('请选择支付方式', 'error');
     return;
   }
   
   const orderData = {
-    email: formData.get('email'),
+    email: formData.get('email') || formData.get('contact') || '',
     search_pwd: formData.get('search_pwd'),
     payway: formData.get('payway'),
     cart_items: items.map(item => ({
@@ -348,10 +391,10 @@ document.getElementById('proceedCheckout').addEventListener('click', async funct
       cart.clear();
       window.location.href = result.redirect;
     } else {
-      cart.showMessage(result.message, 'error');
+      cart.notify(result.message, 'error');
     }
   } catch (error) {
-    cart.showMessage('订单创建失败，请重试', 'error');
+    cart.notify('订单创建失败，请重试', 'error');
   } finally {
     this.disabled = false;
     this.textContent = '立即结算';

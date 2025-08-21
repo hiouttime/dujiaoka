@@ -243,6 +243,135 @@
     color: white;
 }
 
+[data-bs-theme="dark"] .auth-container {
+    background: #181d25;
+}
+
+[data-bs-theme="dark"] .auth-card {
+    background: #222934;
+    border-color: #333d4c;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+[data-bs-theme="dark"] .brand-name {
+    color: #eef1f6;
+}
+
+[data-bs-theme="dark"] .brand-tagline {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .auth-tabs {
+    background: #333d4c;
+}
+
+[data-bs-theme="dark"] .auth-tab {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .auth-tab.active {
+    background: #222934;
+    color: #f997a3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-bs-theme="dark"] .input-icon {
+    color: #6c727f;
+}
+
+[data-bs-theme="dark"] .auth-form .form-control {
+    background: #333d4c;
+    border-color: #6c727f;
+    color: #cad0d9;
+}
+
+[data-bs-theme="dark"] .auth-form .form-control:focus {
+    background: #333d4c;
+    border-color: #f997a3;
+    box-shadow: 0 0 0 3px rgba(249, 151, 163, 0.1);
+}
+
+[data-bs-theme="dark"] .auth-form .form-control::placeholder {
+    color: #6c727f;
+}
+
+[data-bs-theme="dark"] .password-toggle {
+    color: #6c727f;
+}
+
+[data-bs-theme="dark"] .password-toggle:hover {
+    color: #f997a3;
+}
+
+[data-bs-theme="dark"] .form-check-label {
+    color: #cad0d9;
+}
+
+[data-bs-theme="dark"] .form-hint {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .forgot-password {
+    color: #f997a3;
+}
+
+[data-bs-theme="dark"] .forgot-password:hover {
+    color: #f55266;
+}
+
+[data-bs-theme="dark"] .btn-auth {
+    background: #f55266;
+}
+
+[data-bs-theme="dark"] .btn-auth:hover {
+    background: #f2223b;
+}
+
+[data-bs-theme="dark"] .strength-bar {
+    background: #6c727f;
+}
+
+[data-bs-theme="dark"] .strength-text {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .password-match {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .terms-link {
+    color: #f997a3;
+}
+
+[data-bs-theme="dark"] .terms-link:hover {
+    color: #f55266;
+}
+
+[data-bs-theme="dark"] .auth-container .alert-danger {
+    background: #f03d3d;
+    color: white;
+}
+
+[data-bs-theme="dark"] .auth-container .alert-success {
+    background: #33b36b;
+    color: white;
+}
+
+/* 表单验证状态深色模式 */
+[data-bs-theme="dark"] .auth-form .form-control.is-valid {
+    border-color: #33b36b;
+    box-shadow: 0 0 0 3px rgba(51, 179, 107, 0.1);
+}
+
+[data-bs-theme="dark"] .auth-form .form-control.is-invalid {
+    border-color: #f03d3d;
+    box-shadow: 0 0 0 3px rgba(240, 61, 61, 0.1);
+}
+
+[data-bs-theme="dark"] .invalid-feedback {
+    color: #f03d3d;
+}
+
 @media (max-width: 768px) {
     .auth-card {
         margin: 1rem;

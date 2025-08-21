@@ -536,13 +536,13 @@
                 const quantity = +amountInput.val();
                 
                 if (quantity > spec.stock) {
-                    cart.showMessage('库存不足', 'error');
+                    cart.notify('库存不足', 'error');
                     return;
                 }
                 
                 @if($buy_limit_num > 0)
                 if (quantity > {{ $buy_limit_num }}) {
-                    cart.showMessage('超出限购数量', 'error');
+                    cart.notify('超出限购数量', 'error');
                     return;
                 }
                 @endif
@@ -568,13 +568,13 @@
                 const quantity = +amountInput.val();
                 
                 if (quantity > spec.stock) {
-                    cart.showMessage('库存不足', 'error');
+                    cart.notify('库存不足', 'error');
                     return;
                 }
                 
                 @if($buy_limit_num > 0)
                 if (quantity > {{ $buy_limit_num }}) {
-                    cart.showMessage('超出限购数量', 'error');
+                    cart.notify('超出限购数量', 'error');
                     return;
                 }
                 @endif

@@ -53,9 +53,22 @@ class ManageSystemSettings extends SettingsPage
                                             ->required(),
                                     ]),
                                 
-                                Toggle::make('is_open_img_code')
-                                    ->label('开启图片验证码')
-                                    ->default(false),
+                                Grid::make(2)
+                                    ->schema([
+                                        Toggle::make('is_open_img_code')
+                                            ->label('开启图片验证码')
+                                            ->default(false),
+                                        
+                                        Select::make('contact_required')
+                                            ->label('下单信息要求')
+                                            ->options([
+                                                'email' => '必须填写邮箱',
+                                                'any' => '任意6位以上字符串',
+                                                'null' => '无需填写',
+                                            ])
+                                            ->default('email')
+                                            ->required(),
+                                    ]),
                             ]),
                         
                         // 推送设置

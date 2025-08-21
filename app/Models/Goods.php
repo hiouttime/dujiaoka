@@ -45,11 +45,11 @@ class Goods extends BaseModel
         parent::boot();
         
         static::updated(function ($goods) {
-            CacheManager::forgetGoods($goods->id);
+            CacheManager::forgetGoodsWithSub($goods->id);
         });
         
         static::deleted(function ($goods) {
-            CacheManager::forgetGoods($goods->id);
+            CacheManager::forgetGoodsWithSub($goods->id);
         });
     }
     

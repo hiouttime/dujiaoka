@@ -10,19 +10,19 @@ use Illuminate\Support\Facades\Cache as LaravelCache;
 class CacheManager
 {
     /**
-     * 商品详情缓存时间（秒）
+     * 商品详情缓存时间（秒）- 6小时
      */
-    const GOODS_CACHE_TIME = 300;
+    const GOODS_CACHE_TIME = 21600;
 
     /**
-     * 订单详情缓存时间（秒）
+     * 订单详情缓存时间（秒）- 1小时
      */
-    const ORDER_CACHE_TIME = 300;
+    const ORDER_CACHE_TIME = 3600;
 
     /**
-     * 统计数据缓存时间（秒）
+     * 统计数据缓存时间（秒）- 30分钟
      */
-    const STATS_CACHE_TIME = 600;
+    const STATS_CACHE_TIME = 1800;
 
     /**
      * 生成商品缓存键
@@ -116,5 +116,51 @@ class CacheManager
         LaravelCache::forget(self::statsKey('overview'));
         LaravelCache::forget(self::statsKey('daily'));
         LaravelCache::forget(self::statsKey('monthly'));
+    }
+
+    /**
+     * 清除邮件模板缓存
+     */
+    public static function forgetEmailTemplate(string $token): void
+    {
+        LaravelCache::forget("email_template_{$token}");
+    }
+
+    /**
+     * 清除所有邮件模板缓存
+     */
+    public static function forgetAllEmailTemplates(): void
+    {
+        LaravelCache::forget('email_template_pending_order');
+        LaravelCache::forget('email_template_completed_order');
+        LaravelCache::forget('email_template_failed_order');
+        LaravelCache::forget('email_template_manual_send_manage_mail');
+        LaravelCache::forget('email_template_card_send_user_email');
+    }
+
+    /**
+     * 清除支付方式缓存
+     */
+    public static function forgetPayMethods(): void
+    {
+        LaravelCache::forget('enabled_pay_methods');
+        // 注意：单个支付方式缓存会在具体编辑时通过 forgetPayMethod() 清除
+    }
+
+    /**
+     * 清除单个支付方式缓存
+     */
+    public static function forgetPayMethod(int $payId): void
+    {
+        LaravelCache::forget("pay_method_{$payId}");
+    }
+
+    /**
+     * 清除商品相关缓存（扩展原有方法）
+     */
+    public static function forgetGoodsWithSub(int $goodsId): void
+    {
+        LaravelCache::forget("goods_with_sub_{$goodsId}");
+        self::forgetGoods($goodsId); // 清除原有商品缓存
     }
 }

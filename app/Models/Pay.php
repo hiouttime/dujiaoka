@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\CacheManager;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,6 +53,21 @@ class Pay extends BaseModel
     public function scopeForClient($query, $client)
     {
         return $query->whereIn('pay_client', [$client, self::CLIENT_ALL]);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::updated(function ($pay) {
+            CacheManager::forgetPayMethod($pay->id);
+            CacheManager::forgetPayMethods();
+        });
+        
+        static::deleted(function ($pay) {
+            CacheManager::forgetPayMethod($pay->id);
+            CacheManager::forgetPayMethods();
+        });
     }
 
 }

@@ -45,15 +45,21 @@ class OrderUpdated
         if ($event->order->type == Order::MANUAL_PROCESSING) {
             switch ($event->order->status) {
                 case Order::STATUS_PENDING:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'pending_order')->first()->toArray();
+                    $mailtpl = cache()->remember('email_template_pending_order', 86400, function () {
+                        return Emailtpl::query()->where('tpl_token', 'pending_order')->first();
+                    })->toArray();
                     self::sendMailToOrderStatus($mailtpl, $order, $to);
                     break;
                 case Order::STATUS_COMPLETED:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'completed_order')->first()->toArray();
+                    $mailtpl = cache()->remember('email_template_completed_order', 86400, function () {
+                        return Emailtpl::query()->where('tpl_token', 'completed_order')->first();
+                    })->toArray();
                     self::sendMailToOrderStatus($mailtpl, $order, $to);
                     break;
                 case Order::STATUS_FAILURE:
-                    $mailtpl = Emailtpl::query()->where('tpl_token', 'failed_order')->first()->toArray();
+                    $mailtpl = cache()->remember('email_template_failed_order', 86400, function () {
+                        return Emailtpl::query()->where('tpl_token', 'failed_order')->first();
+                    })->toArray();
                     self::sendMailToOrderStatus($mailtpl, $order, $to);
                     break;
             }
@@ -71,7 +77,9 @@ class OrderUpdated
      */
     private static function sendMailToOrderStatus(array $mailtpl, array $order, string $to) :void
     {
-        $info = replaceMailTemplate($mailtpl, $order);
-        MailSend::dispatch($to, $info['tpl_name'], $info['tpl_content']);
+        if (filter_var($to, FILTER_VALIDATE_EMAIL)) {
+            $info = replaceMailTemplate($mailtpl, $order);
+            MailSend::dispatch($to, $info['tpl_name'], $info['tpl_content']);
+        }
     }
 }

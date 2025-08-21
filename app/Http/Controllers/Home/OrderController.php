@@ -60,8 +60,20 @@ class OrderController extends BaseController
                 throw new RuleValidationException('购物车为空');
             }
 
+            // 获取用户信息以决定验证规则
+            $user = Auth::guard('web')->user();
+            $contactRequired = cfg('contact_required', 'email');
+            
+            // 根据设置和用户状态决定email字段验证规则
+            $emailRule = 'nullable';
+            if ($contactRequired === 'email') {
+                $emailRule = $user ? 'nullable|email' : 'required|email';
+            } elseif ($contactRequired === 'any') {
+                $emailRule = $user ? 'nullable|string' : 'required|string|min:6';
+            }
+            
             $validated = $request->validate([
-                'email' => 'required|email',
+                'email' => $emailRule,
                 'payway' => 'required|integer',
                 'search_pwd' => 'nullable|string',
                 'cart_items' => 'required|array',
@@ -72,8 +84,6 @@ class OrderController extends BaseController
                 'balance_amount' => 'numeric|min:0'
             ]);
 
-            // 获取用户信息
-            $user = Auth::guard('web')->user();
             $userDiscountRate = 1.00;
             $userId = null;
             
@@ -142,7 +152,9 @@ class OrderController extends BaseController
                 ];
             }
 
-            $payway = Pay::find($validated['payway']);
+            $payway = cache()->remember("pay_method_{$validated['payway']}", 43200, function () use ($validated) {
+                return Pay::find($validated['payway']);
+            });
             if (!$payway?->enable) {
                 throw new RuleValidationException('支付方式无效');
             }

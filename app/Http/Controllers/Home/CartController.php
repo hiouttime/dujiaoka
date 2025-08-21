@@ -21,7 +21,10 @@ class CartController extends BaseController
         $params = $request->only(['goods_id', 'sub_id', 'quantity']);
         $qty = (int) ($params['quantity'] ?? 1);
 
-        $goods = Goods::with('goods_sub')->find($params['goods_id']);
+        $goods = cache()->remember("goods_with_sub_{$params['goods_id']}", 21600, function () use ($params) {
+            return Goods::with('goods_sub')->find($params['goods_id']);
+        });
+        
         if (!$goods?->is_open) {
             return $this->fail('商品不存在或已下架');
         }
@@ -43,7 +46,9 @@ class CartController extends BaseController
             return $this->fail("超出限购数量：{$goods->buy_limit_num}");
         }
 
-        $enabledPays = Pay::enabled()->get();
+        $enabledPays = cache()->remember('enabled_pay_methods', 43200, function () {
+            return Pay::enabled()->get();
+        });
         $payways = empty($goods->payment_limit) 
             ? $enabledPays->toArray()
             : $enabledPays->whereIn('id', $goods->payment_limit)->values()->toArray();
