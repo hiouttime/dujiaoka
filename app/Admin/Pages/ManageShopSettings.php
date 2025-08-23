@@ -29,98 +29,142 @@ class ManageShopSettings extends SettingsPage
     
     protected static ?int $navigationSort = 2;
 
+    public function getTitle(): string 
+    {
+        return '店铺装修';
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Tabs::make('ShopDecorationSettings')
                     ->tabs([
-                        // 基础设置
-                        Tabs\Tab::make('基础设置')
+                        // 基础设置  
+                        Tabs\Tab::make('basic-settings')
+                            ->label('基础设置')
                             ->schema([
-                                Grid::make(2)
+                                Section::make('网站标识')
+                                    ->description('设置网站的Logo和标题，将在网站头部显示')
                                     ->schema([
-                                        TextInput::make('title')
-                                            ->label('网站标题')
-                                            ->required()
-                                            ->default('独角数卡')
-                                            ->maxLength(255),
-                                        
-                                        TextInput::make('text_logo')
-                                            ->label('文字Logo')
-                                            ->maxLength(255),
+                                        Grid::make(3)
+                                            ->schema([
+                                                FileUpload::make('img_logo')
+                                                    ->label('图片Logo')
+                                                    ->image()
+                                                    ->directory('logos')
+                                                    ->maxSize(1024)
+                                                    ->imagePreviewHeight('80')
+                                                    ->helperText('推荐尺寸：200x80像素，支持PNG/JPG格式'),
+                                                
+                                                Grid::make(1)
+                                                    ->schema([
+                                                        TextInput::make('title')
+                                                            ->label('网站标题')
+                                                            ->required()
+                                                            ->default('独角数卡')
+                                                            ->maxLength(255)
+                                                            ->helperText('显示在网站标题栏和搜索结果中'),
+                                                        
+                                                        TextInput::make('text_logo')
+                                                            ->label('文字Logo')
+                                                            ->maxLength(255)
+                                                            ->helperText('当图片Logo不可用时的备用文字'),
+                                                    ])
+                                                    ->columnSpan(2),
+                                            ]),
                                     ]),
                                 
-                                FileUpload::make('img_logo')
-                                    ->label('图片Logo')
-                                    ->image()
-                                    ->directory('logos')
-                                    ->maxSize(1024),
-                                
-                                Grid::make(2)
+                                Section::make('SEO设置')
+                                    ->description('优化搜索引擎展示效果')
                                     ->schema([
                                         TextInput::make('keywords')
                                             ->label('关键词')
                                             ->maxLength(255)
-                                            ->columnSpan(2),
+                                            ->helperText('用逗号分隔多个关键词，有助于SEO优化')
+                                            ->placeholder('例如：数字卡密,虚拟商品,在线购买'),
+                                        
+                                        Textarea::make('description')
+                                            ->label('网站描述')
+                                            ->rows(3)
+                                            ->helperText('网站简介，会显示在搜索引擎结果中')
+                                            ->placeholder('请简洁描述您的网站...'),
                                     ]),
                                 
-                                Textarea::make('description')
-                                    ->label('网站描述')
-                                    ->rows(3),
-                                
-                                Grid::make(3)
+                                Section::make('基本配置')
+                                    ->description('网站运行的基础参数设置')
                                     ->schema([
-                                        Select::make('template')
-                                            ->label('模板')
-                                            ->options(config('dujiaoka.templates', []))
-                                            ->default('morpho')
-                                            ->required(),
-                                        
-                                        Select::make('language')
-                                            ->label('语言')
-                                            ->options(config('dujiaoka.language', []))
-                                            ->default('zh_CN')
-                                            ->required(),
-                                        
-                                        Select::make('currency')
-                                            ->label('货币')
-                                            ->options(config('dujiaoka.currencies', []))
-                                            ->default('cny')
-                                            ->required(),
+                                        Grid::make(3)
+                                            ->schema([
+                                                Select::make('template')
+                                                    ->label('网站模板')
+                                                    ->options(config('dujiaoka.templates', []))
+                                                    ->default('morpho')
+                                                    ->required()
+                                                    ->helperText('选择网站前端显示模板'),
+                                                
+                                                Select::make('language')
+                                                    ->label('默认语言')
+                                                    ->options(config('dujiaoka.language', []))
+                                                    ->default('zh_CN')
+                                                    ->required()
+                                                    ->helperText('网站默认显示语言'),
+                                                
+                                                Select::make('currency')
+                                                    ->label('货币单位')
+                                                    ->options(config('dujiaoka.currencies', []))
+                                                    ->default('cny')
+                                                    ->required()
+                                                    ->helperText('商品价格显示的货币单位'),
+                                            ]),
                                     ]),
                                 
-                                Grid::make(2)
+                                Section::make('功能开关')
+                                    ->description('控制网站的各种功能特性')
                                     ->schema([
-                                        Toggle::make('is_open_anti_red')
-                                            ->label('开启防红')
-                                            ->default(false),
-                                        
-                                        Toggle::make('is_cn_challenge')
-                                            ->label('中国大陆验证')
-                                            ->default(true),
-                                        
-                                        Toggle::make('is_open_search_pwd')
-                                            ->label('开启查询密码')
-                                            ->default(false),
-                                        
-                                        Toggle::make('is_open_google_translate')
-                                            ->label('开启谷歌翻译')
-                                            ->default(false),
+                                        Grid::make(2)
+                                            ->schema([
+                                                Toggle::make('is_open_anti_red')
+                                                    ->label('开启防红功能')
+                                                    ->default(false)
+                                                    ->helperText('启用微信防红页面跳转'),
+                                                
+                                                Toggle::make('is_cn_challenge')
+                                                    ->label('中国大陆验证')
+                                                    ->default(true)
+                                                    ->helperText('验证访客是否来自中国大陆'),
+                                                
+                                                Toggle::make('is_open_search_pwd')
+                                                    ->label('开启查询密码')
+                                                    ->default(false)
+                                                    ->helperText('用户查询订单时需要输入密码'),
+                                                
+                                                Toggle::make('is_open_google_translate')
+                                                    ->label('开启谷歌翻译')
+                                                    ->default(false)
+                                                    ->helperText('在网站中集成谷歌翻译功能'),
+                                            ]),
                                     ]),
                                 
-                                RichEditor::make('notice')
-                                    ->label('公告')
-                                    ->columnSpanFull(),
-                                
-                                Textarea::make('footer')
-                                    ->label('页脚')
-                                    ->rows(3)
-                                    ->columnSpanFull(),
+                                Section::make('页面内容')
+                                    ->description('设置网站的公告和页脚信息')
+                                    ->schema([
+                                        RichEditor::make('notice')
+                                            ->label('网站公告')
+                                            ->columnSpanFull()
+                                            ->helperText('显示在网站首页的重要公告信息，支持HTML格式'),
+                                        
+                                        Textarea::make('footer')
+                                            ->label('页脚自定义代码')
+                                            ->rows(3)
+                                            ->columnSpanFull()
+                                            ->helperText('可用于添加统计代码、客服系统等')
+                                    ]),
                             ]),
                         
                         // 导航栏设置
-                        Tabs\Tab::make('导航栏设置')
+                        Tabs\Tab::make('navigation-settings')
+                            ->label('导航栏设置')
                             ->schema([
                                 Section::make('导航栏配置')
                                     ->description('配置网站顶部导航栏菜单项，支持二级菜单')

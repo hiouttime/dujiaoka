@@ -12,7 +12,6 @@
     </style>
 
     <meta http-equiv="Cache-Control" content="max-age=3600" />
-    <meta http-equiv="Expires" content="Sun, 17 Mar 2024 12:00:00 GMT" />
     <meta name="Keywords" content="{{ shop_cfg('keywords') }}">
     <meta name="Description" content="{{ shop_cfg('description')  }}">
     <meta name="mobile-web-app-capable" content="yes" />
