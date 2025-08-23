@@ -196,6 +196,37 @@ BEGIN;
 COMMIT;
 
 -- ----------------------------
+-- Table structure for user_levels
+-- ----------------------------
+DROP TABLE IF EXISTS `user_levels`;
+CREATE TABLE `user_levels` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '等级名称',
+  `min_spent` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '最低消费金额',
+  `discount_rate` decimal(4,2) NOT NULL DEFAULT '1.00' COMMENT '折扣率（1.00=原价，0.9=9折）',
+  `color` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '#6c757d' COMMENT '等级颜色',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '等级描述',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '排序',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态 1启用 0禁用',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_min_spent` (`min_spent`),
+  KEY `idx_status_sort` (`status`, `sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户等级表';
+
+-- ----------------------------
+-- Records of user_levels
+-- ----------------------------
+BEGIN;
+INSERT INTO `user_levels` VALUES (1, '普通会员', 0.00, 1.00, '#6c757d', '新注册用户默认等级', 1, 1, now(), now(), NULL);
+INSERT INTO `user_levels` VALUES (2, '白银会员', 500.00, 0.95, '#c0c0c0', '累计消费满500元可升级', 2, 1, now(), now(), NULL);
+INSERT INTO `user_levels` VALUES (3, '黄金会员', 1000.00, 0.92, '#ffd700', '累计消费满1000元可升级', 3, 1, now(), now(), NULL);
+INSERT INTO `user_levels` VALUES (4, '钻石会员', 3000.00, 0.88, '#b9f2ff', '累计消费满3000元可升级', 4, 1, now(), now(), NULL);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for admin_users
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_users`;
@@ -357,6 +388,7 @@ CREATE TABLE `goods` (
   `other_ipu_cnf` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '其他输入框配置',
   `api_hook` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '回调事件',
   `preselection` decimal(10,2) DEFAULT '0.0' COMMENT '自选加价',
+  `require_login` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要登录才能购买',
   `is_open` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用，1是 0否',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -368,6 +400,7 @@ CREATE TABLE `goods` (
 -- Records of goods
 -- ----------------------------
 BEGIN;
+INSERT INTO `goods` VALUES (1, 1, '示例商品', '这是一个示例商品', '示例,商品', NULL, 10.00, 0, 100, 0, 1, NULL, 0, '这是一个用于演示的示例商品，您可以修改或删除它。', 1, NULL, NULL, 0, 0.00, 0, 1, now(), now(), NULL);
 COMMIT;
 
 -- ----------------------------
@@ -413,6 +446,7 @@ CREATE TABLE `goods_group` (
 -- Records of goods_group
 -- ----------------------------
 BEGIN;
+INSERT INTO `goods_group` VALUES (1, '默认分类', 1, 1, now(), now(), NULL);
 COMMIT;
 
 -- ----------------------------
@@ -561,12 +595,36 @@ INSERT INTO `pays` VALUES (null ,'USDC-ERC20', 'tokenpay-usdc-erc', 0, 1, 3, 'US
 INSERT INTO `pays` VALUES (null ,'币安支付', 'binance', 0, 1, 3, 'USDT', 'API密钥', '密钥', 'pay/binance', 0, 0, now(), now(), NULL);
 COMMIT;
 -- ----------------------------
+-- Table structure for article_categories
+-- ----------------------------
+DROP TABLE IF EXISTS `article_categories`;
+CREATE TABLE `article_categories` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类名称',
+  `slug` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci UNIQUE DEFAULT NULL COMMENT '分类标识',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '分类描述',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '排序',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否启用',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_categories_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of article_categories
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for articles
 -- ----------------------------
 
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章ID',
+  `category_id` bigint unsigned DEFAULT NULL COMMENT '文章分类ID',
   `link` varchar(255) NOT NULL COMMENT '文章链接',
   `title` varchar(255) NOT NULL COMMENT '文章标题',
   `category` varchar(255) NULL COMMENT '文章分类',
@@ -574,11 +632,36 @@ CREATE TABLE `articles` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `articles_category_id_foreign` (`category_id`),
+  CONSTRAINT `articles_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `article_categories` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of articles
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for article_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `article_goods`;
+CREATE TABLE `article_goods` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `article_id` int NOT NULL COMMENT '文章ID',
+  `goods_id` int NOT NULL COMMENT '商品ID',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '排序',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `article_goods_article_id_goods_id_unique` (`article_id`,`goods_id`),
+  KEY `article_goods_article_id_index` (`article_id`),
+  KEY `article_goods_goods_id_index` (`goods_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of article_goods
 -- ----------------------------
 BEGIN;
 COMMIT;

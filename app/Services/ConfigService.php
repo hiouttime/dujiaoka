@@ -36,7 +36,7 @@ class ConfigService
 
     protected function loadConfig(): void
     {
-        $this->config = Cache::get('system-setting');
+        $this->config = Cache::get('system-setting', []);
         
         // Redis 没数据时从数据库读取一次
         if (empty($this->config)) {
@@ -46,7 +46,11 @@ class ConfigService
                 
                 foreach ($settings as $setting) {
                     $payload = json_decode($setting->payload, true);
-                    $config = array_merge($config, $payload);
+                    // 构建嵌套结构：config[group][name] = payload
+                    if (!isset($config[$setting->group])) {
+                        $config[$setting->group] = [];
+                    }
+                    $config[$setting->group][$setting->name] = $payload;
                 }
                 
                 $this->config = $config;

@@ -79,8 +79,10 @@ Route::middleware(['dujiaoka.boot', 'auth:web'])->namespace('User')->prefix('use
     Route::get('level', 'UserCenterController@levelInfo')->name('user.level');
 });
 
-Route::middleware('install.check')->namespace('Home')->prefix('install')->controller('HomeController')->group(function () {
-    Route::get('/', 'install');
-    Route::post('do', 'doInstall');
+// 安装路由
+Route::middleware('install.check')->group(function () {
+    Route::get('/install', 'InstallController@index')->name('install.index');
+    Route::post('/install', 'InstallController@install')->name('install.do');
 });
+
 

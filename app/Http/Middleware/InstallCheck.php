@@ -15,7 +15,7 @@ class InstallCheck
      */
     public function handle($request, Closure $next)
     {
-        // 安装检查
+        // 检查是否已安装 - 已安装则阻止访问安装页面
         $installLock = base_path() . DIRECTORY_SEPARATOR . 'install.lock';
         if (file_exists($installLock)) {
             return redirect(url('/'));
