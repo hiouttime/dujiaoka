@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ConfigService
 {
@@ -35,7 +36,28 @@ class ConfigService
 
     protected function loadConfig(): void
     {
-        $this->config = Cache::get('system-setting', []);
+        $this->config = Cache::get('system-setting');
+        
+        // Redis 没数据时从数据库读取一次
+        if (empty($this->config)) {
+            try {
+                $settings = DB::table('settings')->get();
+                $config = [];
+                
+                foreach ($settings as $setting) {
+                    $payload = json_decode($setting->payload, true);
+                    $config = array_merge($config, $payload);
+                }
+                
+                $this->config = $config;
+                if (!empty($config)) {
+                    Cache::put('system-setting', $config);
+                }
+            } catch (\Exception $e) {
+                $this->config = [];
+            }
+        }
+        
         $this->loaded = true;
     }
 
