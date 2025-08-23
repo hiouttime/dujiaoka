@@ -153,8 +153,7 @@
           </div>
           @else
           <div class="d-flex gap-1 me-2">
-            <a class="btn btn-sm btn-outline-secondary" href="{{ route('login') }}?tab=login">登录</a>
-            <a class="btn btn-sm btn-primary" href="{{ route('register') }}?tab=register">注册</a>
+            <a class="btn btn-sm btn-primary" href="{{ route('login') }}">登录</a>
           </div>
           @endauth
 

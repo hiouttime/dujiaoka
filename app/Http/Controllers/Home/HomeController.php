@@ -81,6 +81,7 @@ class HomeController extends BaseController
             if(empty($goods))
                 return $this->err(__('dujiaoka.prompt.the_goods_is_not_on_the_shelves'));
             $this->goodsService->validatorGoodsStatus($goods);
+            $goods->need_login = $goods->require_login && !Auth::guard('web')->check();
             
             // 加载关联文章
             $goods->relatedArticles = $goods->articles()->select('articles.id', 'articles.title', 'articles.link', 'articles.content')->get();
@@ -90,9 +91,9 @@ class HomeController extends BaseController
             }
             $formatGoods = $this->goodsService->format($goods);
             // 加载支付方式.
-            $client = Pay::CLIENT_PC;
+            $client = \App\Models\Pay::CLIENT_PC;
             if (app('Jenssegers\Agent')->isMobile()) {
-                $client = Pay::CLIENT_MOBILE;
+                $client = \App\Models\Pay::CLIENT_MOBILE;
             }
             $formatGoods->payways = $this->payService->pays($client);
             if (!empty($formatGoods->payment_limit)) {

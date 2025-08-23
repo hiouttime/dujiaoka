@@ -25,6 +25,11 @@ class CacheManager
     const STATS_CACHE_TIME = 1800;
 
     /**
+     * 库存锁定缓存时间（秒）- 30分钟（与订单过期时间相关）
+     */
+    const STOCK_LOCK_TIME = 1800;
+
+    /**
      * 生成商品缓存键
      */
     public static function goodsKey(int $id): string
@@ -162,5 +167,74 @@ class CacheManager
     {
         LaravelCache::forget("goods_with_sub_{$goodsId}");
         self::forgetGoods($goodsId); // 清除原有商品缓存
+    }
+
+    /**
+     * 生成库存锁定缓存键
+     */
+    public static function stockLockKey(int $subId): string
+    {
+        return "stock_lock_{$subId}";
+    }
+
+    /**
+     * 生成订单库存锁定缓存键
+     */
+    public static function orderStockLockKey(string $orderSn): string
+    {
+        return "order_stock_lock_{$orderSn}";
+    }
+
+    /**
+     * 简单锁定库存（下单即减库存模式）
+     */
+    public static function lockStock(int $subId, int $quantity, string $orderSn): bool
+    {
+        $lockKey = self::stockLockKey($subId);
+        $orderStockKey = self::orderStockLockKey($orderSn);
+        
+        // 记录锁定数量
+        LaravelCache::increment($lockKey, $quantity);
+        
+        // 记录订单锁定的商品信息（用于释放）
+        $orderStock = LaravelCache::get($orderStockKey, []);
+        $orderStock[] = ['sub_id' => $subId, 'quantity' => $quantity];
+        LaravelCache::put($orderStockKey, $orderStock, self::STOCK_LOCK_TIME);
+        
+        return true;
+    }
+
+    /**
+     * 简单释放库存锁定（订单过期或取消）
+     */
+    public static function unlockStock(string $orderSn): bool
+    {
+        $orderStockKey = self::orderStockLockKey($orderSn);
+        $orderStock = LaravelCache::get($orderStockKey, []);
+        
+        foreach ($orderStock as $item) {
+            $lockKey = self::stockLockKey($item['sub_id']);
+            LaravelCache::decrement($lockKey, $item['quantity']);
+        }
+        
+        LaravelCache::forget($orderStockKey);
+        return true;
+    }
+
+    /**
+     * 获取已锁定的库存数量
+     */
+    public static function getLockedStock(int $subId): int
+    {
+        return (int) LaravelCache::get(self::stockLockKey($subId), 0);
+    }
+
+    /**
+     * 检查库存是否足够（考虑锁定库存）
+     */
+    public static function checkStockAvailable(int $subId, int $requestQuantity, int $actualStock): bool
+    {
+        $availableStock = $actualStock - self::getLockedStock($subId);
+        return $availableStock >= $requestQuantity;
     }
 }

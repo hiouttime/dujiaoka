@@ -17,8 +17,11 @@ use App\Jobs\WorkWeiXinPush;
 use App\Models\BaseModel;
 use App\Models\Coupon;
 use App\Models\Goods;
+use App\Models\GoodsSub;
+use App\Models\Carmis;
 use App\Models\Order;
 use App\Models\FrontUser;
+use App\Services\CacheManager;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -442,19 +445,29 @@ class OrderProcess
             }
             $order->actual_price = $actualPrice;
             $order->trade_no = $tradeNo ?: '';
-            // 区分订单类型
-            // 自动发货
-            if ($order->type == Order::AUTOMATIC_DELIVERY) {
-                $completedOrder = $this->processAuto($order);
-            } else {
-                $completedOrder = $this->processManual($order);
+            
+            // 简单的库存处理
+            $stockMode = cfg('stock_mode', 2);
+            if ($stockMode == 1) {
+                // 下单即减库存模式：释放锁定
+                CacheManager::unlockStock($order->order_sn);
             }
+            
+            // 根据订单中的商品类型处理
+            $hasAutoDelivery = $order->orderItems()->whereHas('goods', function($query) {
+                $query->where('type', Goods::AUTOMATIC_DELIVERY);
+            })->exists();
+            
+            if ($hasAutoDelivery) {
+                $this->processAuto($order);
+            } else {
+                $this->processManual($order);
+            }
+            
             // 处理用户相关逻辑
             $this->processUserLogic($order);
-            
-            // 销量加上
-            $this->goodsService->salesVolumeIncr($order->goods_id, $order->buy_amount);
             DB::commit();
+            
             // 如果开启了server酱
             if (cfg('is_open_server_jiang', 0) == BaseModel::STATUS_OPEN) {
                 ServerJiang::dispatch($order);
@@ -473,7 +486,7 @@ class OrderProcess
             }
             // 回调事件
             ApiHook::dispatch($order);
-            return $completedOrder;
+            return $order;
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new RuleValidationException($exception->getMessage());
@@ -491,14 +504,24 @@ class OrderProcess
     {
         // 设置订单为待处理
         $order->status = Order::STATUS_PENDING;
-        // 保存订单
         $order->save();
-        // 商品库存减去
-        $this->goodsService->inStockDecr($order->goods_id, $order->buy_amount);
+        
+        // 如果是发货时减库存模式，现在减库存
+        $stockMode = cfg('stock_mode', 2);
+        if ($stockMode == 2) {
+            foreach ($order->orderItems as $orderItem) {
+                $goodsSub = GoodsSub::find($orderItem->sub_id);
+                if ($goodsSub && $goodsSub->stock >= $orderItem->quantity) {
+                    $goodsSub->stock -= $orderItem->quantity;
+                    $goodsSub->sales_volume += $orderItem->quantity;
+                    $goodsSub->save();
+                }
+            }
+        }
         // 邮件数据
         $mailData = [
             'created_at' => $order->create_at,
-            'product_name' => $order->goods->gd_name,
+            'product_name' => $order->orderItems->first()->goods_name ?? '未知商品',
             'webname' => cfg('text_logo', '独角数卡'),
             'weburl' => config('app.url') ?? 'http://dujiaoka.com',
             'ord_info' => str_replace(PHP_EOL, '<br/>', $order->info),
@@ -550,7 +573,7 @@ class OrderProcess
         // 邮件数据
         $mailData = [
             'created_at' => $order->create_at,
-            'product_name' => $order->goods->gd_name,
+            'product_name' => $order->orderItems->first()->goods_name ?? '未知商品',
             'webname' => cfg('text_logo', '独角数卡'),
             'weburl' => config('app.url') ?? 'http://dujiaoka.com',
             'ord_info' => implode('<br/>', $carmisInfo),
@@ -600,5 +623,6 @@ class OrderProcess
             $user->addTotalSpent($totalSpent);
         }
     }
+
 
 }

@@ -137,22 +137,9 @@
 let paymentMethods = [];
 
 document.addEventListener('DOMContentLoaded', function() {
-  handleBuyNow();
   renderCart();
 });
 
-// 处理立即购买模式
-function handleBuyNow() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const buyNowItem = sessionStorage.getItem('buyNowItem');
-  
-  if (urlParams.get('buy_now') === '1' && buyNowItem) {
-    const item = JSON.parse(buyNowItem);
-    cart.clear();
-    cart.add(item);
-    sessionStorage.removeItem('buyNowItem');
-  }
-}
 
 function loadPaymentMethods(items) {
   if (items.length === 0) {
@@ -310,7 +297,6 @@ function removeItem(goodsId, subId) {
 }
 
 function updateSummary() {
-  const items = cart.getItems();
   const totalQuantity = cart.getTotalQuantity();
   const totalPrice = cart.getTotalPrice();
   

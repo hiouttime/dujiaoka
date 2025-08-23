@@ -19,7 +19,7 @@ class Goods extends BaseModel
         'sales_volume', 'ord', 'payment_limit',
         'buy_limit_num', 'buy_min_num', 'buy_prompt', 'description', 'usage_instructions',
         'type', 'wholesale_price_cnf', 'wholesale_prices', 'other_ipu_cnf', 
-        'customer_form_fields', 'api_hook', 'preselection', 'is_open'
+        'customer_form_fields', 'api_hook', 'preselection', 'is_open', 'require_login'
     ];
 
     protected $casts = [
@@ -34,6 +34,7 @@ class Goods extends BaseModel
         'type' => 'integer',
         'api_hook' => 'integer',
         'is_open' => 'boolean',
+        'require_login' => 'boolean',
     ];
 
     protected $dispatchesEvents = [

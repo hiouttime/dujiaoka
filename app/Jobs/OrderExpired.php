@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Services\CacheManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -55,6 +56,12 @@ class OrderExpired implements ShouldQueue
         // 如果x分钟后还没支付就算过期
         $order = app('App\Services\Orders')->detailOrderSN($this->orderSN);
         if ($order && $order->status == Order::STATUS_WAIT_PAY) {
+            $stockMode = cfg('stock_mode', 2);
+            // 如果是下单即减库存模式，释放锁定的库存
+            if ($stockMode == 1) {
+                CacheManager::unlockStock($this->orderSN);
+            }
+            
             app('App\Services\Orders')->expiredOrderSN($this->orderSN);
             // 回退优惠券
             CouponBack::dispatch($order);

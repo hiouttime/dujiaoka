@@ -149,17 +149,22 @@ class Products extends Resource
                             ->helperText('留空则不限制')
                             ->columnSpanFull(),
                         
+                        Forms\Components\Toggle::make('require_login')
+                            ->label('需要登录才能购买')
+                            ->default(false)
+                            ->columnSpanFull(),
+                        
                         Forms\Components\Group::make([
                             Forms\Components\TextInput::make('buy_min_num')
-                                ->label('最小数量')
+                                ->label('最小下单数量')
                                 ->numeric()
                                 ->default(1)
                                 ->minValue(1),
                             Forms\Components\TextInput::make('buy_limit_num')
-                                ->label('最大数量')
+                                ->label('最大下单数量')
                                 ->numeric()
                                 ->default(0)
-                                ->helperText('0为不限制'),
+                                ->helperText('如果商品需要登录才能购买，则最大数量为单用户最大购买数量；0为不限制'),
                         ])->columns(2),
                         
                         Forms\Components\TextInput::make('preselection')

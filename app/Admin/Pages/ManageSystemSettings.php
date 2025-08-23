@@ -69,6 +69,17 @@ class ManageSystemSettings extends SettingsPage
                                             ->default('email')
                                             ->required(),
                                     ]),
+                                
+                                Select::make('stock_mode')
+                                    ->label('下单库存模式')
+                                    ->options([
+                                        1 => '下单即减库存',
+                                        2 => '发货时减库存',
+                                    ])
+                                    ->default(2)
+                                    ->required()
+                                    ->helperText('下单即减库存适合秒杀商品场景，避免高并发下单时造成部分订单无法兑现，但可能存在被恶意占用库存的情况，建议设置商品下单需登录使用。库存会在订单过期后恢复。')
+                                    ->columnSpanFull(),
                             ]),
                         
                         // 推送设置

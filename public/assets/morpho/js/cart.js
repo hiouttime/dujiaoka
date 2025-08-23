@@ -143,6 +143,53 @@ class Cart {
     }
 
     async validateAndAdd(goodsId, subId, qty = 1, customFields = {}) {
+        const data = await this.validateItem(goodsId, subId, qty);
+        if (!data) return false;
+        
+        this.add({
+            goods_id: goodsId,
+            sub_id: subId,
+            name: data.name,
+            price: +data.price,
+            image: data.image,
+            quantity: qty,
+            stock: data.stock,
+            max_quantity: data.max_quantity,
+            custom_fields: customFields,
+            payways: data.payways
+        });
+        
+        this.animate();
+        this.notify('已添加到购物车', 'success');
+        return true;
+    }
+
+    async validateAndBuyNow(goodsId, subId, qty = 1, customFields = {}) {
+        const data = await this.validateItem(goodsId, subId, qty);
+        if (!data) return false;
+        
+        // 清空购物车并添加单品
+        this.clear();
+        this.add({
+            goods_id: goodsId,
+            sub_id: subId,
+            name: data.name,
+            price: +data.price,
+            image: data.image,
+            quantity: qty,
+            stock: data.stock,
+            max_quantity: data.max_quantity,
+            custom_fields: customFields,
+            payways: data.payways,
+            buy_now: true
+        });
+        
+        // 跳转到购物车
+        window.location.href = '/cart?buy_now=1';
+        return true;
+    }
+
+    async validateItem(goodsId, subId, qty = 1) {
         try {
             const token = document.querySelector('meta[name="csrf-token"]')?.content;
             const res = await fetch('/api/cart/validate', {
@@ -157,7 +204,7 @@ class Cart {
             const {success, data, message} = await res.json();
             
             if (success) {
-                this.add({
+                return {
                     goods_id: goodsId,
                     sub_id: subId,
                     name: data.name,
@@ -166,20 +213,15 @@ class Cart {
                     quantity: qty,
                     stock: data.stock,
                     max_quantity: data.max_quantity,
-                    custom_fields: customFields,
                     payways: data.payways.map(({id, name, pay_name}) => ({id, name: name || pay_name}))
-                });
-                
-                this.animate();
-                this.notify('已添加到购物车', 'success');
-                return true;
+                };
             }
             
             this.notify(message, 'error');
-            return false;
+            return null;
         } catch (error) {
-            this.notify('添加失败，请重试', 'error');
-            return false;
+            this.notify('操作失败，请重试', 'error');
+            return null;
         }
     }
 

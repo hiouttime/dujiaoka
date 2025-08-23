@@ -10,6 +10,7 @@ use App\Models\Carmis;
 use App\Models\Pay;
 use App\Models\FrontUser;
 use App\Services\OrderProcess;
+use App\Services\CacheManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -99,10 +100,19 @@ class OrderController extends BaseController
             $totalPrice = 0;
             $orderItems = [];
 
+            // 获取库存模式配置
+            $stockMode = cfg('stock_mode', 2); // 默认发货时减库存
+            $orderSn = strtoupper(\Illuminate\Support\Str::random(16)); // 提前生成订单号用于库存锁定
+
             foreach ($cartItems as $item) {
                 $goods = Goods::with('goods_sub')->find($item['goods_id']);
                 if (!$goods || !$goods->is_open) {
                     throw new RuleValidationException("商品不存在或已下架");
+                }
+
+                // 检查是否需要登录购买
+                if ($goods->require_login && !$user) {
+                    throw new RuleValidationException("{$goods->gd_name} 需要登录后才能购买");
                 }
 
                 $sub = $goods->goods_sub()->find($item['sub_id']);
@@ -110,16 +120,47 @@ class OrderController extends BaseController
                     throw new RuleValidationException("商品规格不存在");
                 }
 
-                $stock = $goods->type == Goods::AUTOMATIC_DELIVERY 
+                // 计算实际库存
+                $actualStock = $goods->type == Goods::AUTOMATIC_DELIVERY 
                     ? Carmis::where('sub_id', $item['sub_id'])->where('status', 1)->count()
                     : $sub->stock;
 
-                if ($item['quantity'] > $stock) {
-                    throw new RuleValidationException("{$goods->gd_name} 库存不足");
+                // 根据库存模式检查库存
+                if ($stockMode == 1) {
+                    // 下单即减库存模式：需要考虑已锁定的库存
+                    if (!CacheManager::checkStockAvailable($item['sub_id'], $item['quantity'], $actualStock)) {
+                        throw new RuleValidationException("{$goods->gd_name} 库存不足");
+                    }
+                } else {
+                    // 发货时减库存模式：直接检查实际库存
+                    if ($item['quantity'] > $actualStock) {
+                        throw new RuleValidationException("{$goods->gd_name} 库存不足");
+                    }
                 }
 
-                if ($goods->buy_limit_num > 0 && $item['quantity'] > $goods->buy_limit_num) {
-                    throw new RuleValidationException("{$goods->gd_name} 超出限购数量");
+                // 检查购买数量限制
+                if ($goods->buy_limit_num > 0) {
+                    if ($goods->require_login && $user) {
+                        // 检查所有有效订单（待支付、待处理、处理中、已完成）
+                        $purchasedQuantity = \App\Models\OrderItem::join('orders', 'order_items.order_id', '=', 'orders.id')
+                            ->where('orders.user_id', $user->id)
+                            ->where('order_items.goods_id', $goods->id)
+                            ->whereIn('orders.status', [
+                                \App\Models\Order::STATUS_WAIT_PAY,
+                                \App\Models\Order::STATUS_PENDING,
+                                \App\Models\Order::STATUS_PROCESSING,
+                                \App\Models\Order::STATUS_COMPLETED
+                            ])
+                            ->sum('order_items.quantity');
+                            
+                        if ($purchasedQuantity + $item['quantity'] > $goods->buy_limit_num) {
+                            throw new RuleValidationException("{$goods->gd_name} 超出最大购买数量（已下单 {$purchasedQuantity} 件，限购 {$goods->buy_limit_num} 件）");
+                        }
+                    } else {
+                        if ($item['quantity'] > $goods->buy_limit_num) {
+                            throw new RuleValidationException("{$goods->gd_name} 超出限购数量");
+                        }
+                    }
                 }
 
                 // 应用用户等级折扣
@@ -194,8 +235,6 @@ class OrderController extends BaseController
                 }
             }
 
-            $orderSn = strtoupper(\Illuminate\Support\Str::random(16));
-
             $order = Order::create([
                 'order_sn' => $orderSn,
                 'user_id' => $userId,
@@ -218,8 +257,16 @@ class OrderController extends BaseController
                 $user->deductBalance($balanceUsed, 'consume', '订单消费', $orderSn);
             }
 
+            // 创建订单项
             foreach ($orderItems as $itemData) {
                 $order->orderItems()->create($itemData);
+            }
+
+            // 如果是下单即减库存模式，锁定库存
+            if ($stockMode == 1) {
+                foreach ($cartItems as $item) {
+                    CacheManager::lockStock($item['sub_id'], $item['quantity'], $orderSn);
+                }
             }
 
             DB::commit();
@@ -232,12 +279,20 @@ class OrderController extends BaseController
 
         } catch (RuleValidationException $exception) {
             DB::rollBack();
+            // 如果是下单即减库存模式，释放可能已锁定的库存
+            if (isset($stockMode) && $stockMode == 1 && isset($orderSn)) {
+                CacheManager::unlockStock($orderSn);
+            }
             return response()->json([
                 'success' => false,
                 'message' => $exception->getMessage()
             ]);
         } catch (\Exception $exception) {
-            DB::rollBack();         
+            DB::rollBack();
+            // 如果是下单即减库存模式，释放可能已锁定的库存
+            if (isset($stockMode) && $stockMode == 1 && isset($orderSn)) {
+                CacheManager::unlockStock($orderSn);
+            }
             return response()->json([
                 'success' => false,
                 'message' => '订单创建失败，请重试',

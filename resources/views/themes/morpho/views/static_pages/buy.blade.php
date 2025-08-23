@@ -229,11 +229,26 @@
                       }
                     </script>
                   @endif
-  
+
+                  {{-- 登录购买提示 --}}
+                  @if(isset($need_login) && $need_login)
+                    <div class="alert alert-warning mb-3" role="alert">
+                      <div class="d-flex align-items-center">
+                        <i class="ci-user fs-xl me-2"></i>
+                        <div>
+                          <strong>需要登录购买</strong><br>
+                          <small>此商品需要登录后才能购买，请先 
+                            <a href="{{ url('/user/login') }}" class="alert-link">点击登录</a>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  @endif
   
                   <div class="d-flex gap-3 pb-3 pb-lg-4 mb-3">
                     <div class="count-input flex-shrink-0 w-50 d-flex justify-content-center align-items-center">
-                      <button type="button" class="btn btn-icon btn-lg" data-decrement aria-label="Decrement quantity">
+                      <button type="button" class="btn btn-icon btn-lg" data-decrement aria-label="Decrement quantity"
+                              @if(isset($need_login) && $need_login) disabled @endif>
                         <i class="ci-minus"></i>
                       </button>
                       @php
@@ -242,20 +257,28 @@
                           ($type == 1 ? collect($goods_sub)->sum(fn($sub) => \App\Models\Carmis::where('sub_id', $sub['id'])->where('status', 1)->count()) : collect($goods_sub)->sum('stock'));
                       @endphp
                       <input type="number" class="form-control form-control-xl w-50" name="by_amount" min="1"
-                             max="{{ $initialStock }}" value="1">
-                      <button type="button" class="btn btn-icon btn-lg" data-increment aria-label="Increment quantity">
+                             max="{{ $initialStock }}" value="1"
+                             @if(isset($need_login) && $need_login) disabled @endif>
+                      <button type="button" class="btn btn-icon btn-lg" data-increment aria-label="Increment quantity"
+                              @if(isset($need_login) && $need_login) disabled @endif>
                         <i class="ci-plus"></i>
                       </button>
                     </div>
                     <input type="hidden" name="aff" value="">
   
                     <div class="d-flex gap-2 w-100">
-                      <button type="button" id="addToCart" class="btn btn-lg btn-outline-dark">
-                        <i class="ci-shopping-cart me-2"></i>加入购物车
-                      </button>
-                      <button type="button" id="buyNow" class="btn btn-lg btn-dark">
-                        立即购买
-                      </button>
+                      @if(isset($need_login) && $need_login)
+                        <a href="{{ url('/user/login') }}" class="btn btn-lg btn-primary w-100">
+                          <i class="ci-user me-2"></i>请先登录
+                        </a>
+                      @else
+                        <button type="button" id="addToCart" class="btn btn-lg btn-outline-dark">
+                          <i class="ci-shopping-cart me-2"></i>加入购物车
+                        </button>
+                        <button type="button" id="buyNow" class="btn btn-lg btn-dark">
+                          立即购买
+                        </button>
+                      @endif
                     </div>
                   </div>
   
@@ -601,19 +624,22 @@
                 }
             });
             
-            addToCartBtn.click(async function() {
+            // 统一的购买前数据准备和验证
+            function preparePurchaseData() {
                 const spec = getSelectedSpec();
                 const quantity = +amountInput.val();
                 
+                // 库存验证
                 if (quantity > spec.stock) {
                     cart.notify('库存不足', 'error');
-                    return;
+                    return null;
                 }
                 
                 @if($buy_limit_num > 0)
+                // 限购验证
                 if (quantity > {{ $buy_limit_num }}) {
                     cart.notify('超出限购数量', 'error');
-                    return;
+                    return null;
                 }
                 @endif
                 
@@ -622,64 +648,28 @@
                 document.querySelectorAll('[name^="custom_fields["]').forEach(field => {
                     const fieldName = field.name.match(/custom_fields\[([^\]]+)\]/)?.[1];
                     if (fieldName) {
-                        if (field.type === 'checkbox') {
-                            customFieldsData[fieldName] = field.checked ? field.value : '0';
-                        } else {
-                            customFieldsData[fieldName] = field.value;
-                        }
+                        customFieldsData[fieldName] = field.type === 'checkbox' 
+                            ? (field.checked ? field.value : '0')
+                            : field.value;
                     }
                 });
                 
-                await cart.validateAndAdd(spec.goods_id, spec.sub_id, quantity, customFieldsData);
+                return { spec, quantity, customFieldsData };
+            }
+            
+            // 加入购物车
+            addToCartBtn.click(async function() {
+                const data = preparePurchaseData();
+                if (!data) return;
+                
+                await cart.validateAndAdd(data.spec.goods_id, data.spec.sub_id, data.quantity, data.customFieldsData);
             });
             
+            // 立即购买
             buyNowBtn.click(async function() {
-                const spec = getSelectedSpec();
-                const quantity = +amountInput.val();
-                
-                if (quantity > spec.stock) {
-                    cart.notify('库存不足', 'error');
-                    return;
-                }
-                
-                @if($buy_limit_num > 0)
-                if (quantity > {{ $buy_limit_num }}) {
-                    cart.notify('超出限购数量', 'error');
-                    return;
-                }
-                @endif
-                
-                // 收集自定义字段数据
-                const customFieldsData = {};
-                document.querySelectorAll('[name^="custom_fields["]').forEach(field => {
-                    const fieldName = field.name.match(/custom_fields\[([^\]]+)\]/)?.[1];
-                    if (fieldName) {
-                        if (field.type === 'checkbox') {
-                            customFieldsData[fieldName] = field.checked ? field.value : '0';
-                        } else {
-                            customFieldsData[fieldName] = field.value;
-                        }
-                    }
-                });
-                
-                // 立即购买：创建单品订单数据并直接跳转到购物车页面
-                const orderData = {
-                    goods_id: spec.goods_id,
-                    sub_id: spec.sub_id,
-                    quantity: quantity,
-                    name: spec.name,
-                    price: spec.price,
-                    image: '{{ pictureUrl($picture) }}',
-                    stock: spec.stock,
-                    custom_fields: customFieldsData,
-                    buy_now: true
-                };
-                
-                // 存储单品购买数据到sessionStorage
-                sessionStorage.setItem('buyNowItem', JSON.stringify(orderData));
-                
-                // 直接跳转到购物车
-                window.location.href = '/cart?buy_now=1';
+                const data = preparePurchaseData();
+                if (!data) return;
+                await cart.validateAndBuyNow(data.spec.goods_id, data.spec.sub_id, data.quantity, data.customFieldsData);
             });
             
             // 底部浮动购买栏逻辑
