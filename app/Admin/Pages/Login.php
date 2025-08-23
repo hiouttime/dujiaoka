@@ -5,6 +5,7 @@ namespace App\Admin\Pages;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as BaseLogin;
+use Illuminate\Validation\ValidationException;
 
 class Login extends BaseLogin
 {
@@ -29,5 +30,12 @@ class Login extends BaseLogin
             'username' => $data['username'],
             'password' => $data['password'],
         ];
+    }
+    
+    protected function throwFailureValidationException(): never
+    {
+        throw ValidationException::withMessages([
+            'data.username' => '登录信息有误。',
+        ]);
     }
 }

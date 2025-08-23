@@ -7,7 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\FrontUser;
+use App\Models\User;
 
 class ListUsers extends ListRecords
 {
@@ -25,9 +25,9 @@ class ListUsers extends ListRecords
         return [
             'all' => Tab::make('全部用户'),
             'active' => Tab::make('正常用户')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', FrontUser::STATUS_ACTIVE)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', User::STATUS_ACTIVE)),
             'disabled' => Tab::make('禁用用户')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', FrontUser::STATUS_DISABLED)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', User::STATUS_DISABLED)),
             'vip' => Tab::make('VIP用户')
                 ->modifyQueryUsing(fn (Builder $query) => $query->whereHas('level', fn($q) => $q->where('min_spent', '>', 0))),
         ];

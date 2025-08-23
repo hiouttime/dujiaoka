@@ -238,10 +238,6 @@
             </ul>
           </div>
 
-          <!-- Search -->
-          <a class="btn btn-icon fs-lg btn-outline-secondary border-0 rounded-circle animate-scale" href="/order-search">
-            <i class="ci-search animate-target"></i>
-          </a>
         </div>
       </div>
     </header>

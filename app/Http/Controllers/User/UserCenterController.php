@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\FrontUser;
+use App\Models\User;
 use App\Models\UserBalanceRecord;
 use App\Models\Order;
 use Illuminate\Http\Request;

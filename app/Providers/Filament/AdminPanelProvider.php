@@ -12,13 +12,8 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use App\Admin\Pages\Login;
-use App\Admin\Widgets\StatsOverviewWidget;
-use App\Admin\Widgets\EnhancedStatsOverviewWidget;
+use App\Admin\Widgets\SalesOverviewWidget;
 use App\Admin\Widgets\SalesChartWidget;
-use App\Admin\Widgets\PaymentMethodChartWidget;
-use App\Admin\Widgets\TopSellingGoodsWidget;
-use App\Admin\Widgets\OrderStatusChartWidget;
-use App\Admin\Widgets\HourlyOrdersWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -46,12 +41,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Admin/Widgets'), for: 'App\\Admin\\Widgets')
             ->widgets([
-                EnhancedStatsOverviewWidget::class,
+                SalesOverviewWidget::class,
                 SalesChartWidget::class,
-                PaymentMethodChartWidget::class,
-                TopSellingGoodsWidget::class,
-                OrderStatusChartWidget::class,
-                HourlyOrdersWidget::class,
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])

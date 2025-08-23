@@ -39,7 +39,7 @@ class UserLevel extends BaseModel
     // 关联用户
     public function users(): HasMany
     {
-        return $this->hasMany(FrontUser::class, 'level_id');
+        return $this->hasMany(User::class, 'level_id');
     }
 
     // 获取折扣百分比文本

@@ -3,7 +3,7 @@
 namespace App\Admin\Resources;
 
 use App\Admin\Resources\AdminUsers\Pages;
-use App\Models\User;
+use App\Models\AdminUser;
 use Filament\Forms\{Form, Components\Section, Components\Select, Components\TextInput};
 use Filament\Resources\Resource;
 use Filament\Tables\{Table, Columns\TextColumn, Actions\Action};
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUsers extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = AdminUser::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     
@@ -82,7 +82,7 @@ class AdminUsers extends Resource
                             ->required()
                             ->same('password'),
                     ])
-                    ->action(function (User $record, array $data) {
+                    ->action(function (AdminUser $record, array $data) {
                         $record->update([
                             'password' => Hash::make($data['password'])
                         ]);

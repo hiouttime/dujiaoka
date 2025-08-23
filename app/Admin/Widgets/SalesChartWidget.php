@@ -4,136 +4,122 @@ namespace App\Admin\Widgets;
 
 use App\Models\Order;
 use Filament\Widgets\ChartWidget;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class SalesChartWidget extends ChartWidget
 {
-    protected static ?string $heading = '销售额趋势';
+    protected static ?string $heading = '销售趋势';
     
     protected static ?int $sort = 2;
     
-    protected static string $color = 'info';
-    
-    protected int | string | array $columnSpan = 'full';
-    
-    public ?string $filter = '7days';
-    
-    protected function getFilters(): ?array
-    {
-        return [
-            '7days' => '最近7天',
-            '30days' => '最近30天',
-            '3months' => '最近3个月',
-            'year' => '本年度',
-        ];
-    }
+    protected int | string | array $columnSpan = 2;
+
+    public ?string $filter = 'week';
 
     protected function getData(): array
     {
         $filter = $this->filter;
         
-        switch ($filter) {
-            case '7days':
-                return $this->getDailyData(7);
-            case '30days':
-                return $this->getDailyData(30);
-            case '3months':
-                return $this->getMonthlyData(3);
-            case 'year':
-                return $this->getMonthlyData(12);
-            default:
-                return $this->getDailyData(7);
+        if ($filter === 'week') {
+            return $this->getWeeklyData();
+        } elseif ($filter === 'month') {
+            return $this->getMonthlyData();
         }
+        
+        return $this->getDailyData();
     }
-    
-    private function getDailyData(int $days): array
+
+    protected function getFilters(): ?array
     {
-        $endDate = Carbon::today();
-        $startDate = $endDate->copy()->subDays($days - 1);
-        
-        $orders = Order::where('status', Order::STATUS_COMPLETED)
-            ->whereBetween('created_at', [$startDate, $endDate->copy()->endOfDay()])
-            ->selectRaw('DATE(created_at) as date, SUM(actual_price) as revenue, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
-        
+        return [
+            'week' => '最近7天',
+            'month' => '最近30天',
+            'today' => '今日每小时',
+        ];
+    }
+
+    private function getDailyData(): array
+    {
+        $data = [];
         $labels = [];
-        $revenueData = [];
-        $orderData = [];
         
-        for ($date = $startDate->copy(); $date <= $endDate; $date->addDay()) {
-            $dateStr = $date->format('Y-m-d');
-            $dayData = $orders->where('date', $dateStr)->first();
-            
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
             $labels[] = $date->format('m/d');
-            $revenueData[] = $dayData ? (float) $dayData->revenue : 0;
-            $orderData[] = $dayData ? (int) $dayData->count : 0;
+            
+            $revenue = Order::whereDate('created_at', $date)
+                ->where('status', 4)
+                ->sum('actual_price');
+                
+            $data[] = (float) $revenue;
         }
-        
+
         return [
             'datasets' => [
                 [
-                    'label' => '销售额 (¥)',
-                    'data' => $revenueData,
-                    'borderColor' => 'rgb(59, 130, 246)',
-                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
-                    'yAxisID' => 'y',
-                ],
-                [
-                    'label' => '订单数',
-                    'data' => $orderData,
-                    'borderColor' => 'rgb(16, 185, 129)',
-                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'yAxisID' => 'y1',
+                    'label' => '销售额',
+                    'data' => $data,
+                    'borderColor' => '#f59e0b',
+                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
                 ],
             ],
             'labels' => $labels,
         ];
     }
-    
-    private function getMonthlyData(int $months): array
+
+    private function getWeeklyData(): array
     {
-        $endDate = Carbon::now()->endOfMonth();
-        $startDate = $endDate->copy()->subMonths($months - 1)->startOfMonth();
-        
-        $orders = Order::where('status', Order::STATUS_COMPLETED)
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(actual_price) as revenue, COUNT(*) as count')
-            ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get();
-        
+        $data = [];
         $labels = [];
-        $revenueData = [];
-        $orderData = [];
         
-        for ($date = $startDate->copy(); $date <= $endDate; $date->addMonth()) {
-            $year = $date->year;
-            $month = $date->month;
-            $monthData = $orders->where('year', $year)->where('month', $month)->first();
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subWeeks($i)->startOfWeek();
+            $endDate = $date->copy()->endOfWeek();
+            $labels[] = $date->format('m/d') . '-' . $endDate->format('m/d');
             
-            $labels[] = $date->format('Y/m');
-            $revenueData[] = $monthData ? (float) $monthData->revenue : 0;
-            $orderData[] = $monthData ? (int) $monthData->count : 0;
+            $revenue = Order::whereBetween('created_at', [$date, $endDate])
+                ->where('status', 4)
+                ->sum('actual_price');
+                
+            $data[] = (float) $revenue;
         }
-        
+
         return [
             'datasets' => [
                 [
-                    'label' => '销售额 (¥)',
-                    'data' => $revenueData,
-                    'borderColor' => 'rgb(59, 130, 246)',
-                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
-                    'yAxisID' => 'y',
+                    'label' => '销售额',
+                    'data' => $data,
+                    'borderColor' => '#f59e0b',
+                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
                 ],
+            ],
+            'labels' => $labels,
+        ];
+    }
+
+    private function getMonthlyData(): array
+    {
+        $data = [];
+        $labels = [];
+        
+        for ($i = 29; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $labels[] = $date->format('m/d');
+            
+            $revenue = Order::whereDate('created_at', $date)
+                ->where('status', 4)
+                ->sum('actual_price');
+                
+            $data[] = (float) $revenue;
+        }
+
+        return [
+            'datasets' => [
                 [
-                    'label' => '订单数',
-                    'data' => $orderData,
-                    'borderColor' => 'rgb(16, 185, 129)',
-                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'yAxisID' => 'y1',
+                    'label' => '销售额',
+                    'data' => $data,
+                    'borderColor' => '#f59e0b',
+                    'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
                 ],
             ],
             'labels' => $labels,
@@ -143,48 +129,5 @@ class SalesChartWidget extends ChartWidget
     protected function getType(): string
     {
         return 'line';
-    }
-    
-    protected function getOptions(): array
-    {
-        return [
-            'responsive' => true,
-            'interaction' => [
-                'mode' => 'index',
-                'intersect' => false,
-            ],
-            'scales' => [
-                'y' => [
-                    'type' => 'linear',
-                    'display' => true,
-                    'position' => 'left',
-                    'title' => [
-                        'display' => true,
-                        'text' => '销售额 (¥)',
-                    ],
-                ],
-                'y1' => [
-                    'type' => 'linear',
-                    'display' => true,
-                    'position' => 'right',
-                    'title' => [
-                        'display' => true,
-                        'text' => '订单数',
-                    ],
-                    'grid' => [
-                        'drawOnChartArea' => false,
-                    ],
-                ],
-            ],
-            'plugins' => [
-                'legend' => [
-                    'position' => 'top',
-                ],
-                'title' => [
-                    'display' => true,
-                    'text' => '销售趋势分析',
-                ],
-            ],
-        ];
     }
 }

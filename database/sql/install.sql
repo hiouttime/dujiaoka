@@ -21,6 +21,22 @@ CREATE TABLE `permissions` (
 -- Records of permissions
 -- ----------------------------
 BEGIN;
+INSERT INTO `permissions` VALUES (1, 'manage_admins', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (2, 'manage_roles', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (3, 'manage_users', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (4, 'manage_user_levels', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (5, 'manage_products', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (6, 'manage_categories', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (7, 'manage_cards', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (8, 'manage_coupons', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (9, 'manage_servers', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (10, 'manage_orders', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (11, 'view_orders', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (12, 'manage_payments', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (13, 'manage_articles', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (14, 'manage_article_categories', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (15, 'manage_email_templates', 'admin', now(), now());
+INSERT INTO `permissions` VALUES (16, 'manage_settings', 'admin', now(), now());
 COMMIT;
 
 -- ----------------------------
@@ -41,9 +57,10 @@ CREATE TABLE `roles` (
 -- Records of roles
 -- ----------------------------
 BEGIN;
-INSERT INTO `roles` VALUES (1, 'super-admin', 'web', now(), now());
-INSERT INTO `roles` VALUES (2, 'admin', 'web', now(), now());
-INSERT INTO `roles` VALUES (3, 'manager', 'web', now(), now());
+INSERT INTO `roles` VALUES (1, 'super-admin', 'admin', now(), now());
+INSERT INTO `roles` VALUES (2, 'admin', 'admin', now(), now());
+INSERT INTO `roles` VALUES (3, 'manager', 'admin', now(), now());
+INSERT INTO `roles` VALUES (4, 'order-processor', 'admin', now(), now());
 COMMIT;
 
 -- ----------------------------
@@ -82,7 +99,7 @@ CREATE TABLE `model_has_roles` (
 -- Records of model_has_roles
 -- ----------------------------
 BEGIN;
-INSERT INTO `model_has_roles` VALUES (1, 'App\\Models\\User', 1);
+INSERT INTO `model_has_roles` VALUES (1, 'App\\Models\\AdminUser', 1);
 COMMIT;
 
 -- ----------------------------
@@ -101,6 +118,17 @@ CREATE TABLE `role_has_permissions` (
 -- Records of role_has_permissions
 -- ----------------------------
 BEGIN;
+-- super-admin 拥有全部权限
+INSERT INTO `role_has_permissions` VALUES (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1), (11, 1), (12, 1), (13, 1), (14, 1), (15, 1), (16, 1);
+
+-- admin 拥有除了管理员和角色管理的所有权限
+INSERT INTO `role_has_permissions` VALUES (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2), (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2);
+
+-- manager 拥有用户、商店、内容管理权限
+INSERT INTO `role_has_permissions` VALUES (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), (8, 3), (13, 3), (14, 3), (15, 3);
+
+-- order-processor 拥有订单和库存管理权限
+INSERT INTO `role_has_permissions` VALUES (7, 4), (10, 4), (11, 4);
 COMMIT;
 
 -- ----------------------------
@@ -445,32 +473,32 @@ CREATE TABLE `pays` (
 -- Records of pays
 -- ----------------------------
 BEGIN;
-INSERT INTO `pays` VALUES (null ,'USDT-TRC20', 'tokenpay-usdt-trc', 0, 1, 3, 'USDT_TRC20', '你的API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 1, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null ,'TRX', 'tokenpay-trx', 0, 1, 3, 'TRX', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 1, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Epusdt[trc20]', 'epusdt', 0, 1, 3, 'API密钥', '不填即可', 'api请求地址', 'pay/epusdt', 0, 1, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '支付宝当面付', 'zfbf2f', 0, 2, 3, '商户号', '支付宝公钥', '商户私钥', '/pay/alipay', 1, 1, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '支付宝 PC', 'aliweb', 0, 1, 1, '商户号', '', '密钥', '/pay/alipay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '支付宝 WAP', 'aliwap', 0, 1, 2, '商户号', '', '密钥', '/pay/alipay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '微信扫码', 'wescan', 0, 2, 1, '商户号', '', 'V2密钥', '/pay/wepay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '微信小程序', 'miniapp', 0, 1, 2, '商户号', '', 'V2密钥', '/pay/wepay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '码支付 QQ', 'mqq', 0, 1, 1, '商户号', '', '密钥', '/pay/mapay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '码支付支付宝', 'mzfb', 0, 1, 1, '商户号', '', '密钥', '/pay/mapay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '码支付微信', 'mwx', 0, 1, 1, '商户号', '', '密钥', '/pay/mapay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Paysapi 支付宝', 'pszfb', 0, 1, 1, '商户号', '', '密钥', '/pay/paysapi', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Paysapi 微信', 'pswx', 0, 1, 1, '商户号', '', '密钥', '/pay/paysapi', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Payjs 微信扫码', 'payjswescan', 0, 1, 1, '商户号', '', '密钥', '/pay/payjs', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '易支付-支付宝', 'alipay', 0, 1, 1, '商户号', '', '密钥', '/pay/yipay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '易支付-微信', 'wxpay', 0, 1, 1, '商户号', NULL, '密钥', '/pay/yipay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, '易支付-QQ 钱包', 'qqpay', 0, 1, 1, '商户号', NULL, '密钥', '/pay/yipay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'PayPal', 'paypal', 0, 1, 1, '商户号', NULL, '密钥', '/pay/paypal', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'V 免签支付宝', 'vzfb', 0, 1, 1, 'V 免签通讯密钥', NULL, 'V 免签地址 例如 https://vpay.qq.com/    结尾必须有/', 'pay/vpay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'V 免签微信', 'vwx', 0, 1, 1, 'V 免签通讯密钥', NULL, 'V 免签地址 例如 https://vpay.qq.com/    结尾必须有/', 'pay/vpay', 1, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Stripe[微信支付宝]', 'stripe', 0, 1, 1, 'pk开头的可发布密钥', NULL, 'sk开头的密钥', 'pay/stripe', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null, 'Coinbase[加密货币]', 'coinbase', 0, 1, 3, '费率', 'API密钥', '共享密钥', 'pay/coinbase', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null ,'ETH', 'tokenpay-eth', 0, 1, 3, 'ETH', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null ,'USDT-ERC20', 'tokenpay-usdt-erc', 0, 1, 3, 'USDT_ERC20', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null ,'USDC-ERC20', 'tokenpay-usdc-erc', 0, 1, 3, 'USDC_ERC20', 'API密钥', 'TokenPay地址', 'pay/tokenpay', 0, 0, now(), now(), NULL);
-INSERT INTO `pays` VALUES (null ,'币安支付', 'binance', 0, 1, 3, 'USDT', 'API密钥', '密钥', 'pay/binance', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'USDT-TRC20', 'tokenpay-usdt-trc', 0, 1, 3, 'USDT_TRC20', '你的API密钥', 'TokenPay地址', 'tokenpay', 0, 1, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'TRX', 'tokenpay-trx', 0, 1, 3, 'TRX', 'API密钥', 'TokenPay地址', 'tokenpay', 0, 1, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Epusdt[trc20]', 'epusdt', 0, 1, 3, 'API密钥', '不填即可', 'api请求地址', 'epusdt', 0, 1, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '支付宝当面付', 'zfbf2f', 0, 2, 3, '商户号', '支付宝公钥', '商户私钥', 'alipay', 1, 1, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '支付宝 PC', 'aliweb', 0, 1, 1, '商户号', '', '密钥', 'alipay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '支付宝 WAP', 'aliwap', 0, 1, 2, '商户号', '', '密钥', 'alipay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '微信扫码', 'wescan', 0, 2, 1, '商户号', '', 'V2密钥', 'wepay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '微信小程序', 'miniapp', 0, 1, 2, '商户号', '', 'V2密钥', 'wepay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '码支付 QQ', 'mqq', 0, 1, 1, '商户号', '', '密钥', 'mapay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '码支付支付宝', 'mzfb', 0, 1, 1, '商户号', '', '密钥', 'mapay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '码支付微信', 'mwx', 0, 1, 1, '商户号', '', '密钥', 'mapay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Paysapi 支付宝', 'pszfb', 0, 1, 1, '商户号', '', '密钥', 'paysapi', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Paysapi 微信', 'pswx', 0, 1, 1, '商户号', '', '密钥', 'paysapi', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Payjs 微信扫码', 'payjswescan', 0, 1, 1, '商户号', '', '密钥', 'payjs', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '易支付-支付宝', 'alipay', 0, 1, 1, '商户号', '', '密钥', 'yipay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '易支付-微信', 'wxpay', 0, 1, 1, '商户号', NULL, '密钥', 'yipay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, '易支付-QQ 钱包', 'qqpay', 0, 1, 1, '商户号', NULL, '密钥', 'yipay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'PayPal', 'paypal', 0, 1, 1, '商户号', NULL, '密钥', 'paypal', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'V 免签支付宝', 'vzfb', 0, 1, 1, 'V 免签通讯密钥', NULL, 'V 免签地址 例如 https://vpay.qq.com/    结尾必须有/', 'vpay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'V 免签微信', 'vwx', 0, 1, 1, 'V 免签通讯密钥', NULL, 'V 免签地址 例如 https://vpay.qq.com/    结尾必须有/', 'vpay', 1, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Stripe[微信支付宝]', 'stripe', 0, 1, 1, 'pk开头的可发布密钥', NULL, 'sk开头的密钥', 'stripe', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null, 'Coinbase[加密货币]', 'coinbase', 0, 1, 3, '费率', 'API密钥', '共享密钥', 'coinbase', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'ETH', 'tokenpay-eth', 0, 1, 3, 'ETH', 'API密钥', 'TokenPay地址', 'tokenpay', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'USDT-ERC20', 'tokenpay-usdt-erc', 0, 1, 3, 'USDT_ERC20', 'API密钥', 'TokenPay地址', 'tokenpay', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'USDC-ERC20', 'tokenpay-usdc-erc', 0, 1, 3, 'USDC_ERC20', 'API密钥', 'TokenPay地址', 'tokenpay', 0, 0, now(), now(), NULL);
+INSERT INTO `pays` VALUES (null ,'币安支付', 'binance', 0, 1, 3, 'USDT', 'API密钥', '密钥', 'binance', 0, 0, now(), now(), NULL);
 COMMIT;
 -- ----------------------------
 -- Table structure for article_categories

@@ -8,7 +8,7 @@ use App\Models\Order;
 use App\Models\Goods;
 use App\Models\Carmis;
 use App\Models\Pay;
-use App\Models\FrontUser;
+use App\Models\User;
 use App\Services\OrderProcess;
 use App\Services\CacheManager;
 use Illuminate\Http\Request;

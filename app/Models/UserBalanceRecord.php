@@ -48,7 +48,7 @@ class UserBalanceRecord extends BaseModel
     // 关联用户
     public function user(): BelongsTo
     {
-        return $this->belongsTo(FrontUser::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // 关联管理员

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\FrontUser;
+use App\Models\User;
 use App\Models\UserLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,12 +77,12 @@ class AuthController extends Controller
 
         $defaultLevel = UserLevel::where('status', 1)->orderBy('min_spent')->first();
 
-        $user = FrontUser::create([
+        $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'nickname' => $request->nickname ?: substr($request->email, 0, strpos($request->email, '@')),
             'level_id' => $defaultLevel ? $defaultLevel->id : 1,
-            'status' => FrontUser::STATUS_ACTIVE,
+            'status' => User::STATUS_ACTIVE,
             'balance' => 0,
             'total_spent' => 0,
         ]);

@@ -2,7 +2,7 @@
 
 namespace App\Admin\Resources;
 
-use App\Models\FrontUser;
+use App\Models\User;
 use App\Models\UserLevel;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -23,7 +23,7 @@ use Filament\Notifications\Notification;
 
 class Users extends Resource
 {
-    protected static ?string $model = FrontUser::class;
+    protected static ?string $model = User::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = '用户';
     protected static ?string $modelLabel = '用户';
@@ -59,7 +59,7 @@ class Users extends Resource
                         
                         Select::make('status')
                             ->label('状态')
-                            ->options(FrontUser::getStatusMap())
+                            ->options(User::getStatusMap())
                             ->required(),
                     ])->columns(2),
 
@@ -157,7 +157,7 @@ class Users extends Resource
                 
                 SelectFilter::make('status')
                     ->label('状态')
-                    ->options(FrontUser::getStatusMap()),
+                    ->options(User::getStatusMap()),
             ])
             ->actions([
                 Action::make('adjustBalance')
@@ -185,7 +185,7 @@ class Users extends Resource
                             ->required()
                             ->default('管理员调整'),
                     ])
-                    ->action(function (FrontUser $record, array $data) {
+                    ->action(function (User $record, array $data) {
                         $balanceBefore = $record->balance;
                         
                         switch ($data['type']) {
@@ -228,7 +228,7 @@ class Users extends Resource
                     ->label('批量启用')
                     ->icon('heroicon-o-check-circle')
                     ->action(function (Collection $records) {
-                        $records->each->update(['status' => FrontUser::STATUS_ACTIVE]);
+                        $records->each->update(['status' => User::STATUS_ACTIVE]);
                         
                         Notification::make()
                             ->title('批量启用成功')
@@ -241,7 +241,7 @@ class Users extends Resource
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->action(function (Collection $records) {
-                        $records->each->update(['status' => FrontUser::STATUS_DISABLED]);
+                        $records->each->update(['status' => User::STATUS_DISABLED]);
                         
                         Notification::make()
                             ->title('批量禁用成功')

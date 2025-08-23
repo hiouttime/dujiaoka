@@ -20,7 +20,7 @@ use App\Models\Goods;
 use App\Models\GoodsSub;
 use App\Models\Carmis;
 use App\Models\Order;
-use App\Models\FrontUser;
+use App\Models\User;
 use App\Services\CacheManager;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -601,7 +601,7 @@ class OrderProcess
             return;
         }
 
-        $user = FrontUser::find($order->user_id);
+        $user = User::find($order->user_id);
         if (!$user) {
             return;
         }
