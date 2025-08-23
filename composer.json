@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-settings-plugin": "^3.3",
         "geoip2/geoip2": "^2.13",

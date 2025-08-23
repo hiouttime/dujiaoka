@@ -180,4 +180,23 @@ class Servers extends Resource
             'edit' => Pages\EditRemoteServer::route('/{record}/edit'),
         ];
     }
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->can('manage_servers') || auth()->user()?->hasRole('super-admin') || false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canViewAny();
+    }
 }

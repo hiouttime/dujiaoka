@@ -7,12 +7,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     protected $table = 'admin_users';
+    
+    /**
+     * 设置权限系统的guard
+     */
+    protected $guard_name = 'web';
 
     /**
      * The attributes that are mass assignable.
@@ -52,6 +58,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true; // 所有用户都可以访问管理面板
+        // 检查用户是否有admin或manager角色
+        return $this->hasRole(['super-admin', 'admin', 'manager']);
     }
 }

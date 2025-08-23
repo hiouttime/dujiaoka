@@ -278,4 +278,23 @@ class Users extends Resource
     {
         return ['email', 'nickname'];
     }
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->can('manage_users') || auth()->user()?->hasRole('super-admin') || false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return static::canViewAny();
+    }
+
+    public static function canDelete($record): bool
+    {
+        return static::canViewAny();
+    }
 }

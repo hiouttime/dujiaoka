@@ -78,6 +78,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('独角数卡 DUJIAOKA')
             ->favicon(asset('favicon.ico'))
             ->navigationGroups([
+                '系统管理',
                 '用户管理',
                 '商店管理',
                 '支付配置',
