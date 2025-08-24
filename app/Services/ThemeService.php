@@ -53,6 +53,7 @@ class ThemeService
      */
     public function asset(string $path): string
     {
-        return "/assets/{$this->currentTheme}/{$path}";
+        $url = "/assets/{$this->currentTheme}/{$path}";
+        return \App\Helpers\CdnHelper::asset($url);
     }
 }

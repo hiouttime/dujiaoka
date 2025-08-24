@@ -31,6 +31,9 @@ class SystemSettings extends Settings
     public ?string $geetest_key = null;
     public bool $is_open_geetest = false;
 
+    // CDN设置
+    public ?string $cdn_url = null;
+
     public static function group(): string
     {
         return 'system';

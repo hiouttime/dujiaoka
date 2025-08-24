@@ -225,7 +225,8 @@ if (!function_exists('pictureUrl')) {
     {
         if ($getHost) return Storage::disk('admin')->url('');
         if (Illuminate\Support\Facades\URL::isValidUrl($file)) return $file;
-        return $file ? Storage::disk('admin')->url($file) : url('assets/common/images/default.jpg');
+        $url = $file ? Storage::disk('admin')->url($file) : url('assets/common/images/default.jpg');
+        return \App\Helpers\CdnHelper::asset($url);
     }
 }
 
@@ -260,5 +261,22 @@ if (!function_exists('getIpCountry')) {
         }
         
         return $isoCode;
+    }
+}
+
+if (!function_exists('asset')) {
+    /**
+     * 覆盖Laravel默认asset函数，支持CDN
+     *
+     * @param string $path 资源路径
+     * @param bool|null $secure 是否HTTPS
+     * @return string
+     */
+    function asset(string $path, ?bool $secure = null): string
+    {
+        // 先获取Laravel原生URL
+        $url = app('url')->asset($path, $secure);
+        // 应用CDN转换
+        return \App\Helpers\CdnHelper::asset($url);
     }
 }

@@ -200,6 +200,22 @@ class ManageSystemSettings extends SettingsPage
                                     ])->columns(2),
                             ]),
                         
+                        // CDN设置
+                        Tabs\Tab::make('cdn-settings')
+                            ->label('CDN配置')
+                            ->schema([
+                                Section::make('CDN加速设置')
+                                    ->description('配置CDN加速域名，自动替换静态资源（图片、CSS、JS）的访问地址')
+                                    ->schema([
+                                        TextInput::make('cdn_url')
+                                            ->label('CDN加速域名')
+                                            ->url()
+                                            ->placeholder('https://cdn.example.com')
+                                            ->helperText('配置后系统会自动将静态资源地址替换为此CDN域名，请确保CDN服务商已将本站设置为源站')
+                                            ->columnSpanFull(),
+                                    ]),
+                            ]),
+                        
                     ])
                     ->persistTabInQueryString()
                     ->columnSpanFull(),
