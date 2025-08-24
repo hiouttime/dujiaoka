@@ -14,6 +14,7 @@ use Filament\Widgets;
 use App\Admin\Pages\Login;
 use App\Admin\Widgets\SalesOverviewWidget;
 use App\Admin\Widgets\SalesChartWidget;
+use App\Admin\Widgets\CustomFilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -44,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
                 SalesOverviewWidget::class,
                 SalesChartWidget::class,
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                CustomFilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -66,7 +67,8 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s')
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
-            ->brandName('独角数卡 DUJIAOKA')
+            ->brandLogo(asset('assets/common/images/logo.svg'))
+            ->brandLogoHeight('2rem')
             ->favicon(asset('favicon.ico'))
             ->navigationGroups([
                 '系统管理',

@@ -8,7 +8,7 @@
  */
 
 return [
-    'dujiaoka_version' => '2.1.5',
+    'dujiaoka_version' => 'v3.0.0',
      // 模板集合
      'templates' => [
          'morpho' => 'morpho[Author: @Riniba]',

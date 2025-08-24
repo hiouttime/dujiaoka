@@ -743,5 +743,28 @@ CREATE TABLE `settings` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('system', 'contact_required', '"email"', 0, now(), now());
+
+-- Shop Settings 基础设置
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'title', '"独角数卡"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'img_logo', '"/assets/common/images/logo.svg"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'text_logo', 'null', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'keywords', '"独角数卡,虚拟商品,自动发货"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'description', '"独角数卡 - 专业的虚拟商品自动发货平台"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'template', '"morpho"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'language', '"zh-CN"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'currency', '"CNY"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'is_open_anti_red', 'false', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'is_cn_challenge', 'false', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'is_open_search_pwd', 'true', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'is_open_google_translate', 'false', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'notice', 'null', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'footer', 'null', 0, now(), now());
+
+-- Shop Settings 导航栏设置
 INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'nav_items', '[{\"name\":\"首页\",\"url\":\"/\",\"target_blank\":false,\"children\":[]},{\"name\":\"站点文章\",\"url\":\"/article\",\"target_blank\":false,\"children\":[]},{\"name\":\"订单查询\",\"url\":\"/order/search\",\"target_blank\":false,\"children\":[]}]', 0, now(), now());
+
+-- Theme Settings
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'notices', '"欢迎使用我们的服务！\n限时优惠，立即购买享受折扣\n24小时客服在线，随时为您服务\n优质产品，值得信赖"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'banners', '[]', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'invert_logo', 'false', 0, now(), now());
 COMMIT;
