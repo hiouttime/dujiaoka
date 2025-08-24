@@ -90,9 +90,10 @@
 - 原作者的[Telegram官方频道](https://t.me/dujiaoshuka)
 
 ## :eye_speech_bubble:相关推荐
-- [两米商店 2MStore](https://buy.2m.pub) ，也可视为前台演示站。
+- [两米商店 2MStore](https://buy.2m.pub)
 > 以下为原作者推荐
-> - （美国免备案vps，配置2核2G仅需`20.98$`≈`145RMB`一年/支持支付宝付款）[👉🏻点我直达](https://my.racknerd.com/aff.php?aff=2745&pid=681)
+- （🇭🇰香港三网(电信/移动/联通)直连优化VPS，CN2优化网络大带宽低至35RMB/每月）[👉🏻点我直达](https://www.vkvm.info/cart?action=configureproduct&pid=146&aff=ECRPONNJ)
+- （🇺🇸美国免备案vps，配置2核2G仅需`20.98$`≈`145RMB`一年/支持支付宝付款）[👉🏻点我直达](https://my.racknerd.com/aff.php?aff=2745&pid=681)
 
 ## :open_mouth:快速预览
 ![](https://files.mdnice.com/user/39773/0abbadfa-ef39-492b-bbc0-ac74b78e6a64.png)
