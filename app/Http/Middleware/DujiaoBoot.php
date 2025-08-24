@@ -16,6 +16,11 @@ class DujiaoBoot
      */
     public function handle($request, Closure $next)
     {
+        // 未安装时复制默认配置
+        if (!file_exists(base_path('.env')) && file_exists(base_path('.env.default'))) {
+            copy(base_path('.env.default'), base_path('.env'));
+        }
+        
         // 安装检查
         $installLock = base_path() . DIRECTORY_SEPARATOR . 'install.lock';
         if (!file_exists($installLock)) {

@@ -147,6 +147,15 @@ class Installer
                 $data['admin_path'],
             ], $envTemplate);
 
+            // 安装完成后启用redis缓存和队列
+            $envContent = str_replace([
+                'CACHE_DRIVER=file',
+                'QUEUE_CONNECTION=sync'
+            ], [
+                'CACHE_DRIVER=redis',
+                'QUEUE_CONNECTION=redis'
+            ], $envContent);
+
             // 写入环境文件
             file_put_contents(base_path('.env'), $envContent);
 
