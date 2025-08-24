@@ -52,7 +52,8 @@ class ManageShopSettings extends SettingsPage
                                                 FileUpload::make('img_logo')
                                                     ->label('图片Logo')
                                                     ->image()
-                                                    ->directory('logos')
+                                                    ->disk('admin')
+                                                    ->directory('images')
                                                     ->maxSize(1024)
                                                     ->imagePreviewHeight('80')
                                                     ->helperText('推荐尺寸：200x80像素，支持PNG/JPG格式'),

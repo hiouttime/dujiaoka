@@ -731,7 +731,7 @@ CREATE TABLE `settings` (
   `group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `payload` json NOT NULL,
-  `locked` tinyint(1) NOT NULL,
+  `locked` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`group`,`name`)
@@ -763,7 +763,7 @@ INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `upd
 INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('shop', 'nav_items', '[{\"name\":\"首页\",\"url\":\"/\",\"target_blank\":false,\"children\":[]},{\"name\":\"站点文章\",\"url\":\"/article\",\"target_blank\":false,\"children\":[]},{\"name\":\"订单查询\",\"url\":\"/order/search\",\"target_blank\":false,\"children\":[]}]', 0, now(), now());
 
 -- Theme Settings
-INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'notices', '"欢迎使用我们的服务！\n限时优惠，立即购买享受折扣\n24小时客服在线，随时为您服务\n优质产品，值得信赖"', 0, now(), now());
+INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'notices', '"欢迎使用我们的服务！\\n限时优惠，立即购买享受折扣\\n24小时客服在线，随时为您服务\\n优质产品，值得信赖"', 0, now(), now());
 INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'banners', '[]', 0, now(), now());
 INSERT INTO `settings` (`group`, `name`, `payload`, `locked`, `created_at`, `updated_at`) VALUES ('theme', 'invert_logo', 'false', 0, now(), now());
 COMMIT;

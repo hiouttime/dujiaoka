@@ -3,41 +3,56 @@
 <p align="center">
 <img alt="GitHub" src="https://img.shields.io/github/license/outtimes/dujiaoka?style=for-the-badge">
 <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/outtimes/dujiaoka?label=version&style=for-the-badge">
-<img alt="PHP Version" src="https://img.shields.io/static/v1?label=PHP&message=8.0.2&style=for-the-badge">
+<img alt="PHP Version" src="https://img.shields.io/static/v1?label=PHP&message=8.2%2B&style=for-the-badge">
+<img alt="Laravel Version" src="https://img.shields.io/static/v1?label=Laravel&message=12.x&style=for-the-badge&color=red">
 <img alt="Telegram" src="https://img.shields.io/static/v1?label=Telegram&logo=Telegram&message=@dujiaoka&style=for-the-badge&color=blue&&link=https://t.me/dujiaoka">
 </p>
 
-# :warning:使用前警告
-# 这是*正在开发*，未经*充分测试*的版本，请*不要*用于*生产环境*
-# 仅供尝鲜试用，必须全新安装
+# :warning: 开发版本声明
+**本版本为重构版本，正在积极开发中，不建议用于生产环境**  
+**仅供技术研究和功能预览，目前需全新安装部署，后期将会推出迁移工具**
 
-## :bulb:版本介绍
-这是一份基于[独角数卡](https://github.com/assimon/dujiaoka)在[dc53741](https://github.com/assimon/dujiaoka/commit/dc53741e275007b8c81c43319ee657ef011bad93)基础上修改的版本。此版本在部分功能上与原版有所修改，故请以本仓库的Wiki/Issues得到的反馈为准。
+## :rocket: 架构升级
+本项目基于[独角数卡](https://github.com/assimon/dujiaoka)进行深度重构和功能扩展：
 
-以下是目前比较明显的更改：
-- 更新框架至Laravel9
-- 必须运行在PHP8.0.2及以上
-- 补充插件表结构
-- Unicorn模板支持深色模式，优化样式，显示销量，显示缺货，支持极验验证
-- 新增支付宝WAP支付，微信小程序支付[（开发参考）](https://github.com/outtimes/dujiaoka/wiki/微信小程序支付开发说明)
-- 优先全站HTTPS
-- 支持手动补单
-- 优惠券支持系数优惠/固定金额优惠/每件商品固定金额优惠
-- 支付通道费率设置
-- 单个商品限制支付方式
-- 支持从外部链接添加商品图片
-- 限制同一IP同时存在待支付的订单数量
-- 访问前进行人机验证
-- 自选卡密
+- 升级框架至 **Laravel 12**
+- 使用 **Filament 3** 作为后台管理系统
+- 以及超多新增功能与优化
+
+## :sparkles: 部分功能特性
+
+### 用户系统
+- 完整的用户注册/登录体系
+- 基于消费实现的用户等级与折扣系统
+- 用户下单历史
+
+### 商品管理
 - 多规格商品支持
+- 下单库存模式可选
+- 登录购买限制
+- 自选卡密功能
 
-## :open_book:关于此项目
+### 订单系统
+- 购物车批量下单
+- IP并发订单限制
 
-- 程序框架使用 [Laravel](https://github.com/laravel/laravel)
-- 后台系统框架 [Dcat Admin](http://www.dcatadmin.com)
-- 部分支付系统集成 [yansongda/Pay](https://github.com/yansongda/pay)
-- 区块链代币支付系统集成 [Tokenpay](https://github.com/LightCountry/TokenPay)
-- IP数据库[GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
+### 支付系统
+- 支付通道费率配置
+- 单商品支付方式限制  
+
+## :open_book: 技术依赖
+
+### 核心框架
+- **后端框架**: [Laravel 12.x](https://github.com/laravel/laravel)
+- **管理后台**: [Filament 3.x](https://filamentphp.com/)
+- **支付集成**: [yansongda/Pay](https://github.com/yansongda/pay)
+- **区块链支付**: [Tokenpay](https://github.com/LightCountry/TokenPay)
+
+### 数据与服务
+- **地理数据**: [GeoLite2](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
+- **缓存系统**: Redis
+- **队列处理**: Laravel Queues
+- **文件存储**: Laravel Storage
 
 ### 项目原版作者：
 - [Assimon](https://github.com/assimon)
@@ -46,25 +61,29 @@
 - [iLay1678](https://github.com/iLay1678)
 
 #### 模板贡献者：
-- [Julyssn](https://github.com/Julyssn) 模板`luna`作者
-- [bimoe](https://github.com/bimoe) 模板`hyper`作者
+- [Riniba](https://t.me/riniba) 默认模板作者
 
 鸣谢以上开源项目及贡献者，排名不分先后。
 
-## :thinking:为什么选择独角数卡
+## :gear: 部署要求
 
-- 基于`Laravel`框架开发，优雅且带来安全稳定的系统架构。
-- 简洁优雅的`系统模板`，能自行上手客制化。
-- 支持`多国语言扩展`，能自行将独角数卡翻译到目标语言。
-- 代码*全开源*，所有信息均安全存储在您的服务器上。
-- `5K+`的用户的选择，众多资深使用者为你答疑解惑（不是一定）。
+### 服务器环境
+- **操作系统**: Linux (推荐Ubuntu 20.04+/CentOS 8+)
+- **Web服务器**: Nginx 1.18+ 或 Apache 2.4+
+- **数据库**: MySQL 8.0+ 或 MariaDB 10.6+
+- **缓存**: Redis 6.0+
+- **PHP版本**: 8.2+ (必需)
 
-## :wink:在开始之前你需要知道
+### PHP扩展要求
+- **必需扩展**: `fileinfo`, `redis`, `gd`, `curl`, `zip`, `xml`, `mbstring`
+- **系统函数**: `putenv`, `proc_open`, `pcntl_signal`, `pcntl_alarm`
+- **推荐扩展**: `opcache`, `imagick`
 
-- 本程序有一定的上手安装难度，请具备Linux服务器相关的基础知识，跟随Wiki一步一步安装基本不会出现问题。
-- 本程序不支持虚拟主机，未在Windows服务器上进行测试，请直接使用Linux服务器完成搭建。
-- 本程序*近支持*PHP8.0.2及以上。
-- 提问，没人回答？买别人的时间。
+### 技术要求
+- 具备Linux服务器基础运维知识
+- 理解Laravel框架部署流程
+- 熟悉Composer依赖管理
+- 了解Redis配置和使用
 
 ## :speech_balloon:使用交流
 - 原作者的[Telegram群组](https://t.me/dujiaoka)
@@ -76,24 +95,34 @@
 > - （美国免备案vps，配置2核2G仅需`20.98$`≈`145RMB`一年/支持支付宝付款）[👉🏻点我直达](https://my.racknerd.com/aff.php?aff=2745&pid=681)
 
 ## :open_mouth:快速预览
-【官方`Unicorn`模板首页】
-![首页](https://files.mdnice.com/user/39773/7669cf85-4e93-4572-a1b8-f11170c50b90.png)
+![](https://files.mdnice.com/user/39773/0abbadfa-ef39-492b-bbc0-ac74b78e6a64.png)
 
-【`hyper`模板】  
-![](https://files.mdnice.com/user/39773/5f649d68-a1ce-4911-accb-2b7467e8fa4f.png)
+![](https://files.mdnice.com/user/39773/8d72ecb8-c860-4d05-93c3-3691e786b05a.png)
 
-【`luna`模板】 
-![](https://files.mdnice.com/user/39773/10ffe97d-fb17-4f69-bb4e-e82f9befdc3d.png)
+![](https://files.mdnice.com/user/39773/c712dd5a-d987-4fd4-a84c-ed2244579c1c.png)
 
-## :compass:相关教程
-> 以下为原作者提供
+![](https://files.mdnice.com/user/39773/554c51e0-563f-4176-91ed-5ec4e0478c1c.png)
+
+![](https://files.mdnice.com/user/39773/e43c9d40-1a03-4821-9e98-d285fa1ce6bd.png)
+
+![](https://files.mdnice.com/user/39773/978342a2-15f7-477c-85c3-d6aac8a06e63.png)
+
+![](https://files.mdnice.com/user/39773/0d9494c7-9cbe-4dea-b168-05f36d55273c.png)
+
+## :book: 文档和教程
+
+### 官方文档
+- [系统安装指南](https://github.com/outtimes/dujiaoka/wiki/installation)
+- [配置说明文档](https://github.com/outtimes/dujiaoka/wiki/configuration)
+- [API接口文档](https://github.com/outtimes/dujiaoka/wiki/api)
+- [主题开发指南](https://github.com/outtimes/dujiaoka/wiki/theme-development)
+
+### 参考资料（原版）
 - [Linux环境安装](https://github.com/assimon/dujiaoka/wiki/linux_install)
-- [2.x版本宝塔安装教程](https://github.com/assimon/dujiaoka/wiki/2.x_bt_install)
-- [1.x版本宝塔环境安装](https://github.com/assimon/dujiaoka/wiki/1.x_bt_install)
-- [常见问题锦集-你遇到的问题大部分能在这里找到解决！！](https://github.com/assimon/dujiaoka/wiki/problems)
-- [系统升级](https://github.com/assimon/dujiaoka/wiki/update)
-- [各支付对应后台配置](https://github.com/assimon/dujiaoka/wiki/problems#各支付对应配置)
-- [视频教程及工具集合](https://pan.dujiaoka.com)
+- [支付配置说明](https://github.com/assimon/dujiaoka/wiki/problems#各支付对应配置)
+- [常见问题解答](https://github.com/assimon/dujiaoka/wiki/problems)
+
+**注意**: 本版本架构已升级，请以本仓库Wiki文档为准
 
 ## :bank:支持的支付接口
 - [x] 支付宝当面付、PC网站、手机网站
@@ -105,21 +134,21 @@
 - [x] 全网易支付支持(通用彩虹版)
 - [x] [stripe](https://stripe.com/)
 
-## :earth_asia:PHP环境要求
+## :shield: 安全配置
 
-星号(\*)为*必须*执行的要求，其他为建议内容
+### 默认管理员信息
+**部署完成后请立即修改以下默认配置:**
 
-- **\*安装`fileinfo`扩展**
-- **\*安装`redis`扩展**
-- **\*终端需支持`php-cli`，测试`php -v`(版本必须一致)**
-- **\*需要开启的函数：`putenv`，`proc_open`，`pcntl_signal`，`pcntl_alarm`**
-- 安装`opcache`扩展
+- **后台访问路径**: `/admin`
+- **默认管理员账号**: `admin`
+- **默认管理员密码**: `admin`
 
-## :cop:默认管理信息（请务必安装完后修改）
-
-- 后台路径 `/admin`
-- 默认管理员账号 `admin`
-- 默认管理员密码 `admin`
+### 安全建议
+- 修改默认管理员密码为强密码
+- 启用二步验证（如支持）
+- 定期更新系统和依赖
+- 配置防火墙限制管理后台访问
+- 开启HTTPS并配置HSTS头
 
 ## :eyes:免责声明
 

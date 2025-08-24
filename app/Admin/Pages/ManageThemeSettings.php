@@ -65,7 +65,8 @@ class ManageThemeSettings extends SettingsPage
                                                         FileUpload::make('image')
                                                             ->label('轮播图片')
                                                             ->image()
-                                                            ->directory('carousel')
+                                                            ->disk('admin')
+                                                            ->directory('images')
                                                             ->maxSize(2048)
                                                             ->required(),
                                                         
