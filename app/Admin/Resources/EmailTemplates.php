@@ -32,22 +32,31 @@ class EmailTemplates extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Placeholder::make('static_template_notice')
+                    ->label('📧 邮件模板说明')
+                    ->content(new \Illuminate\Support\HtmlString('
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px;">
+                            <p style="margin: 0 0 8px 0; color: #475569;">
+                                <strong>模板文件位置：</strong><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 3px; color: #0f172a;">resources/email-templates/</code>
+                            </p>
+                            <p style="margin: 0; color: #64748b; font-size: 14px;">
+                                您可以直接修改该目录下的HTML模板文件，此处仅可编辑邮件标题。
+                            </p>
+                        </div>
+                    '))
+                    ->columnSpanFull(),
+                
                 Forms\Components\TextInput::make('tpl_name')
-                    ->label('模板名称')
+                    ->label('邮件标题')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->helperText('支持变量：{{site.name}}、{{order.id}}、{{order.amount | money}}、{{customer.email}} 等。更多变量请查看开发文档。'),
                 
                 Forms\Components\TextInput::make('tpl_token')
                     ->label('模板标识')
-                    ->required()
+                    ->disabled()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true)
-                    ->disabled(fn ($context) => $context === 'edit'),
-                
-                Forms\Components\RichEditor::make('tpl_content')
-                    ->label('模板内容')
-                    ->required()
-                    ->columnSpanFull(),
+                    ->helperText('模板标识符（只读）'),
             ]);
     }
 
@@ -81,7 +90,8 @@ class EmailTemplates extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->label('编辑标题'),
             ])
             ->bulkActions([
                 // 邮件模板不允许删除
@@ -99,8 +109,6 @@ class EmailTemplates extends Resource
     {
         return [
             'index' => Pages\ListEmailtpls::route('/'),
-            'create' => Pages\CreateEmailtpl::route('/create'),
-            'view' => Pages\ViewEmailtpl::route('/{record}'),
             'edit' => Pages\EditEmailtpl::route('/{record}/edit'),
         ];
     }

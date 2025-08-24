@@ -280,4 +280,10 @@ class Orders extends Resource
     {
         return auth()->user()?->can('manage_orders') || auth()->user()?->hasRole('super-admin') || false;
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getModel()::whereIn('status', [Order::STATUS_PENDING, Order::STATUS_PROCESSING])->count();
+        return $count > 0 ? (string) $count : null;
+    }
 }

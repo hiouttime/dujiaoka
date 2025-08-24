@@ -44,6 +44,7 @@ class ManageEmailTest extends Page
     {
         return $form
             ->schema([
+                
                 Forms\Components\Section::make(__('email-test.labels.send_test_email'))
                     ->description('测试邮件发送功能，确保邮件配置正确')
                     ->schema([
@@ -56,7 +57,8 @@ class ManageEmailTest extends Page
                         Forms\Components\TextInput::make('title')
                             ->label(__('email-test.labels.title'))
                             ->required()
-                            ->default('这是一条测试邮件'),
+                            ->default('这是一条测试邮件')
+                            ->helperText('支持变量：{{site.name}}、{{order.id}}、{{order.amount | money}}、{{customer.email}} 等。更多变量请查看开发文档。'),
 
                         Forms\Components\RichEditor::make('body')
                             ->label(__('email-test.labels.body'))

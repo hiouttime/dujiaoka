@@ -151,10 +151,6 @@ class UserLevels extends Resource
         ];
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
     public static function canViewAny(): bool
     {
         return auth()->user()?->can('manage_user_levels') || auth()->user()?->hasRole('super-admin') || false;

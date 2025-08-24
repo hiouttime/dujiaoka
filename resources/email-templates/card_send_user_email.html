@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{site.name}} - 购买收据</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: -apple-system, sans-serif; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header { padding: 32px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .content { padding: 32px; }
+        .order-info { background: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0; }
+        .info-row { display: flex; justify-content: space-between; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #e9ecef; }
+        .info-row:last-child { border-bottom: none; }
+        .label { color: #6c757d; font-size: 14px; }
+        .value { font-weight: 600; }
+        .card-info { background: #e8f5e8; border: 1px solid #c3e6c3; border-radius: 6px; padding: 16px; margin: 20px 0; font-family: monospace; }
+        .footer { padding: 24px 32px; background: #f8f9fa; color: #6c757d; text-align: center; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 购买成功</h1>
+            <p>感谢您在 {{site.name}} 的购买</p>
+        </div>
+        
+        <div class="content">
+            <p>尊敬的 {{customer.name}}，</p>
+            <p>您的订单已处理完成，以下是您的订单详情：</p>
+            
+            <div class="order-info">
+                <div class="info-row">
+                    <span class="label">订单号</span>
+                    <span class="value">#{{order.id}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">商品摘要</span>
+                    <span class="value">{{order.goods_summary}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">购买数量</span>
+                    <span class="value">{{order.quantity}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">支付金额</span>
+                    <span class="value">{{order.amount | money}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">订单状态</span>
+                    <span class="value">{{order.status}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">创建时间</span>
+                    <span class="value">{{order.created_at | date}}</span>
+                </div>
+            </div>
+
+            {{#if customer.is_registered}}
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 16px; border-radius: 6px; margin: 20px 0;">
+                <p style="margin: 0; color: #856404;">🌟 感谢您作为会员的支持！</p>
+            </div>
+            {{/if}}
+        </div>
+        
+        <div class="footer">
+            <p>来自 <a href="{{site.url}}">{{site.name}}</a></p>
+            <p>如有疑问，请联系：{{site.email}}</p>
+        </div>
+    </div>
+</body>
+</html>
