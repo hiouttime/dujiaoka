@@ -1,7 +1,6 @@
 /public/hot
 /public/storage
 /public/uploads
-/storage
 public/vendor/dcat-admin-extensions
 /storage/*.key
 /vendor
