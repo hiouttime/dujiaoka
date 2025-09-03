@@ -342,7 +342,7 @@
             $('#loading').removeClass('d-none');
             
             $.ajax({
-                url: '{{ route("install.do") }}',
+                url: '/install',
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(result) {

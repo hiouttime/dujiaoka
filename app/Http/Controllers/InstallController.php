@@ -41,14 +41,17 @@ class InstallController extends Controller
         ]);
         
         // 测试数据库连接
-        if (!Installer::testDatabase([
+        $dbTestResult = Installer::testDatabase([
             'host' => $validated['db_host'],
             'port' => $validated['db_port'],
             'database' => $validated['db_database'],
             'username' => $validated['db_username'],
             'password' => $validated['db_password'] ?? '',
-        ])) {
-            return response()->json(['error' => '数据库连接失败，请检查配置'], 400);
+        ]);
+        
+        if ($dbTestResult !== true) {
+            $errorMessage = '数据库连接失败: ' . ($dbTestResult['error'] ?? '请检查配置');
+            return response()->json(['error' => $errorMessage], 400);
         }
         
         // 测试Redis连接
@@ -59,6 +62,8 @@ class InstallController extends Controller
         ])) {
             return response()->json(['error' => 'Redis连接失败，请检查配置'], 400);
         }
+        $validated['cache_driver'] = 'redis';
+        $validated['queue_connection'] = 'redis';
         
         // 执行安装
         $result = Installer::install($validated);
