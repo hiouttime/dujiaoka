@@ -109,8 +109,8 @@ class ManageThemeSettings extends SettingsPage
                                 Section::make('Logo设置')
                                     ->schema([
                                         Toggle::make('invert_logo')
-                                            ->label('Logo反色')
-                                            ->helperText('开启后，Logo会在暗色主题下自动反色显示')
+                                            ->label('Logo适配模式')
+                                            ->helperText('开启后，在浅色模式下保持Logo原始亮度，深色模式下不应用滤镜。适用于深色Logo需要在不同主题下正确显示的场景')
                                             ->default(false),
                                     ]),
                             ]),

@@ -112,7 +112,11 @@
 
 /* Logo反色样式 */
 [data-bs-theme=light] .invert_logo {
-    filter: brightness(0);
+    filter: brightness(1);
+}
+/* 深色模式下不应用滤镜 */
+[data-bs-theme=dark] .invert_logo {
+    filter: none;
 }
 
 /* CSS变量定义 */
