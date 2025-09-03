@@ -182,7 +182,7 @@ class Servers extends Resource
     }
     public static function canViewAny(): bool
     {
-        return auth()->user()?->can('manage_servers') || auth()->user()?->hasRole('super-admin') || false;
+        return auth('admin')->user()?->can('manage_servers') || auth('admin')->user()?->hasRole('super-admin') || false;
     }
 
     public static function canCreate(): bool

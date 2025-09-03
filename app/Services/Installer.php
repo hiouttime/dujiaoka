@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 use Exception;
 
 class Installer
@@ -118,65 +120,48 @@ class Installer
         try {
             $appKey = $data['app_key'] ?? 'base64:' . base64_encode(random_bytes(32));
             $config = [
-                // 基础配置
                 'APP_NAME' => $data['title'] ?? '独角数卡',
                 'APP_ENV' => $data['app_env'] ?? 'production',
                 'APP_KEY' => $appKey,
                 'APP_DEBUG' => $data['app_debug'] ?? 'false',
                 'APP_URL' => $data['app_url'] ?? 'http://localhost',
-                '',
                 'LOG_CHANNEL' => 'stack',
-                '',
-                '# 数据库配置',
+                
+                // 数据库配置
                 'DB_CONNECTION' => 'mysql',
                 'DB_HOST' => $data['db_host'] ?? '127.0.0.1',
                 'DB_PORT' => $data['db_port'] ?? '3306',
                 'DB_DATABASE' => $data['db_database'] ?? 'dujiaoka',
                 'DB_USERNAME' => $data['db_username'] ?? 'root',
                 'DB_PASSWORD' => $data['db_password'] ?? '',
-                '',
-                '# redis配置',
+                
+                // Redis配置
                 'REDIS_HOST' => $data['redis_host'] ?? '127.0.0.1',
                 'REDIS_PASSWORD' => empty($data['redis_password']) ? 'null' : $data['redis_password'],
                 'REDIS_PORT' => $data['redis_port'] ?? '6379',
-                '',
+                
+                // 广播和会话
                 'BROADCAST_DRIVER' => 'log',
                 'SESSION_DRIVER' => 'redis',
                 'SESSION_LIFETIME' => '120',
-                '',
-                '# 缓存配置',
-                '# file为磁盘文件  redis为内存级别',
-                '# redis为内存需要安装好redis服务端并配置',
+                
+                // 缓存和队列
                 'CACHE_DRIVER' => 'redis',
-                '',
-                '# 异步消息队列',
-                '# sync为同步  redis为异步',
-                '# 使用redis异步需要安装好redis服务端并配置',
                 'QUEUE_CONNECTION' => 'redis',
-                '',
-                '# 后台语言',
-                '## zh_CN 简体中文',
-                '## zh_TW 繁体中文',
-                '## en    英文',
+                
+                // 后台配置
                 'DUJIAO_ADMIN_LANGUAGE' => $data['admin_language'] ?? 'zh_CN',
-                '',
-                '# 后台登录地址',
                 'ADMIN_ROUTE_PREFIX' => $data['admin_path'] ?? '/admin'
             ];
             
-            // 构建.env内容
             $envContent = '';
             foreach ($config as $key => $value) {
-                if ($key === '') {
-                    $envContent .= "\n";
-                } elseif (str_starts_with($key, '#')) {
-                    $envContent .= $key . "\n";
-                } else {
-                    $envContent .= $key . '=' . $value . "\n";
+                if ($key === 'APP_NAME') {
+                    $value = '"' . $value . '"';
                 }
+                $envContent .= $key . '=' . $value . "\n";
             }
             
-            // 写入文件
             $basePath = dirname(dirname(dirname(__FILE__)));
             file_put_contents($basePath . '/.env', $envContent);
             
@@ -219,11 +204,34 @@ class Installer
             // 执行数据库及初始化
             $installSql = file_get_contents(database_path('sql/install.sql'));
             DB::unprepared($installSql);
+            self::publishAssets();        
             file_put_contents(base_path('install.lock'), 'install ok');
 
             return 'success';
         } catch (Exception $e) {
             return $e->getMessage();
+        }
+    }
+    
+    /**
+     * 发布 Livewire 和 Filament 资源
+     */
+    protected static function publishAssets(): void
+    {
+        try {
+            $livewirePath = public_path('livewire');
+            if (!File::exists($livewirePath)) {
+                File::ensureDirectoryExists($livewirePath);
+
+                $sourcePath = base_path('vendor/livewire/livewire/dist');
+                if (File::isDirectory($sourcePath)) {
+                    File::copyDirectory($sourcePath, $livewirePath);
+                }
+            }
+            Artisan::call('filament:assets', ['--silent' => true]);
+            
+        } catch (Exception $e) {
+            \Log::warning('Failed to publish assets during installation: ' . $e->getMessage());
         }
     }
 }

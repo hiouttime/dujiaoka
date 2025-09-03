@@ -263,22 +263,22 @@ class Orders extends Resource
     }
     public static function canViewAny(): bool
     {
-        return auth()->user()?->can('manage_orders') || auth()->user()?->can('view_orders') || auth()->user()?->hasRole('super-admin') || false;
+        return auth('admin')->user()?->can('manage_orders') || auth('admin')->user()?->can('view_orders') || auth('admin')->user()?->hasRole('super-admin') || false;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->can('manage_orders') || auth()->user()?->hasRole('super-admin') || false;
+        return auth('admin')->user()?->can('manage_orders') || auth('admin')->user()?->hasRole('super-admin') || false;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()?->can('manage_orders') || auth()->user()?->hasRole('super-admin') || false;
+        return auth('admin')->user()?->can('manage_orders') || auth('admin')->user()?->hasRole('super-admin') || false;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()?->can('manage_orders') || auth()->user()?->hasRole('super-admin') || false;
+        return auth('admin')->user()?->can('manage_orders') || auth('admin')->user()?->hasRole('super-admin') || false;
     }
 
     public static function getNavigationBadge(): ?string
