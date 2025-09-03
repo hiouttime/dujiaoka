@@ -39,7 +39,7 @@
                     offline: !data.success,
                     new_captcha: data.new_captcha,
                     lang: '{{ cfg('language') ?? 'zh_CN' }}',
-                    http: '{{ (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://" }}' + '://'
+                    http: window.location.protocol + '//'
                 }, handlerEmbed);
             }
         });

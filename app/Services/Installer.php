@@ -51,7 +51,7 @@ class Installer
                 'message' => is_writable(storage_path()) ? '可写' : '不可写'
             ],
             'bootstrap_writable' => [
-                'label' => 'bootstrap/cache目录可写 (建议)',
+                'label' => 'bootstrap/cache目录可写',
                 'status' => is_writable(base_path('bootstrap/cache')),
                 'message' => is_writable(base_path('bootstrap/cache')) ? '可写' : '不可写',
                 'required' => false

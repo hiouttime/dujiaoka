@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-@include('morpho::layouts._header')
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>安装独角数卡</title>
+    <style>
+      html, body {
+        touch-action: manipulation;
+      }
+    </style>
+    @if(\request()->isSecure())
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    @endif
+    
+    <link rel="stylesheet" href="{{ asset('assets/morpho/icons/cartzilla-icons.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/morpho/css/swiper-bundle.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/morpho/css/simplebar.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/morpho/css/theme.min.css') }}" />
+</head>
 <body>
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -72,6 +91,18 @@
                                 <h4 class="mb-4">系统环境检查</h4>
                                 
                                 <div class="list-group list-group-flush mb-4">
+                                    @php
+                                        $hasError = false;
+                                        foreach($environmentChecks as $check) {
+                                            if (!isset($check['required']) || $check['required'] !== false) {
+                                                if (!$check['status']) {
+                                                    $hasError = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    
                                     @foreach($environmentChecks as $key => $check)
                                     <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
                                         <span>{{ $check['label'] }}</span>
@@ -90,11 +121,18 @@
                                     @endforeach
                                 </div>
 
+                                @if($hasError)
+                                <div class="alert alert-danger mb-3">
+                                    <i class="ci-alert-circle me-2"></i>
+                                    <strong>错误：</strong> 存在必需的环境要求未满足，请先解决上述红色标记的问题后再继续安装。
+                                </div>
+                                @endif
+
                                 <div class="d-flex justify-content-between">
                                     <button type="button" class="btn btn-outline-primary" onclick="prevStep()">
                                         <i class="ci-arrow-left me-1"></i> 上一步
                                     </button>
-                                    <button class="btn btn-primary" onclick="nextStep()">
+                                    <button class="btn btn-primary" onclick="nextStep()" {{ $hasError ? 'disabled' : '' }}>
                                         下一步 <i class="ci-arrow-right ms-1"></i>
                                     </button>
                                 </div>
@@ -220,7 +258,8 @@
         </div>
     </div>
     
-    @include('morpho::layouts._script')
+    <script src="{{ asset('assets/morpho/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/morpho/js/bootstrap.bundle.min.js') }}"></script>
     
     <script>
         let currentStep = 1;

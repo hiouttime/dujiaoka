@@ -24,7 +24,7 @@
         <link rel="icon" type="image/png" href="{{ theme_asset('app-icons/icon-32x32.png') }}" sizes="32x32" />
     @endif
     
-    @if(\request()->getScheme() == "https")
+    @if(\request()->isSecure())
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     @endif
     

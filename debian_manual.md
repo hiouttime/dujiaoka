@@ -159,8 +159,7 @@ su
 
 编辑 `/var/www/dujiaoka/.env`
 - 将 `APP_DEBUG=true` 改为 `APP_DEBUG=false`
-- 另起一行，添加 `ADMIN_HTTPS=true`
-- 尝试登入后台。如果提示 `0 error` ，刷新页面即可
+- 系统会自动根据访问协议适配，无需手动配置 HTTPS
 
 ## 配置 Supervisor
 先安装
