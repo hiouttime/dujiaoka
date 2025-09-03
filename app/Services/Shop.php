@@ -16,9 +16,9 @@ class Shop
     public function withGroup(): ?array
     {
         $goods = GoodsGroup::query()
-            ->with(['goods' => fn($query) => $query->with('goods_sub')->where('is_open', Goods::STATUS_OPEN)->orderBy('ord', 'DESC')])
+            ->with(['goods' => fn($query) => $query->with('goods_sub')->where('is_open', Goods::STATUS_OPEN)->orderBy('ord', 'ASC')])
             ->where('is_open', GoodsGroup::STATUS_OPEN)
-            ->orderBy('ord', 'DESC')
+            ->orderBy('ord', 'ASC')
             ->get();
         return $goods?->toArray();
     }
