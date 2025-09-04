@@ -44,7 +44,7 @@
             </div>
 
             <div class="fw-bold text-primary">
-                ${{ number_format(collect($goods['goods_sub'])->min('price'), 2) }}
+                {{ currency_symbol() }}{{ number_format(collect($goods['goods_sub'])->min('price'), 2) }}
             </div>
         </div>
     </div>

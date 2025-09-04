@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="text-end">
-                            <div class="fw-medium">¥{{ number_format($order->actual_price, 2) }}</div>
+                            <div class="fw-medium">{{ currency_symbol() }}{{ number_format($order->actual_price, 2) }}</div>
                             @php
                                 $statusClass = match($order->status) {
                                     1 => 'warning',

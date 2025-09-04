@@ -135,7 +135,7 @@
                             <small class="text-muted">{{ $order->goods_summary ?? $order->orderItems->pluck('goods_name')->implode('、') }}</small>
                         </div>
                         <div class="text-end">
-                            <div class="fw-medium">¥{{ number_format($order->actual_price, 2) }}</div>
+                            <div class="fw-medium">{{ currency_symbol() }}{{ number_format($order->actual_price, 2) }}</div>
                             @php
                                 $statusClass = match($order->status) {
                                     1 => 'warning',

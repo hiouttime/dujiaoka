@@ -51,7 +51,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <i class="ci-credit-card text-primary mb-2" style="font-size: 2rem;"></i>
-                            <h4 class="text-primary">¥{{ number_format($stats['current_balance'], 2) }}</h4>
+                            <h4 class="text-primary">{{ currency_symbol() }}{{ number_format($stats['current_balance'], 2) }}</h4>
                             <p class="text-muted mb-0">当前余额</p>
                             <a href="{{ route('user.recharge') }}" class="btn btn-sm btn-outline-primary mt-2">立即充值</a>
                         </div>
@@ -61,7 +61,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <i class="ci-plus-circle text-success mb-2" style="font-size: 2rem;"></i>
-                            <h4 class="text-success">¥{{ number_format($stats['total_recharge'], 2) }}</h4>
+                            <h4 class="text-success">{{ currency_symbol() }}{{ number_format($stats['total_recharge'], 2) }}</h4>
                             <p class="text-muted mb-0">累计充值</p>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <i class="ci-minus-circle text-danger mb-2" style="font-size: 2rem;"></i>
-                            <h4 class="text-danger">¥{{ number_format($stats['total_consume'], 2) }}</h4>
+                            <h4 class="text-danger">{{ currency_symbol() }}{{ number_format($stats['total_consume'], 2) }}</h4>
                             <p class="text-muted mb-0">累计消费</p>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                     <div class="card text-center">
                         <div class="card-body">
                             <i class="ci-refresh-cw text-info mb-2" style="font-size: 2rem;"></i>
-                            <h4 class="text-info">¥{{ number_format($stats['total_refund'], 2) }}</h4>
+                            <h4 class="text-info">{{ currency_symbol() }}{{ number_format($stats['total_refund'], 2) }}</h4>
                             <p class="text-muted mb-0">累计退款</p>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                             </div>
                             <small class="text-muted">{{ $record->created_at->format('Y-m-d H:i:s') }}</small>
                             <div>
-                                <small class="text-muted">余额：¥{{ number_format($record->balance_after, 2) }}</small>
+                                <small class="text-muted">余额：{{ currency_symbol() }}{{ number_format($record->balance_after, 2) }}</small>
                             </div>
                         </div>
                     </div>

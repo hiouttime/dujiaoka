@@ -61,7 +61,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="text-muted">订单总价：</span>
-                  <span class="fw-bold text-success">¥{{ $order->actual_price }}</span>
+                  <span class="fw-bold text-success">{{ currency_symbol() }}{{ $order->actual_price }}</span>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="text-muted">支付方式：</span>
@@ -90,7 +90,7 @@
                     </span>
                   </div>
                   <div class="small text-muted">
-                    单价：¥{{ $item->unit_price }} × {{ $item->quantity }} = ¥{{ $item->subtotal }}
+                    单价：{{ currency_symbol() }}{{ $item->unit_price }} × {{ $item->quantity }} = {{ currency_symbol() }}{{ $item->subtotal }}
                   </div>
                 </div>
                 

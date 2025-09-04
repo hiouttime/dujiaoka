@@ -51,14 +51,14 @@
                   
                   <div class="d-flex justify-content-between mb-3">
                     <span>小计:</span>
-                    <span id="subtotal">$0.00</span>
+                    <span id="subtotal">{{ currency_symbol() }}0.00</span>
                   </div>
                   
                   <hr>
                   
                   <div class="d-flex justify-content-between mb-3">
                     <strong>总计:</strong>
-                    <strong id="total">$0.00</strong>
+                    <strong id="total">{{ currency_symbol() }}0.00</strong>
                   </div>
 
                   <form id="checkoutForm" class="mb-3">
@@ -134,6 +134,7 @@
 @section('js')
 <script src="{{ asset('assets/morpho/js/payment-icons.js') }}"></script>
 <script>
+const CURRENCY_SYMBOL = '{{ currency_symbol() }}';
 let paymentMethods = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -249,7 +250,7 @@ function renderCart() {
         </div>
         <div class="col">
           <h6 class="mb-1">${item.name}</h6>
-          <small class="text-muted">单价: $${item.price.toFixed(2)}</small>
+          <small class="text-muted">单价: ${CURRENCY_SYMBOL}${item.price.toFixed(2)}</small>
           ${fieldsHtml}
         </div>
         <div class="col-auto">
@@ -265,7 +266,7 @@ function renderCart() {
           </div>
         </div>
         <div class="col-auto">
-          <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+          <strong>${CURRENCY_SYMBOL}${(item.price * item.quantity).toFixed(2)}</strong>
         </div>
         <div class="col-auto">
           <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeItem(${item.goods_id}, ${item.sub_id})">
@@ -301,8 +302,8 @@ function updateSummary() {
   const totalPrice = cart.getTotalPrice();
   
   document.getElementById('itemsCount').textContent = `${totalQuantity} 件`;
-  document.getElementById('subtotal').textContent = `$${totalPrice.toFixed(2)}`;
-  document.getElementById('total').textContent = `$${totalPrice.toFixed(2)}`;
+  document.getElementById('subtotal').textContent = `${CURRENCY_SYMBOL}${totalPrice.toFixed(2)}`;
+  document.getElementById('total').textContent = `${CURRENCY_SYMBOL}${totalPrice.toFixed(2)}`;
 }
 
 

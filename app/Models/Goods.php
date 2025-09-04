@@ -121,8 +121,7 @@ class Goods extends BaseModel
     }
     
     /**
-     * 获取图片路径访问器
-     * 修复图片路径缺少 /uploads 前缀的问题
+     * 获取图片路径
      */
     public function getPictureAttribute($value)
     {
@@ -130,18 +129,7 @@ class Goods extends BaseModel
             return $this->attributes['picture_url'];
         }
         
-        // 如果没有图片，返回null
-        if (empty($value)) {
-            return null;
-        }
-        if (filter_var($value, FILTER_VALIDATE_URL)) {
-            return $value;
-        }
-        if (strpos($value, '/uploads/') === 0) {
-            return $value;
-        }
-        
-        return '/uploads/' . ltrim($value, '/');
+        return $value;
     }
     
 }

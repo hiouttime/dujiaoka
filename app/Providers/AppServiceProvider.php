@@ -50,6 +50,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        // 动态设置语言文件中的货币符号
+        $this->app->booted(function () {
+            $currency = shop_cfg('currency', 'cny');
+            $symbols = [
+                'cny' => '¥',
+                'usd' => '$',
+            ];
+            $symbol = $symbols[$currency] ?? '¥';
+            
+            // 设置所有语言文件的货币符号
+            app('translator')->addLines(['dujiaoka.money_symbol' => $symbol], 'zh_CN');
+            app('translator')->addLines(['dujiaoka.money_symbol' => $symbol], 'zh_TW');
+            app('translator')->addLines(['dujiaoka.money_symbol' => $symbol], 'en');
+        });
     }
 }

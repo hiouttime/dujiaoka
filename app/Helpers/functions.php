@@ -264,6 +264,25 @@ if (!function_exists('getIpCountry')) {
     }
 }
 
+if (!function_exists('currency_symbol')) {
+    /**
+     * 获取当前系统设置的货币符号
+     *
+     * @return string
+     */
+    function currency_symbol(): string
+    {
+        $currency = shop_cfg('currency', 'cny');
+        
+        $symbols = [
+            'cny' => '¥',
+            'usd' => '$',
+        ];
+        
+        return $symbols[$currency] ?? '¥';
+    }
+}
+
 if (!function_exists('asset')) {
     /**
      * 覆盖Laravel默认asset函数，支持CDN

@@ -58,7 +58,7 @@ class CartController extends BaseController
             'sub_id' => $sub->id,
             'name' => "{$goods->gd_name} [{$sub->name}]",
             'price' => $sub->price,
-            'image' => $goods->picture,
+            'image' => pictureUrl($goods->picture),
             'stock' => $stock,
             'max_quantity' => min($stock, $goods->buy_limit_num ?: $stock),
             'payways' => $payways
