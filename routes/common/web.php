@@ -62,6 +62,9 @@ Route::middleware('dujiaoka.boot')->namespace('Auth')->prefix('auth')->group(fun
     Route::post('reset-password', 'AuthController@resetPassword')->name('password.update');
     Route::post('logout', 'AuthController@logout')->name('logout');
     Route::post('email/verify', 'AuthController@verifyEmail')->name('verification.send');
+    Route::get('email/verify/{id}/{hash}', 'AuthController@verify')->name('verification.verify');
+    Route::get('email/verify', 'AuthController@showVerifyNotice')->name('verification.notice');
+    Route::post('email/resend', 'AuthController@resendVerification')->name('verification.resend');
 });
 
 // 用户中心路由

@@ -4,7 +4,7 @@
 <div class="auth-container">
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-sm-8 col-md-6 col-lg-4 col-xl-3">
+            <div class="col-sm-10 col-md-8 col-lg-5 col-xl-4">
                 <div class="auth-card">
                     <div class="auth-header">
                         <div class="auth-logo mb-4">

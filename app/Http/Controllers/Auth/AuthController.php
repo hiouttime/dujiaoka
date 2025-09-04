@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Auth\Events\Verified;
 
 class AuthController extends Controller
 {
@@ -184,5 +186,42 @@ class AuthController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('message', '验证邮件已发送！');
+    }
+
+    public function verify(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            abort(403, '无效的验证链接');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('user.center')->with('message', '邮箱已经验证过了');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
+
+        return redirect()->route('user.center')->with('success', '邮箱验证成功！');
+    }
+
+    public function showVerifyNotice(Request $request)
+    {
+        return $request->user()->hasVerifiedEmail() 
+            ? redirect()->route('user.center') 
+            : view('themes.morpho.views.auth.verify-email');
+    }
+
+    public function resendVerification(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('user.center');
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', '验证链接已重新发送！');
     }
 }
