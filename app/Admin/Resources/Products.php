@@ -62,7 +62,8 @@ class Products extends Resource
                                 Forms\Components\FileUpload::make('picture')
                                     ->label('上传商品图片')
                                     ->image()
-                                    ->directory('goods')
+                                    ->disk('admin')
+                                    ->directory('images')
                                     ->visibility('public')
                                     ->maxFiles(1),
                                 Forms\Components\TextInput::make('picture_url')

@@ -85,7 +85,7 @@
                                                                  class="img-fluid"
                                                                  style="max-width: 400px;">
                                                         @else
-                                                            <div class="bg-light p-5 border" style="max-width: 400px; margin: 0 auto;">
+                                                            <div class="p-5 border" style="max-width: 400px; margin: 0 auto;">
                                                                 <i class="ci-image display-1 text-muted mb-3"></i>
                                                                 <p class="text-muted">暂无图片</p>
                                                             </div>
